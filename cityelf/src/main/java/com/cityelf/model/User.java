@@ -1,6 +1,7 @@
 package com.cityelf.model;
 
 public class User {
+
   private String firstname;
   private String lastname;
   private String adress;
@@ -8,13 +9,14 @@ public class User {
   private String phone;
 
 
-  public User () {
+  public User() {
     this.firstname = "None";
     this.lastname = "None";
     this.adress = "None";
     this.email = "None";
     this.phone = "None";
   }
+
   public User(String firstname, String lastname, String adress, String email, String phone) {
     this.firstname = firstname;
     this.lastname = lastname;
