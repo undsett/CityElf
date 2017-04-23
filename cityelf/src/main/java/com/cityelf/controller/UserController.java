@@ -1,13 +1,11 @@
 package com.cityelf.controller;
 
-
+import com.cityelf.model.User;
 import com.cityelf.service.UserService;
-import java.util.HashMap;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.cityelf.model.User;
 
 @RestController
 @RequestMapping("/users")
@@ -17,13 +15,8 @@ public class UserController {
   UserService us;
 
   @RequestMapping("/all")
-  public HashMap<String, User> getAll() {
+  public List<User> getAll() {
     return us.getAll();
-  }
-
-  @RequestMapping("{email}")
-  public User getUser(@PathVariable("email") String email) {
-    return us.getUser(email);
   }
 
 }

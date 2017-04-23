@@ -4,9 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CityelfApplication {
+public class CityElfApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(CityelfApplication.class, args);
+    SpringApplication.run(CityElfApplication.class, args);
   }
 }
+

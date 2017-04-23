@@ -2,14 +2,13 @@ package com.cityelf.service;
 
 import com.cityelf.model.User;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
-  HashMap<String, User> users = new HashMap();
+  private List<User> users = new ArrayList<>();
 
   public UserService() {
     User user = new User();
@@ -19,7 +18,7 @@ public class UserService {
     user.setEmail("norco_mount@mail.ru");
     user.setPhone("0936436691");
 
-    users.put(user.getEmail(), user);
+    users.add(user);
 
     user = new User();
     user.setFirstname("Sasha");
@@ -28,19 +27,11 @@ public class UserService {
     user.setEmail("sasha_stim@mail.ru");
     user.setPhone("063456321");
 
-    users.put(user.getEmail(), user);
+    users.add(user);
   }
 
 
-  public User getUser(String email) {
-    if (users.containsKey(email)) {
-      return users.get(email);
-    } else {
-      return null;
-    }
-  }
-
-  public HashMap<String, User> getAll() {
+  public List<User> getAll() {
     return users;
   }
 
