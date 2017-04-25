@@ -2,66 +2,76 @@ package com.cityelf.model;
 
 public class User {
 
-  private String firstname;
-  private String lastname;
-  private String adress;
-  private String email;
-  private String phone;
+    private long id;
+    private String firstname;
+    private String lastname;
+    private String address;
+    private String email;
+    private String phone;
 
-  public User() {
-    firstname = "None";
-    lastname = "None";
-    adress = "None";
-    email = "None";
-    phone = "None";
-  }
+    public User() {
+        id = 0;
+        firstname = "None";
+        lastname = "None";
+        address = "None";
+        email = "None";
+        phone = "None";
+    }
 
-  public User(String firstname, String lastname, String adress, String email, String phone) {
-    this.firstname = firstname;
-    this.lastname = lastname;
-    this.adress = adress;
-    this.email = email;
-    this.phone = phone;
-  }
+    public User(long id, String firstname, String lastname, String address, String email, String phone) {
+        this.id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.address = address;
+        this.email = email;
+        this.phone = phone;
+    }
 
-  public String getFirstname() {
-    return firstname;
-  }
+    public long getId() {
+        return id;
+    }
 
-  public void setFirstname(String firstname) {
-    this.firstname = firstname;
-  }
+    public void setId(long id) {
+        this.id = id;
+    }
 
-  public String getLastname() {
-    return lastname;
-  }
+    public String getFirstname() {
+        return firstname;
+    }
 
-  public void setLastname(String lastname) {
-    this.lastname = lastname;
-  }
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
 
-  public String getAdress() {
-    return adress;
-  }
+    public String getLastname() {
+        return lastname;
+    }
 
-  public void setAdress(String adress) {
-    this.adress = adress;
-  }
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
 
-  public String getEmail() {
-    return email;
-  }
+    public String getAddress() {
+        return address;
+    }
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-  public String getPhone() {
-    return phone;
-  }
+    public String getEmail() {
+        return email;
+    }
 
-  public void setPhone(String phone) {
-    this.phone = phone;
-  }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 }
-
