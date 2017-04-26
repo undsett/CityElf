@@ -1,9 +1,10 @@
-package com.cityelf.controller;
+package main.java.com.cityelf.controller;
 
-import com.cityelf.model.User;
-import com.cityelf.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import main.java.com.cityelf.model.User;
+import main.java.com.cityelf.service.UserService;
+import main.java.com.cityelf.controller.RestController;
+import main.java.org.springframework.beans.factory.annotation.Autowired;
+import main.java.org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,22 +19,22 @@ public class UserController {
         return userService.getAll();
     }
 
-    @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
     public User get(@PathVariable("userId") long id) {
         return userService.get(id);
     }
 
-    @RequestMapping(value = "/users", method = RequestMethod.PUT)
+    @RequestMapping(value = "/put", method = RequestMethod.PUT)
     public void put(@RequestBody User user) {
         userService.put(user);
     }
 
-    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    @RequestMapping(value = "/post", method = RequestMethod.POST)
     public void post(@RequestBody User user) {
         userService.post(user);
     }
 
-    @RequestMapping(value = "/users/{userId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
     public void delete(@RequestBody long id) {
         userService.delete(id);
     }

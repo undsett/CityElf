@@ -68,7 +68,12 @@ public class UserRepository {
     }
 
     public User get(long id) {
-        return users.get((int) id);
+        for (User user : users) {
+            if (user.getId() == id) {
+                return user;
+            }
+        }
+        return null;
     }
 
     public void post(User user) {
@@ -76,14 +81,21 @@ public class UserRepository {
     }
 
     public void put(User user) {
-        if (users.contains(user)) {
-            users.set((int) user.getId(), user);
-        } else {
-            post(user);
+        long id = user.getId();
+        for (User userDb : users) {
+            if (userDb.getId() == id) {
+                users.set(users.indexOf(userDb), user);
+                break;
+            }
         }
     }
 
     public void delete(long id) {
-        users.remove(id);
+        for (User user : users) {
+            if (user.getId() == id) {
+                users.remove(user);
+                break;
+            }
+        }
     }
 }
