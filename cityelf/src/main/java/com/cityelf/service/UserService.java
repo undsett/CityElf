@@ -17,8 +17,4 @@ public class UserService {
     public java.util.List<User> getAll() {
         return userRepository.getUsers();
     }
-
-    public Notification getNotification(User user){
-        return userRepository.getNotification(user);
-    }
 }

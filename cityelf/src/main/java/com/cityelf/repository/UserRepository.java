@@ -35,8 +35,4 @@ public class UserRepository {
     public List<User> getUsers() {
         return users;
     }
-
-    public Notification getNotification(User user) {
-        return new Notification();
-    }
 }
