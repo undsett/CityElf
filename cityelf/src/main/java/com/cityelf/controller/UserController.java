@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class UserController {
     @Autowired
-    private UserService us;
+    private UserService userService;
 
     @RequestMapping("/all")
     public java.util.List<User> getAll() {
-        return us.getAll();
+        return userService.getAll();
     }
 }

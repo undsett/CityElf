@@ -1,11 +1,8 @@
 package com.cityelf.repository;
 
 import com.cityelf.model.User;
-import com.cityelf.model.Notification;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,7 +29,8 @@ public class UserRepository {
         users.add(user);
     }
 
-    public List<User> getUsers() {
+    public List<User> getUsers()
+    {
         return users;
     }
 }
