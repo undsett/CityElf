@@ -74,7 +74,7 @@ public class UserRepository {
             }
         }
         return null;
-    }
+     }
 
     public void addNewUser(User user) {
         users.add(user);
