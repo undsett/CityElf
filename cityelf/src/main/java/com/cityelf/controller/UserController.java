@@ -18,7 +18,7 @@ public class UserController {
     public List<User> getAll() {
         return userService.getAll();
     }
-
+//
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
     public User getUser(@PathVariable("userId") long id) {
         return userService.getUser(id);
