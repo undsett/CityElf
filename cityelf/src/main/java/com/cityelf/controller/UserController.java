@@ -2,6 +2,7 @@ package com.cityelf.controller;
 
 import com.cityelf.model.User;
 import com.cityelf.service.UserService;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,24 +19,24 @@ public class UserController {
         return userService.getAll();
     }
 
-    @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET)
-    public User get(@PathVariable("userId") long id) {
-        return userService.get(id);
+    @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
+    public User getUser(@PathVariable("userId") long id) {
+        return userService.getUser(id);
     }
 
-    @RequestMapping(value = "/users", method = RequestMethod.PUT)
-    public void put(@RequestBody User user) {
-        userService.put(user);
+    @RequestMapping(value = "/updateUser", method = RequestMethod.PUT)
+    public void updateUser(@RequestBody User user) {
+        userService.updateUser(user);
     }
 
-    @RequestMapping(value = "/users", method = RequestMethod.POST)
-    public void post(@RequestBody User user) {
-        userService.post(user);
+    @RequestMapping(value = "/addUser", method = RequestMethod.POST)
+    public void addNewUser(@RequestBody User user) {
+        userService.addNewUser(user);
     }
 
-    @RequestMapping(value = "/users/{userId}", method = RequestMethod.DELETE)
-    public void delete(@RequestBody long id) {
-        userService.delete(id);
+    @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
+    public void deleteUser(@RequestBody long id) {
+        userService.deleteUser(id);
     }
 
 }

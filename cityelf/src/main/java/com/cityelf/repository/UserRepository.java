@@ -5,9 +5,9 @@ import com.cityelf.model.User;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
-@Service
+@Repository
 public class UserRepository {
     private List<User> users = new ArrayList();
 
@@ -67,23 +67,35 @@ public class UserRepository {
         return users;
     }
 
-    public User get(long id) {
-        return users.get((int) id);
+    public User getUser(long id) {
+        for (User user : users) {
+            if (user.getId() == id) {
+                return user;
+            }
+        }
+        return null;
     }
 
-    public void post(User user) {
+    public void addNewUser(User user) {
         users.add(user);
     }
 
-    public void put(User user) {
-        if (users.contains(user)) {
-            users.set((int) user.getId(), user);
-        } else {
-            post(user);
+    public void updateUser(User user) {
+        long id = user.getId();
+        for (User userDb : users) {
+            if (userDb.getId() == id) {
+                users.set(users.indexOf(userDb), user);
+                break;
+            }
         }
     }
 
-    public void delete(long id) {
-        users.remove(id);
+    public void deleteUser(long id) {
+        for (User user : users) {
+            if (user.getId() == id) {
+                users.remove(user);
+                break;
+            }
+        }
     }
 }

@@ -4,8 +4,7 @@ import com.cityelf.model.User;
 import com.cityelf.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.*;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -19,19 +18,19 @@ public class UserService {
         return userRepository.getUsers();
     }
 
-    public User get(long id) {
-        return userRepository.get(id);
+    public User getUser(long id) {
+        return userRepository.getUser(id);
     }
 
-    public void post(User user) {
-        userRepository.post(user);
+    public void addNewUser(User user) {
+        userRepository.addNewUser(user);
     }
 
-    public void put(User user) {
-        userRepository.put(user);
+    public void updateUser(User user) {
+        userRepository.updateUser(user);
     }
 
-    public void delete(long id) {
-        userRepository.delete(id);
+    public void deleteUser(long id) {
+        userRepository.deleteUser(id);
     }
 }
