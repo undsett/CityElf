@@ -4,6 +4,7 @@ import com.cityelf.model.User;
 import com.cityelf.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
