@@ -1,12 +1,15 @@
 package com.cityelf.repository;
 
 import com.cityelf.model.User;
+
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.stereotype.Service;
 
 @Service
 public class UserRepository {
+
   private List<User> users = new ArrayList();
 
   public UserRepository() {
@@ -29,8 +32,7 @@ public class UserRepository {
     users.add(user);
   }
 
-  public List<User> getUsers()
-  {
+  public List<User> getUsers() {
     return users;
   }
 }
