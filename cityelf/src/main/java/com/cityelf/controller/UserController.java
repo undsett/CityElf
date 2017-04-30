@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping({"/users"})
-public class UserController{
+public class UserController {
+
   @Autowired
   private UserService us;
 
   @RequestMapping({"/all"})
-  public java.util.List<User> getAll()
-  {
+  public java.util.List<User> getAll() {
     return us.getAll();
   }
 }
