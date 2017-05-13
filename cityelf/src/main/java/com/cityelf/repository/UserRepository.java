@@ -2,10 +2,10 @@ package com.cityelf.repository;
 
 import com.cityelf.model.User;
 
+import org.springframework.stereotype.Repository;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserRepository {
