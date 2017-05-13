@@ -2,26 +2,38 @@ package com.cityelf.model;
 
 public class User {
 
+  private long id;
   private String firstname;
   private String lastname;
-  private String adress;
+  private String address;
   private String email;
   private String phone;
 
   public User() {
+    id = 0;
     firstname = "None";
     lastname = "None";
-    adress = "None";
+    address = "None";
     email = "None";
     phone = "None";
   }
 
-  public User(String firstname, String lastname, String adress, String email, String phone) {
+  public User(long id, String firstname, String lastname, String address, String email,
+      String phone) {
+    this.id = id;
     this.firstname = firstname;
     this.lastname = lastname;
-    this.adress = adress;
+    this.address = address;
     this.email = email;
     this.phone = phone;
+  }
+
+  public long getId() {
+    return id;
+  }
+
+  public void setId(long id) {
+    this.id = id;
   }
 
   public String getFirstname() {
@@ -40,12 +52,12 @@ public class User {
     this.lastname = lastname;
   }
 
-  public String getAdress() {
-    return adress;
+  public String getAddress() {
+    return address;
   }
 
-  public void setAdress(String adress) {
-    this.adress = adress;
+  public void setAddress(String address) {
+    this.address = address;
   }
 
   public String getEmail() {
@@ -64,4 +76,3 @@ public class User {
     this.phone = phone;
   }
 }
-
