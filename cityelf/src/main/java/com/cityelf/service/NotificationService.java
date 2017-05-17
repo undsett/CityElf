@@ -12,7 +12,7 @@ public class NotificationService {
   @Autowired
   private NotificationRepository notificationRepository;
 
-  public Notification getNotification(User user) {
-    return notificationRepository.getNotification(user);
+  public Notification getNotification(long id) {
+    return notificationRepository.getNotification(id);
   }
 }
