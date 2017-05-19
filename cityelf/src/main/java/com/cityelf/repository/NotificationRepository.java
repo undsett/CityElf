@@ -6,18 +6,16 @@ import com.cityelf.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public class NotificationRepository {
 
   @Autowired
   private UserRepository userRepository;
 
-  public Notification getNotification(long id) {
-    User innerUser = userRepository.getUser(id);
-    if (innerUser != null) {
-      return innerUser.getNotification();
-    } else {
-      return null;
-    }
+  public Optional<Notification> getNotification(long id) {
+    Optional<User> innerUser = Optional.ofNullable(userRepository.getUser(id));
+    return innerUser.map(User::getNotification);
   }
 }

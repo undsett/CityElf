@@ -18,6 +18,6 @@ public class NotificationController {
 
   @RequestMapping(value = "/settings/{userId}", method = RequestMethod.GET)
   public Notification getNotifications(@PathVariable("userId") long id) {
-    return notificationService.getNotification(id);
+    return notificationService.getNotification(id).orElse(null);
   }
 }
