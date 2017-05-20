@@ -1,5 +1,6 @@
 package com.cityelf.repository;
 
+import com.cityelf.model.Notification;
 import com.cityelf.model.User;
 
 import org.springframework.stereotype.Repository;
@@ -20,6 +21,7 @@ public class UserRepository {
     user.setAddress("Lenina");
     user.setEmail("norco_mount@mail.ru");
     user.setPhone("0936436691");
+    user.setNotification(new Notification());
 
     users.add(user);
 
@@ -30,6 +32,7 @@ public class UserRepository {
     user.setAddress("Bunina");
     user.setEmail("sasha_asdasfas@mail.ru");
     user.setPhone("063456321");
+    user.setNotification(new Notification());
 
     users.add(user);
 
@@ -40,6 +43,7 @@ public class UserRepository {
     user.setAddress("Rishel'evskaya");
     user.setEmail("vasya_pupkin@gmail.com");
     user.setPhone("0735556644");
+    user.setNotification(new Notification());
 
     users.add(user);
 
@@ -50,6 +54,7 @@ public class UserRepository {
     user.setAddress("Levitana");
     user.setEmail("vlada_test@rambler.ru");
     user.setPhone("0487865432");
+    user.setNotification(new Notification());
 
     users.add(user);
 
@@ -60,6 +65,7 @@ public class UserRepository {
     user.setAddress("Vodoprovodnaya");
     user.setEmail("romaodessa@ukr.net");
     user.setPhone("0946677321");
+    user.setNotification(new Notification());
 
     users.add(user);
   }

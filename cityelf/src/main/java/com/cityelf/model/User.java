@@ -8,6 +8,7 @@ public class User {
   private String address;
   private String email;
   private String phone;
+  private Notification notification;
 
   public User() {
     id = 0;
@@ -74,5 +75,13 @@ public class User {
 
   public void setPhone(String phone) {
     this.phone = phone;
+  }
+
+  public Notification getNotification() {
+    return notification;
+  }
+
+  public void setNotification(Notification notification) {
+    this.notification = notification;
   }
 }

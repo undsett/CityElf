@@ -1,10 +1,12 @@
 package com.cityelf.controller;
 
 import com.cityelf.model.Notification;
-import com.cityelf.model.User;
 import com.cityelf.service.NotificationService;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -14,8 +16,8 @@ public class NotificationController {
   @Autowired
   private NotificationService notificationService;
 
-  @RequestMapping("/settings")
-  public Notification getNotifications(User user) {
-    return notificationService.getNotification(user);
+  @RequestMapping(value = "/settings/{userId}", method = RequestMethod.GET)
+  public Notification getNotifications(@PathVariable("userId") long id) {
+    return notificationService.getNotification(id).orElse(null);
   }
 }
