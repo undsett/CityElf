@@ -11,7 +11,7 @@ buildscript {
 	}
 }
 
-group = 'pashadolbnev'
+group = 'cityelf'
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
