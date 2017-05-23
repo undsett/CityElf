@@ -1,5 +1,8 @@
 package com.cityelf.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
 
   private long id;
@@ -9,6 +12,7 @@ public class User {
   private String email;
   private String phone;
   private Notification notification;
+  private List<String> recentAddresses = new ArrayList<>();
 
   public User() {
     id = 0;
@@ -83,5 +87,13 @@ public class User {
 
   public void setNotification(Notification notification) {
     this.notification = notification;
+  }
+
+  public List<String> getRecentAddresses() {
+    return recentAddresses;
+  }
+
+  public void setRecentAddresses(List<String> recentAddresses) {
+    this.recentAddresses = recentAddresses;
   }
 }
