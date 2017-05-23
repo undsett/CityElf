@@ -22,6 +22,8 @@ public class UserRepository {
     user.setEmail("norco_mount@mail.ru");
     user.setPhone("0936436691");
     user.setNotification(new Notification());
+    user.getRecentAddresses().add("Pushkinskaya, 16");
+    user.getRecentAddresses().add("Zhukovskogo, 4");
 
     users.add(user);
 
@@ -33,6 +35,7 @@ public class UserRepository {
     user.setEmail("sasha_asdasfas@mail.ru");
     user.setPhone("063456321");
     user.setNotification(new Notification());
+    user.getRecentAddresses().add("Primorskii, 10");
 
     users.add(user);
 

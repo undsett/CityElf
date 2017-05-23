@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -40,5 +42,10 @@ public class UserController {
   @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
   public void deleteUser(@PathVariable("userId") long id) {
     userService.deleteUser(id);
+  }
+
+  @RequestMapping(value = "/recentAddresses/{userId}", method = RequestMethod.GET)
+  public List<String> getRecentAddresses(@PathVariable("userId") long id) {
+    return userService.getUser(id).getRecentAddresses();
   }
 }
