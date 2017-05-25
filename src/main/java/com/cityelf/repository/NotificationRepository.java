@@ -15,7 +15,7 @@ public class NotificationRepository {
   private UserRepository userRepository;
 
   public Optional<Notification> getNotification(long id) {
-    Optional<User> innerUser = Optional.ofNullable(userRepository.getUser(id));
+    Optional<User> innerUser = userRepository.getUser(id);
     return innerUser.map(User::getNotification);
   }
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserRepository {
@@ -77,35 +78,26 @@ public class UserRepository {
     return users;
   }
 
-  public User getUser(long id) {
-    for (User user : users) {
-      if (user.getId() == id) {
-        return user;
-      }
-    }
-    return null;
+  public Optional<User> getUser(long id) {
+    return users.stream().filter(user -> user.getId() == id).findFirst();
   }
 
   public void addNewUser(User user) {
     users.add(user);
   }
 
-  public void updateUser(User user) {
+  public boolean updateUser(User user) {
     long id = user.getId();
     for (User userDb : users) {
       if (userDb.getId() == id) {
         users.set(users.indexOf(userDb), user);
-        break;
+        return true;
       }
     }
+    return false;
   }
 
-  public void deleteUser(long id) {
-    for (User user : users) {
-      if (user.getId() == id) {
-        users.remove(user);
-        break;
-      }
-    }
+  public boolean deleteUser(long id) {
+    return users.removeIf(user -> user.getId() == id);
   }
 }

@@ -1,7 +1,9 @@
 package com.cityelf.service;
 
+import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.model.User;
 import com.cityelf.repository.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,19 +22,23 @@ public class UserService {
     return userRepository.getUsers();
   }
 
-  public User getUser(long id) {
-    return userRepository.getUser(id);
+  public User getUser(long id) throws UserNotFoundException {
+    return userRepository.getUser(id).orElseThrow(() -> new UserNotFoundException());
   }
 
   public void addNewUser(User user) {
     userRepository.addNewUser(user);
   }
 
-  public void updateUser(User user) {
-    userRepository.updateUser(user);
+  public void updateUser(User user) throws UserNotFoundException {
+    if (userRepository.updateUser(user) == false) {
+      throw new UserNotFoundException();
+    }
   }
 
-  public void deleteUser(long id) {
-    userRepository.deleteUser(id);
+  public void deleteUser(long id) throws UserNotFoundException {
+    if (userRepository.deleteUser(id) == false) {
+      throw new UserNotFoundException();
+    }
   }
 }
