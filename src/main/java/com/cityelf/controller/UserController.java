@@ -1,5 +1,6 @@
 package com.cityelf.controller;
 
+import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.model.User;
 import com.cityelf.service.UserService;
 
@@ -25,12 +26,12 @@ public class UserController {
   }
 
   @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-  public User getUser(@PathVariable("userId") long id) {
+  public User getUser(@PathVariable("userId") long id) throws UserNotFoundException {
     return userService.getUser(id);
   }
 
   @RequestMapping(value = "/updateUser", method = RequestMethod.PUT)
-  public void updateUser(@RequestBody User user) {
+  public void updateUser(@RequestBody User user) throws UserNotFoundException {
     userService.updateUser(user);
   }
 
@@ -40,12 +41,13 @@ public class UserController {
   }
 
   @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
-  public void deleteUser(@PathVariable("userId") long id) {
+  public void deleteUser(@PathVariable("userId") long id) throws UserNotFoundException {
     userService.deleteUser(id);
   }
 
   @RequestMapping(value = "/recentAddresses/{userId}", method = RequestMethod.GET)
-  public List<String> getRecentAddresses(@PathVariable("userId") long id) {
+  public List<String> getRecentAddresses(@PathVariable("userId") long id)
+      throws UserNotFoundException {
     return userService.getUser(id).getRecentAddresses();
   }
 }

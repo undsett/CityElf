@@ -1,5 +1,6 @@
 package com.cityelf.controller;
 
+import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.model.Notification;
 import com.cityelf.service.NotificationService;
 
@@ -17,7 +18,8 @@ public class NotificationController {
   private NotificationService notificationService;
 
   @RequestMapping(value = "/settings/{userId}", method = RequestMethod.GET)
-  public Notification getNotifications(@PathVariable("userId") long id) {
-    return notificationService.getNotification(id).orElse(null);
+  public Notification getNotifications(@PathVariable("userId") long id)
+      throws UserNotFoundException {
+    return notificationService.getNotification(id);
   }
 }
