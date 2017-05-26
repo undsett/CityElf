@@ -14,6 +14,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http
+        .csrf().disable() //this line disables requests for CSRF tokens
         .authorizeRequests()
         .antMatchers("/", "/home").permitAll()
         //this line prevents access with out login
