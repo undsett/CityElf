@@ -89,9 +89,7 @@ public class UserRepository {
 
   public void updateUser(User user) {
     long id = user.getId();
-    users = users.stream().map(u -> {
-      return u.getId() == id ? user : u;
-    }).collect(Collectors.toList());
+    users = users.stream().map(u -> u.getId() == id ? user : u).collect(Collectors.toList());
   }
 
   public boolean deleteUser(long id) {
