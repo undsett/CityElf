@@ -95,4 +95,8 @@ public class UserRepository {
   public boolean deleteUser(long id) {
     return users.removeIf(user -> user.getId() == id);
   }
+
+  public Optional<User> getUserByEmail(String userEmail) {
+    return users.stream().filter(user -> user.getEmail().equals(userEmail)).findFirst();
+  }
 }
