@@ -11,6 +11,7 @@ public class User {
   private String address;
   private String email;
   private String phone;
+  private String password;
   private Notification notification;
   private List<String> recentAddresses = new ArrayList<>();
 
@@ -21,6 +22,7 @@ public class User {
     address = "None";
     email = "None";
     phone = "None";
+    password = "None";
   }
 
   public User(long id, String firstname, String lastname, String address, String email,
@@ -31,6 +33,14 @@ public class User {
     this.address = address;
     this.email = email;
     this.phone = phone;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   public long getId() {
