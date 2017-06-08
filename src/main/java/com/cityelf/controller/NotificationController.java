@@ -1,7 +1,7 @@
 package com.cityelf.controller;
 
 import com.cityelf.exceptions.UserNotFoundException;
-import com.cityelf.model.Notification;
+import com.cityelf.domain.Notification;
 import com.cityelf.service.NotificationService;
 
 import org.springframework.beans.factory.annotation.Autowired;

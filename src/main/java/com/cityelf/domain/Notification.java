@@ -1,10 +1,19 @@
-package com.cityelf.model;
+package com.cityelf.domain;
 
 public class Notification {
 
   private boolean sms;
   private boolean email;
   private boolean push = true;
+
+  public Notification(boolean sms, boolean email, boolean push) {
+    this.sms = sms;
+    this.email = email;
+    this.push = push;
+  }
+
+  public Notification() {
+  }
 
   public boolean isSms() {
     return sms;

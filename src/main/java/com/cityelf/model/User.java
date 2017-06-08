@@ -1,28 +1,45 @@
 package com.cityelf.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.cityelf.domain.Notification;
 
+import java.time.LocalDate;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "users")
 public class User {
 
+  @Id
   private long id;
+  @Column(name = "first_name")
   private String firstname;
+  @Column(name = "last_name")
   private String lastname;
+  @Column(name = "last_name")
   private String address;
+  @Column(name = "email")
   private String email;
+  @Column(name = "phone")
   private String phone;
+  @Column(name = "password")
   private String password;
-  private Notification notification;
-  private List<String> recentAddresses = new ArrayList<>();
+  @Column(name = "sms_notification")
+  private boolean sms;
+  @Column(name = "email_notification")
+  private boolean emailNotification;
+  @Column(name = "push_notification")
+  private boolean push = true;
+  @Column(name = "token")
+  private String token;
+  @Column(name = "expiration_date")
+  private LocalDate expirationDate;
+  //private List<String> recentAddresses = new ArrayList<>();
 
   public User() {
-    id = 0;
-    firstname = "None";
-    lastname = "None";
-    address = "None";
-    email = "None";
-    phone = "None";
-    password = "None";
   }
 
   public User(long id, String firstname, String lastname, String address, String email,
@@ -33,6 +50,39 @@ public class User {
     this.address = address;
     this.email = email;
     this.phone = phone;
+  }
+
+  public void setToken(String token) {
+    this.token = token;
+  }
+
+  public void setExpirationDate() {
+    this.expirationDate = newExpirationDate();
+  }
+
+  public String getToken() {
+    return token;
+  }
+
+  public LocalDate getExpirationDate() {
+    return expirationDate;
+  }
+
+  private LocalDate newExpirationDate() {
+    LocalDate localDate = LocalDate.now();
+    return localDate.plusDays(1);
+  }
+
+  public boolean isSms() {
+    return sms;
+  }
+
+  public boolean isEmailNotification() {
+    return emailNotification;
+  }
+
+  public boolean isPush() {
+    return push;
   }
 
   public String getPassword() {
@@ -92,18 +142,19 @@ public class User {
   }
 
   public Notification getNotification() {
+    Notification notification = new Notification(isSms(), isEmailNotification(), isPush());
     return notification;
   }
 
-  public void setNotification(Notification notification) {
+  /*public void setNotification(Notification notification) {
     this.notification = notification;
-  }
+  }*/
 
-  public List<String> getRecentAddresses() {
+  /*public List<String> getRecentAddresses() {
     return recentAddresses;
-  }
+  }*/
 
-  public void setRecentAddresses(List<String> recentAddresses) {
+  /*public void setRecentAddresses(List<String> recentAddresses) {
     this.recentAddresses = recentAddresses;
-  }
+  }*/
 }

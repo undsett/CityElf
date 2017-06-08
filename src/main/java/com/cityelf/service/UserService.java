@@ -19,24 +19,22 @@ public class UserService {
   }
 
   public List<User> getAll() {
-    return userRepository.getUsers();
+    return (List<User>) userRepository.findAll();
   }
 
-  public User getUser(long id) throws UserNotFoundException {
-    return userRepository.getUser(id).orElseThrow(() -> new UserNotFoundException());
+  public User getUser(long id){
+    return userRepository.findOne(id);
   }
 
   public void addNewUser(User user) {
-    userRepository.addNewUser(user);
+    userRepository.save(user);
   }
 
-  public void updateUser(User user) throws UserNotFoundException {
-    userRepository.updateUser(user);
+  public void updateUser(User user) {
+    userRepository.save(user);
   }
 
-  public void deleteUser(long id) throws UserNotFoundException {
-    if (!userRepository.deleteUser(id)) {
-      throw new UserNotFoundException();
-    }
+  public void deleteUser(long id) {
+   userRepository.delete(id);
   }
 }

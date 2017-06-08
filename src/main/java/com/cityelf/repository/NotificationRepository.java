@@ -1,6 +1,6 @@
 package com.cityelf.repository;
 
-import com.cityelf.model.Notification;
+import com.cityelf.domain.Notification;
 import com.cityelf.model.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,13 @@ public class NotificationRepository {
   private UserRepository userRepository;
 
   public Optional<Notification> getNotification(long id) {
-    return userRepository.getUser(id).map(User::getNotification);
+
+    User user = userRepository.findOne(id);
+    if (user != null) {
+      Notification notification = new Notification(user.isSms(), user.isEmailNotification(),
+          user.isPush());
+      return Optional.of(notification);
+    }
+    return Optional.empty();
   }
 }

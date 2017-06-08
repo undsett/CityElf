@@ -45,9 +45,9 @@ public class UserController {
     userService.deleteUser(id);
   }
 
-  @RequestMapping(value = "/recentAddresses/{userId}", method = RequestMethod.GET)
+  /*@RequestMapping(value = "/recentAddresses/{userId}", method = RequestMethod.GET)
   public List<String> getRecentAddresses(@PathVariable("userId") long id)
       throws UserNotFoundException {
     return userService.getUser(id).getRecentAddresses();
-  }
+  }*/
 }

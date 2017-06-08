@@ -2,9 +2,7 @@ package com.cityelf.service;
 
 import com.cityelf.exceptions.TokenNotFoundException;
 import com.cityelf.exceptions.UserNotFoundException;
-import com.cityelf.model.TokenForgotPassword;
 import com.cityelf.model.User;
-import com.cityelf.repository.TokensRepository;
 import com.cityelf.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,21 +19,20 @@ public class ForgotPasswordService {
   private UserRepository userRepository;
 
   @Autowired
-  private TokensRepository tokensRepository;
-
-  @Autowired
   MailSenderService mailSender;
 
   public void forgotPassword(String userEmail) throws UserNotFoundException {
     Optional<User> user = getUserByEmail(userEmail);
     String token = UUID.randomUUID().toString();
     sendResetTokenEmail(userEmail, token);
-    tokensRepository.save(new TokenForgotPassword(token, user.get()));
+    user.get().setToken(token);
+    user.get().setExpirationDate();
+    // tokensRepository.save(new TokenForgotPassword(token, user.get()));
   }
 
-  private Optional<User> getUserByEmail(String userEmail) throws UserNotFoundException {
-    return Optional.ofNullable(
-        userRepository.getUserByEmail(userEmail).orElseThrow(() -> new UserNotFoundException()));
+  private Optional<User> getUserByEmail(String userEmail) {//throws UserNotFoundException {
+    return Optional.ofNullable(userRepository.findByEmail(userEmail).get());
+    //userRepository.findByEmail(userEmail).orElseThrow(() -> new UserNotFoundException()));
   }
 
   private void sendResetTokenEmail(String userEmail, String token) {
@@ -48,10 +45,14 @@ public class ForgotPasswordService {
   }
 
   public void settingNewPassword(String token, String newPassword) throws Exception {
-    Optional<TokenForgotPassword> tokenForgotPassword = Optional.ofNullable(
-        tokensRepository.findToken(token).orElseThrow(() -> new TokenNotFoundException()));
-    tokenForgotPassword.get().getUser().setPassword(convertFromStringToMD5(newPassword));
-    tokensRepository.delete(tokenForgotPassword.get());
+    Optional<User> user = userRepository.findByToken(token);
+    if (user != null) {
+      user.get().setPassword(convertFromStringToMD5(newPassword));
+      user.get().setToken(null);
+      user.get().setExpirationDate();
+    } else {
+      throw new TokenNotFoundException();
+    }
   }
 
   private String convertFromStringToMD5(String newPassword) {

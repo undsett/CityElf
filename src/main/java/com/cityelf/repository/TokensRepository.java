@@ -1,9 +1,10 @@
 package com.cityelf.repository;
 
-import com.cityelf.model.TokenForgotPassword;
+import com.cityelf.domain.TokenForgotPassword;
 
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,6 +26,6 @@ public class TokensRepository {
   public Optional<TokenForgotPassword> findToken(String token) {
     return tokens.stream().filter(
         tokenForgotPassword -> ((tokenForgotPassword.getToken().equals(token))
-            && (tokenForgotPassword.getExpirationDate().after(new Date())))).findFirst();
+            && (tokenForgotPassword.getExpirationDate().isAfter(LocalDate.now())))).findFirst();//.after(new Date())))).findFirst();
   }
 }
