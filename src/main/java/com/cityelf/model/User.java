@@ -1,10 +1,9 @@
 package com.cityelf.model;
 
-import com.cityelf.domain.Notification;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -15,41 +14,58 @@ public class User {
 
   @Id
   private long id;
-  @Column(name = "first_name")
-  private String firstname;
-  @Column(name = "last_name")
-  private String lastname;
-  @Column(name = "last_name")
-  private String address;
   @Column(name = "email")
   private String email;
   @Column(name = "phone")
   private String phone;
   @Column(name = "password")
   private String password;
-  @Column(name = "sms_notification")
-  private boolean sms;
-  @Column(name = "email_notification")
-  private boolean emailNotification;
-  @Column(name = "push_notification")
-  private boolean push = true;
+  @Embedded
+  private Notification notification;
   @Column(name = "token")
   private String token;
   @Column(name = "expiration_date")
-  private LocalDate expirationDate;
+  private LocalDateTime expirationDate;
+  @Column(name = "activated")
+  private boolean activated;
   //private List<String> recentAddresses = new ArrayList<>();
 
   public User() {
+    this.activated = false;
+    this.token = null;
+    this.expirationDate = null;
+    this.activated = false;
+    this.notification = new Notification();
   }
 
-  public User(long id, String firstname, String lastname, String address, String email,
-      String phone) {
-    this.id = id;
-    this.firstname = firstname;
-    this.lastname = lastname;
-    this.address = address;
+  public User(String firstname, String lastname, String email,
+      String phone, String password) {
+    this.id = 0;
     this.email = email;
     this.phone = phone;
+    this.password = password;
+    this.activated = false;
+    this.token = null;
+    this.expirationDate = null;
+    this.activated = false;
+    this.notification = null;
+    this.notification = new Notification();
+  }
+
+  public Notification getNotification() {
+    return notification;
+  }
+
+  public void setNotification(Notification notification) {
+    this.notification = notification;
+  }
+
+  public boolean isActivated() {
+    return activated;
+  }
+
+  public void setActivated(boolean activated) {
+    this.activated = activated;
   }
 
   public void setToken(String token) {
@@ -57,72 +73,27 @@ public class User {
   }
 
   public void setExpirationDate() {
-    this.expirationDate = newExpirationDate();
+    this.expirationDate = LocalDateTime.now().plusDays(1);
   }
 
   public String getToken() {
     return token;
   }
 
-  public LocalDate getExpirationDate() {
+  public LocalDateTime getExpirationDate() {
     return expirationDate;
-  }
-
-  private LocalDate newExpirationDate() {
-    LocalDate localDate = LocalDate.now();
-    return localDate.plusDays(1);
-  }
-
-  public boolean isSms() {
-    return sms;
-  }
-
-  public boolean isEmailNotification() {
-    return emailNotification;
-  }
-
-  public boolean isPush() {
-    return push;
-  }
-
-  public String getPassword() {
-    return password;
   }
 
   public void setPassword(String password) {
     this.password = password;
   }
 
+  public String getPassword() {
+    return password;
+  }
+
   public long getId() {
     return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
-  public String getFirstname() {
-    return firstname;
-  }
-
-  public void setFirstname(String firstname) {
-    this.firstname = firstname;
-  }
-
-  public String getLastname() {
-    return lastname;
-  }
-
-  public void setLastname(String lastname) {
-    this.lastname = lastname;
-  }
-
-  public String getAddress() {
-    return address;
-  }
-
-  public void setAddress(String address) {
-    this.address = address;
   }
 
   public String getEmail() {
@@ -141,20 +112,5 @@ public class User {
     this.phone = phone;
   }
 
-  public Notification getNotification() {
-    Notification notification = new Notification(isSms(), isEmailNotification(), isPush());
-    return notification;
-  }
 
-  /*public void setNotification(Notification notification) {
-    this.notification = notification;
-  }*/
-
-  /*public List<String> getRecentAddresses() {
-    return recentAddresses;
-  }*/
-
-  /*public void setRecentAddresses(List<String> recentAddresses) {
-    this.recentAddresses = recentAddresses;
-  }*/
 }

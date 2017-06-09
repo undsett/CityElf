@@ -16,11 +16,11 @@ public class ForgotPasswordController {
 
   @Autowired
   private ForgotPasswordService forgotPasswordService;
-/*
+
   @RequestMapping(value = "/reset", method = RequestMethod.POST)
   public void forgotPassword(@RequestBody String userEmail) throws UserNotFoundException {
     forgotPasswordService.forgotPassword(userEmail);
-  }*/
+  }
 
   @RequestMapping(value = "/newPassword", method = RequestMethod.POST)
   public void enterNewPassword(@RequestParam String token, @RequestParam String newPassword)

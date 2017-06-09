@@ -1,7 +1,7 @@
 package com.cityelf.controller;
 
 import com.cityelf.exceptions.UserNotFoundException;
-import com.cityelf.domain.Notification;
+import com.cityelf.model.Notification;
 import com.cityelf.service.NotificationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,9 @@ public class NotificationController {
   @RequestMapping(value = "/settings/{userId}", method = RequestMethod.GET)
   public Notification getNotifications(@PathVariable("userId") long id)
       throws UserNotFoundException {
-    return notificationService.getNotification(id);
+    if (!notificationService.getNotification(id).isPresent()) {
+      throw new UserNotFoundException();
+    }
+    return notificationService.getNotification(id).get();
   }
 }
