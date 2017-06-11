@@ -20,6 +20,9 @@ public class NotificationController {
   @RequestMapping(value = "/settings/{userId}", method = RequestMethod.GET)
   public Notification getNotifications(@PathVariable("userId") long id)
       throws UserNotFoundException {
-    return notificationService.getNotification(id);
+    if (!notificationService.getNotification(id).isPresent()) {
+      throw new UserNotFoundException();
+    }
+    return notificationService.getNotification(id).get();
   }
 }

@@ -49,7 +49,7 @@ public class NotificationControllerTest {
 
   @Test
   public void getNotificationShouldReturnHttpStatusOk200() throws Exception {
-    when(notificationService.getNotification(anyInt()))
+    when(notificationService.getNotification(anyInt()).get())
         .thenReturn(notification);
 
     mockMvc.perform(get("/notification/settings/2"))
@@ -60,13 +60,12 @@ public class NotificationControllerTest {
 
   @Test
   public void getNotificationShouldReturnJson() throws Exception {
-    when(notificationService.getNotification(anyInt()))
+    when(notificationService.getNotification(anyInt()).get())
         .thenReturn(notification);
 
     mockMvc.perform(get("/notification/settings/3"))
         .andDo(print())
         .andExpect(content().contentTypeCompatibleWith("application/json"))
         .andExpect(content().string(objectToJson(notification)));
-
   }
 }
