@@ -113,17 +113,6 @@ public class UserControllerTest {
   }
 
   @Test
-  public void recentAddressesShouldReturnJson() throws Exception {
-    when(userService.getUser(anyInt()))
-        .thenReturn(user);
-
-    mockMvc.perform(get("/users/recentAddresses/3"))
-        .andDo(print())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-        .andExpect(content().string(objectToJson(user.getRecentAddresses())));
-  }
-
-  @Test
   public void getUserShouldReturnHttpStatusNotFound404() throws Exception {
     when(userService.getUser(anyInt()))
         .thenThrow(UserNotFoundException.class);
@@ -131,7 +120,6 @@ public class UserControllerTest {
     mockMvc.perform(get("/users/1"))
         .andDo(print())
         .andExpect(status().isNotFound());
-
   }
 
   @Test

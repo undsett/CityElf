@@ -1,5 +1,6 @@
 package com.cityelf.service;
 
+import com.cityelf.exceptions.UserAlreadyExistsException;
 import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.model.User;
 import com.cityelf.repository.UserRepository;
@@ -19,24 +20,37 @@ public class UserService {
   }
 
   public List<User> getAll() {
-    return userRepository.getUsers();
+    return (List<User>) userRepository.findAll();
   }
 
   public User getUser(long id) throws UserNotFoundException {
-    return userRepository.getUser(id).orElseThrow(() -> new UserNotFoundException());
+    User user = userRepository.findOne(id);
+    if (user == null) {
+      throw new UserNotFoundException();
+    }
+    return user;
   }
 
-  public void addNewUser(User user) {
-    userRepository.addNewUser(user);
+  public void addNewUser(User user) throws UserAlreadyExistsException {
+    if (userRepository.findByEmail(user.getEmail()) == null) {
+      userRepository.save(user);
+    } else {
+      throw new UserAlreadyExistsException();
+    }
   }
 
   public void updateUser(User user) throws UserNotFoundException {
-    userRepository.updateUser(user);
+    if (userRepository.exists(user.getId())) {
+      userRepository.save(user);
+    } else {
+      throw new UserNotFoundException();
+    }
   }
 
   public void deleteUser(long id) throws UserNotFoundException {
-    if (!userRepository.deleteUser(id)) {
+    if (userRepository.findOne(id) == null) {
       throw new UserNotFoundException();
     }
+    userRepository.delete(id);
   }
 }

@@ -1,5 +1,6 @@
 package com.cityelf.controller;
 
+import com.cityelf.exceptions.UserAlreadyExistsException;
 import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.model.User;
 import com.cityelf.service.UserService;
@@ -10,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -36,7 +35,7 @@ public class UserController {
   }
 
   @RequestMapping(value = "/addUser", method = RequestMethod.POST)
-  public void addNewUser(@RequestBody User user) {
+  public void addNewUser(@RequestBody User user) throws UserAlreadyExistsException {
     userService.addNewUser(user);
   }
 
@@ -45,9 +44,9 @@ public class UserController {
     userService.deleteUser(id);
   }
 
-  @RequestMapping(value = "/recentAddresses/{userId}", method = RequestMethod.GET)
+  /*@RequestMapping(value = "/recentAddresses/{userId}", method = RequestMethod.GET)
   public List<String> getRecentAddresses(@PathVariable("userId") long id)
       throws UserNotFoundException {
     return userService.getUser(id).getRecentAddresses();
-  }
+  }*/
 }
