@@ -1,4 +1,4 @@
-package com.cityelf.model.water.parser;
+package com.cityelf.utils;
 
 import org.springframework.stereotype.Component;
 
@@ -10,12 +10,11 @@ class StreetExtractor {
 
   private Pattern namePattern = Pattern.compile("[^,]+");
 
-  public String getStreetName(String rawAdress) {
-    Matcher matcher = namePattern.matcher(rawAdress);
+  public String getStreetName(String rawAddress) {
+    Matcher matcher = namePattern.matcher(rawAddress);
     if (matcher.find()) {
       return matcher.group();
-    } else {
-      throw new RuntimeException("No street's found");
     }
+    throw new RuntimeException("No street's found");
   }
 }

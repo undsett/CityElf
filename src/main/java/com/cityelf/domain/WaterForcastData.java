@@ -1,4 +1,4 @@
-package com.cityelf.model.water.parser;
+package com.cityelf.domain;
 
 import java.time.LocalDateTime;
 import java.util.Set;

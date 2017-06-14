@@ -1,25 +1,27 @@
-package com.cityelf.model.water.parser;
+package com.cityelf.utils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.cityelf.domain.WaterForcastData;
 import com.cityelf.exceptions.WaterParserUnavailableException;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-@Configuration
-@ComponentScan(basePackages = "com.cityelf.model.water.parser")
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class ParserTest {
 
+  @Autowired
   private Parser parser;
   private String json = "[{"
       +
@@ -43,9 +45,6 @@ public class ParserTest {
 
   @Before
   public void setUp() throws Exception {
-    ApplicationContext context = new AnnotationConfigApplicationContext(ParserTest.class);
-    parser = context.getBean(Parser.class);
-
     WaterContentLoader loader = mock(WaterContentLoader.class);
     when(loader.load(anyObject()))
         .thenReturn(json);

@@ -1,4 +1,4 @@
-package com.cityelf.model.water.parser;
+package com.cityelf.utils;
 
 import com.cityelf.exceptions.WaterParserUnavailableException;
 
@@ -23,8 +23,8 @@ class WaterContentLoader {
         reader.lines().forEach(line -> sb.append(line));
       }
       return sb.toString();
-    } catch (IOException exception) {
-      throw new WaterParserUnavailableException("Error on accessing infox web resourse", exception);
+    } catch (IOException ex) {
+      throw new WaterParserUnavailableException("Error on accessing infox web resourse", ex);
     }
   }
 }

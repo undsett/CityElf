@@ -1,27 +1,21 @@
-package com.cityelf.model.water.parser;
+package com.cityelf.utils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Set;
 
-@Configuration
-@ComponentScan(basePackages = "com.cityelf.model.water.parser")
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class NumberExtractorTest {
 
-  NumberExtractor numberExtractor = new NumberExtractor();
-
-  @Before
-  public void setUp() throws Exception {
-    ApplicationContext context = new AnnotationConfigApplicationContext(NumberExtractorTest.class);
-    numberExtractor = context.getBean(NumberExtractor.class);
-  }
+  @Autowired
+  NumberExtractor numberExtractor;
 
   @Test
   public void getNumbers1() throws Exception {

@@ -1,5 +1,7 @@
-package com.cityelf.model.water.parser;
+package com.cityelf.utils;
 
+import com.cityelf.domain.Report;
+import com.cityelf.domain.WaterForcastData;
 import com.cityelf.exceptions.WaterParserUnavailableException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

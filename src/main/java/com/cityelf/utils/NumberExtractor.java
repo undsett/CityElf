@@ -1,4 +1,4 @@
-package com.cityelf.model.water.parser;
+package com.cityelf.utils;
 
 import org.springframework.stereotype.Component;
 
@@ -10,21 +10,22 @@ import java.util.regex.Pattern;
 @Component
 class NumberExtractor {
 
-  private String streetReplacePattern = ".+?,";
-  private String stringRangePattern = "\\d+([\\s\\D]*)?-(\\s)?\\d+((\\/)?[^\\s,+]+)?";
+  private final String streetReplacePattern = ".+?,";
+  private final String stringRangePattern = "\\d+([\\s\\D]*)?-(\\s)?\\d+((\\/)?[^\\s,+]+)?";
   private Pattern rangeNumbersPattern = Pattern.compile(stringRangePattern);
-  private Pattern standaloneNumbersPattern = Pattern.compile("\\d{1,3}([^,\\w\\/\\s]{1}|\\/[\\d\\S,]+?){0,4}");
+  private Pattern standaloneNumbersPattern = Pattern
+      .compile("\\d{1,3}([^,\\w\\/\\s]{1}|\\/[\\d\\S,]+?){0,4}");
 
-  private String cleanRangePattern = "(?<=\\d{1,3})([^\\d]*)?(?=-\\d+(\\/.*)?)";
+  private final String cleanRangePattern = "(?<=\\d{1,3})([^\\d]*)?(?=-\\d+(\\/.*)?)";
 
 
   public Set<String> getNumbers(String rawAddress) {
-    Set<String> set = new TreeSet<>();
-    String string = rawAddress.replaceFirst(streetReplacePattern, "");
-    string = getRange(string, set);
-    getSingle(string, set);
+    Set<String> buildingNumberSet = new TreeSet<>();
+    String rawBuildingNumberString = rawAddress.replaceFirst(streetReplacePattern, "");
+    rawBuildingNumberString = getRange(rawBuildingNumberString, buildingNumberSet);
+    getSingle(rawBuildingNumberString, buildingNumberSet);
 
-    return set;
+    return buildingNumberSet;
   }
 
   private String getRange(String str, Set<String> set) {

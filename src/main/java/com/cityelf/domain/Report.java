@@ -1,8 +1,8 @@
-package com.cityelf.model.water.parser;
+package com.cityelf.domain;
 
 import java.util.List;
 
-class Report {
+public class Report {
 
   public String text;
   public List<Place> places;

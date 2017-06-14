@@ -1,4 +1,10 @@
-package com.cityelf.model.water.parser;
+package com.cityelf.utils;
+
+import com.cityelf.domain.Place;
+import com.cityelf.domain.Report;
+import com.cityelf.domain.WaterForcastData;
+import com.cityelf.utils.NumberExtractor;
+import com.cityelf.utils.StreetExtractor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,8 +37,8 @@ class WaterForcaster {
           waterForcastData.setStartOff(parseToDate(place.startTime));
           waterForcastData.setEndOff(parseToDate(place.endTime));
           waterDataList.add(waterForcastData);
-        } catch (Exception exeption) {
-          exeption.printStackTrace();
+        } catch (Exception ex) {
+          ex.printStackTrace();
           continue;
         }
       }
@@ -47,8 +53,8 @@ class WaterForcaster {
           .toInstant()
           .atZone(ZoneId.of("UTC+3"))
           .toLocalDateTime();
-    } catch (ParseException exception) {
-      exception.printStackTrace();
+    } catch (ParseException ex) {
+      ex.printStackTrace();
       return null;
     }
   }

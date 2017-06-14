@@ -1,27 +1,19 @@
-package com.cityelf.model.water.parser;
+package com.cityelf.utils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
-@Configuration
-@ComponentScan(basePackages = "com.cityelf.model.water.parser")
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class StreetExtractorTest {
 
   @Autowired
   private StreetExtractor streetExtractor;
-
-  @Before
-  public void setUp() throws Exception {
-    ApplicationContext context = new AnnotationConfigApplicationContext(StreetExtractorTest.class);
-    streetExtractor = context.getBean(StreetExtractor.class);
-  }
 
   @Test
   public void getStreetName1() throws Exception {

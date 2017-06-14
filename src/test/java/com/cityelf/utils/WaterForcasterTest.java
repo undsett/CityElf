@@ -1,31 +1,33 @@
-package com.cityelf.model.water.parser;
+package com.cityelf.utils;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import com.cityelf.domain.Place;
+import com.cityelf.domain.Report;
+import com.cityelf.domain.WaterForcastData;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Configuration
-@ComponentScan(basePackages = "com.cityelf.model.water.parser")
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class WaterForcasterTest {
 
+  @Autowired
   WaterForcaster waterForcaster;
   Report[] reports;
 
   @Before
   public void setUp() throws Exception {
-    ApplicationContext context = new AnnotationConfigApplicationContext(WaterForcasterTest.class);
-    waterForcaster = context.getBean(WaterForcaster.class);
-
     List<Report> reportList = new ArrayList<>();
 
     Report report = new Report();

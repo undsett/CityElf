@@ -1,8 +1,8 @@
-package com.cityelf.model.water.parser;
+package com.cityelf.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-class Place {
+public class Place {
 
   @JsonProperty("n")
   public int id;
