@@ -93,16 +93,6 @@ public class UserControllerTest {
   }
 
   @Test
-  public void recentAddressesShouldReturnHttpStatusNotFound404() throws Exception {
-    when(userService.getUser(anyInt()))
-        .thenThrow(UserNotFoundException.class);
-
-    mockMvc.perform(get("/users/recentAddresses/1"))
-        .andDo(print())
-        .andExpect(status().isNotFound());
-  }
-
-  @Test
   public void getUserShouldReturnHttpStatusNotFound404() throws Exception {
     when(userService.getUser(anyInt()))
         .thenThrow(UserNotFoundException.class);
