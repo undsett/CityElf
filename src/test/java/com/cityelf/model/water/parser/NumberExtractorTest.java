@@ -95,7 +95,6 @@ public class NumberExtractorTest {
     numbers = numberExtractor.getNumbers("АКАДЕМИКА ВИЛЬЯМСА УЛ., 64 - 76/Б все дома");
     assertThat(numbers).containsExactly("64-76/Б");
   }
-///////////////////////////
 
   @Test
   public void getNumbers11() throws Exception {
