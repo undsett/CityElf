@@ -4,7 +4,6 @@ import com.cityelf.exceptions.TokenNotFoundException;
 import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.model.User;
 import com.cityelf.repository.UserRepository;
-import com.cityelf.utils.MailSenderService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,7 @@ public class ForgotPasswordService {
   private UserRepository userRepository;
 
   @Autowired
-  MailSenderService mailSender;
+  private MailSenderService mailSender;
 
   @Transactional
   public void forgotPassword(String userEmail) throws UserNotFoundException {
