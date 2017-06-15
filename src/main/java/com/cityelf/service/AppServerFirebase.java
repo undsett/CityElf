@@ -4,6 +4,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -11,24 +12,23 @@ import java.net.URL;
 @Service
 public class AppServerFirebase {
 
-  @Value("${authentificationKeyFirebase}")
-  private String authentificationKeyFirebase;
+  @Value("${firebase.authentication.key}")
+  private static String authentificationKeyFirebase;
+  private final static String apiUrlFcm = "https://fcm.googleapis.com/fcm/send";
 
   public void pushFCMNotification(String firebaseId, String titleMessage, String bodyMessage)
       throws Exception {
 
-    String apiUrlFcm = "https://fcm.googleapis.com/fcm/send";
-
     URL url = new URL(apiUrlFcm);
-    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-    conn.setUseCaches(false);
-    conn.setDoInput(true);
-    conn.setDoOutput(true);
+    connection.setUseCaches(false);
+    connection.setDoInput(true);
+    connection.setDoOutput(true);
 
-    conn.setRequestMethod("POST");
-    conn.setRequestProperty("Authorization", "key=" + authentificationKeyFirebase);
-    conn.setRequestProperty("Content-Type", "application/json");
+    connection.setRequestMethod("POST");
+    connection.setRequestProperty("Authorization", "key=" + authentificationKeyFirebase);
+    connection.setRequestProperty("Content-Type", "application/json");
 
     JSONObject json = new JSONObject();
     json.put("to", firebaseId.trim());
@@ -37,9 +37,14 @@ public class AppServerFirebase {
     fireMessage.put("body", bodyMessage);
     json.put("notification", fireMessage);
 
-    OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-    wr.write(json.toString());
-    wr.flush();
-    conn.getInputStream();
+    OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+    try {
+      writer.write(json.toString());
+      writer.flush();
+    } catch (IOException exeption) {
+      exeption.printStackTrace();
+    } finally {
+      writer.close();
+    }
   }
 }
