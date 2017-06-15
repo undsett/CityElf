@@ -55,6 +55,7 @@ dependencies {
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.security:spring-security-test')
 	compile group: 'mysql', name: 'mysql-connector-java', version: '6.0.6'
+	compile group: 'org.json', name: 'json', version: '20160810'
 }
 
 checkstyle {
