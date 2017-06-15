@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -21,7 +23,7 @@ public class UserController {
   private UserService userService;
 
   @RequestMapping("/all")
-  public java.util.List<User> getAll() {
+  public List<User> getAll() {
     return userService.getAll();
   }
 
@@ -48,10 +50,4 @@ public class UserController {
   public void deleteUser(@PathVariable("userId") long id) throws UserNotFoundException {
     userService.deleteUser(id);
   }
-
-  /*@RequestMapping(value = "/recentAddresses/{userId}", method = RequestMethod.GET)
-  public List<String> getRecentAddresses(@PathVariable("userId") long id)
-      throws UserNotFoundException {
-    return userService.getUser(id).getRecentAddresses();
-  }*/
 }

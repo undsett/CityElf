@@ -37,12 +37,25 @@ public class UserService {
     return user;
   }
 
-  public void addNewUser(String email, String password, String address) throws UserAlreadyExistsException {
-    User newUser = new User(email, password);
-    if (userRepository.findByEmail(newUser.getEmail()) == null) {
-      userRepository.save(newUser);
-      int id = userAddressesRepository.findByAddressId(address);
 
+  public void addNewUser(String email, String password, String address)
+
+      throws UserAlreadyExistsException {
+    User newUser = new User(email, password);
+    userRepository.save(newUser);
+    int id = userAddressesRepository.findByAddressId(address);
+
+    if (user.getEmail() == null && userRepository.findByFirebaseId(user.getFirebaseId()) == null) {
+      user.setAuthorized("not_authorized");
+      userRepository.save(user);
+    } else if (user.getFirebaseId() == null
+        && userRepository.findByEmail(user.getEmail()) == null) {
+      user.setAuthorized("authorized");
+      userRepository.save(user);
+    } else if (userRepository.findByFirebaseId(user.getFirebaseId()) == null
+        && userRepository.findByEmail(user.getEmail()) == null) {
+      user.setAuthorized("authorized");
+      userRepository.save(user);
     } else {
       throw new UserAlreadyExistsException();
     }
@@ -50,6 +63,16 @@ public class UserService {
 
   public void updateUser(User user) throws UserNotFoundException {
     if (userRepository.exists(user.getId())) {
+      User userFromDB = userRepository.findOne(user.getId());
+      if (user.getPassword() == null) {
+        user.setPassword(userFromDB.getPassword());
+      }
+      if (user.getFirebaseId() == null) {
+        user.setFirebaseId(userFromDB.getFirebaseId());
+      }
+      if (user.getEmail() == null) {
+        user.setEmail(userFromDB.getEmail());
+      }
       userRepository.save(user);
     } else {
       throw new UserNotFoundException();
