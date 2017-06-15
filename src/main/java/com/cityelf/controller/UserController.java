@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -34,10 +35,14 @@ public class UserController {
     userService.updateUser(user);
   }
 
-  @RequestMapping(value = "/addUser", method = RequestMethod.POST)
-  public void addNewUser(@RequestBody User user) throws UserAlreadyExistsException {
-    userService.addNewUser(user);
+  @RequestMapping(value = "/adduser", method = RequestMethod.POST)
+  public void addNewUser(@RequestParam("login") String email,
+      @RequestParam("password") String password,
+      @RequestParam("adress") String adress) throws UserAlreadyExistsException {
+    userService.addNewUser(email,password,adress);
   }
+
+
 
   @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
   public void deleteUser(@PathVariable("userId") long id) throws UserNotFoundException {

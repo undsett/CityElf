@@ -30,6 +30,16 @@ public class User {
   private boolean activated;
   //private List<String> recentAddresses = new ArrayList<>();
 
+  public User(String email, String password) {
+    this.email = email;
+    this.phone = null;
+    this.password = password;
+    this.notification = null;
+    this.token = null;
+    this.expirationDate = null;
+    this.activated = false;
+  }
+
   public User() {
     this.activated = false;
     this.token = null;

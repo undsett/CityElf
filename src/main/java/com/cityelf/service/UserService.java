@@ -3,10 +3,13 @@ package com.cityelf.service;
 import com.cityelf.exceptions.UserAlreadyExistsException;
 import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.model.User;
+import com.cityelf.model.UserAddresses;
+import com.cityelf.repository.UserAddressesRepository;
 import com.cityelf.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -15,6 +18,9 @@ public class UserService {
 
   @Autowired
   private UserRepository userRepository;
+
+  @Autowired
+  private UserAddressesRepository userAddressesRepository;
 
   public UserService() {
   }
@@ -31,9 +37,12 @@ public class UserService {
     return user;
   }
 
-  public void addNewUser(User user) throws UserAlreadyExistsException {
-    if (userRepository.findByEmail(user.getEmail()) == null) {
-      userRepository.save(user);
+  public void addNewUser(String email, String password, String address) throws UserAlreadyExistsException {
+    User newUser = new User(email, password);
+    if (userRepository.findByEmail(newUser.getEmail()) == null) {
+      userRepository.save(newUser);
+      int id = userAddressesRepository.findByAddressId(address);
+
     } else {
       throw new UserAlreadyExistsException();
     }
