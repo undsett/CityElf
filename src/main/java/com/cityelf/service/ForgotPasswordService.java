@@ -4,6 +4,7 @@ import com.cityelf.exceptions.TokenNotFoundException;
 import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.model.User;
 import com.cityelf.repository.UserRepository;
+import com.cityelf.utils.MailSenderService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class ForgotPasswordService {
     User user = getUserByEmail(userEmail);
     String token = UUID.randomUUID().toString();
     user.setToken(token);
-    user.setExpirationDate();
+    user.setExpirationDate(LocalDateTime.now().plusDays(1));
     userRepository.save(user);
     sendResetTokenEmail(userEmail, token);
   }
@@ -56,6 +57,7 @@ public class ForgotPasswordService {
       if (user.getToken().equals(token) && user.getExpirationDate().isAfter(LocalDateTime.now())) {
         user.setPassword(newPassword);
         user.setToken(null);
+        user.setExpirationDate(null);
         userRepository.save(user);
       }
     } else {
