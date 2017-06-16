@@ -19,5 +19,6 @@ public interface WaterForecastRepository extends CrudRepository<WaterForecast, L
 
   void deleteWaterForecastsByStart(LocalDateTime startTime);
 
-  List<WaterForecast> findWaterForecastsByStartLessThanEqualAndEstimatedStopGreaterThan(LocalDateTime checkStart, LocalDateTime checkEnd);
+  List<WaterForecast> findWaterForecastsByStartLessThanEqualAndEstimatedStopGreaterThan(
+      LocalDateTime checkStart, LocalDateTime checkEnd);
 }
