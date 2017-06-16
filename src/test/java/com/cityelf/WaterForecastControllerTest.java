@@ -58,7 +58,7 @@ public class WaterForecastControllerTest {
   public void getAll() throws Exception {
     when(waterForecastService.getAll()).thenReturn(Arrays.asList(waterForecast));
 
-    mockMvc.perform(get("/waterForecast/all"))
+    mockMvc.perform(get("/waterforecast/all"))
         .andDo(print())
         .andExpect(content().string(objectToJson(Arrays.asList(waterForecast))));
   }
@@ -68,7 +68,7 @@ public class WaterForecastControllerTest {
     when(waterForecastService.getForecast(anyInt()))
         .thenThrow(ForecastNotFoundException.class);
 
-    mockMvc.perform(get("/waterForecast/1"))
+    mockMvc.perform(get("/waterforecast/1"))
         .andDo(print())
         .andExpect(status().isNotFound());
   }
@@ -78,7 +78,7 @@ public class WaterForecastControllerTest {
     when(waterForecastService.getForecast(anyInt()))
         .thenReturn(waterForecast);
 
-    mockMvc.perform(get("/waterForecast/2"))
+    mockMvc.perform(get("/waterforecast/2"))
         .andDo(print())
         .andExpect(status().isOk());
   }
@@ -88,7 +88,7 @@ public class WaterForecastControllerTest {
     when(waterForecastService.getForecast(anyInt()))
         .thenReturn(waterForecast);
 
-    mockMvc.perform(get("/waterForecast/2"))
+    mockMvc.perform(get("/waterforecast/2"))
         .andDo(print())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(content().string(objectToJson(waterForecast)));
@@ -99,7 +99,7 @@ public class WaterForecastControllerTest {
     when(waterForecastService.getForecast(any(LocalDateTime.class), any(String.class)))
         .thenReturn(waterForecast);
 
-    mockMvc.perform(get("/waterForecast/get")
+    mockMvc.perform(get("/waterforecast/get")
             .param("start", waterForecast.getStart().toString())
             .param("address", waterForecast.getAddress().getAddress()))
         .andDo(print())
@@ -111,7 +111,7 @@ public class WaterForecastControllerTest {
     when(waterForecastService.getForecast(any(LocalDateTime.class), any(String.class)))
         .thenReturn(waterForecast);
 
-    mockMvc.perform(get("/waterForecast/get")
+    mockMvc.perform(get("/waterforecast/get")
         .param("start", waterForecast.getStart().toString())
         .param("address", waterForecast.getAddress().getAddress()))
         .andDo(print())
@@ -124,7 +124,7 @@ public class WaterForecastControllerTest {
     when(waterForecastService.getForecastsByTime(any(LocalDateTime.class)))
         .thenReturn(Arrays.asList(waterForecast));
 
-    mockMvc.perform(get("/waterForecast/getbystart")
+    mockMvc.perform(get("/waterforecast/getbystart")
         .param("start", waterForecast.getStart().toString()))
         .andDo(print())
         .andExpect(status().isOk());
@@ -135,8 +135,30 @@ public class WaterForecastControllerTest {
     when(waterForecastService.getForecastsByTime(any(LocalDateTime.class)))
         .thenReturn(Arrays.asList(waterForecast));
 
-    mockMvc.perform(get("/waterForecast/getbystart")
+    mockMvc.perform(get("/waterforecast/getbystart")
         .param("start", waterForecast.getStart().toString()))
+        .andDo(print())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().string(objectToJson(Arrays.asList(waterForecast))));
+  }
+
+  @Test
+  public void getCurrentWaterForecastsShouldReturnHttpStatusOk200() throws Exception {
+    when(waterForecastService.getCurrentWaterForecasts(any(LocalDateTime.class)))
+        .thenReturn(Arrays.asList(waterForecast));
+
+    mockMvc.perform(get("/waterforecast/getcurrent"))
+        .andDo(print())
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  public void getCurrentWaterForecastsShouldReturnJson() throws Exception {
+    waterForecast.setEstimatedStop(LocalDateTime.of(3000,1,1,0,0));
+    when(waterForecastService.getCurrentWaterForecasts(any(LocalDateTime.class)))
+        .thenReturn(Arrays.asList(waterForecast));
+
+    mockMvc.perform(get("/waterforecast/getcurrent"))
         .andDo(print())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(content().string(objectToJson(Arrays.asList(waterForecast))));
@@ -147,7 +169,7 @@ public class WaterForecastControllerTest {
     when(waterForecastService.getAddressesByTime(any(LocalDateTime.class)))
         .thenReturn(new HashSet(Arrays.asList(address)));
 
-    mockMvc.perform(get("/waterForecast/getaddressesbytime")
+    mockMvc.perform(get("/waterforecast/getaddressesbytime")
         .param("start", waterForecast.getStart().toString()))
         .andDo(print())
         .andExpect(status().isOk());
@@ -158,7 +180,7 @@ public class WaterForecastControllerTest {
     when(waterForecastService.getAddressesByTime(any(LocalDateTime.class)))
         .thenReturn(new HashSet(Arrays.asList(address)));
 
-    mockMvc.perform(get("/waterForecast/getaddressesbytime")
+    mockMvc.perform(get("/waterforecast/getaddressesbytime")
         .param("start", waterForecast.getStart().toString()))
         .andDo(print())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
@@ -169,7 +191,7 @@ public class WaterForecastControllerTest {
   public void addNewWaterForecastShouldReturnHttpStatusOk200() throws Exception {
     doNothing().when(waterForecastService).addNewWaterForecast(any());
 
-    mockMvc.perform(post("/waterForecast/addnew")
+    mockMvc.perform(post("/waterforecast/addnew")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(objectToJson(waterForecast))
     )
@@ -182,7 +204,7 @@ public class WaterForecastControllerTest {
     doNothing().when(waterForecastService).updateWaterForecast(any());
 
     mockMvc.perform(
-        put("/waterForecast/update")
+        put("/waterforecast/update")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(waterForecast))
     )
@@ -195,7 +217,7 @@ public class WaterForecastControllerTest {
     doThrow(ForecastNotFoundException.class).when(waterForecastService).updateWaterForecast(any());
 
     mockMvc.perform(
-        put("/waterForecast/update")
+        put("/waterforecast/update")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(waterForecast))
     )
@@ -206,7 +228,7 @@ public class WaterForecastControllerTest {
   @Test
   public void deleteWaterForecastShouldReturnHttpStatusOk200() throws Exception {
     mockMvc.perform(
-        delete("/waterForecast/delete")
+        delete("/waterforecast/delete")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(waterForecast))
     )
@@ -219,7 +241,7 @@ public class WaterForecastControllerTest {
     doThrow(ForecastNotFoundException.class).when(waterForecastService).deleteWaterForecast(any());
 
     mockMvc.perform(
-        delete("/waterForecast/delete")
+        delete("/waterforecast/delete")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(objectToJson(waterForecast))
     )
@@ -230,7 +252,7 @@ public class WaterForecastControllerTest {
   @Test
   public void deleteWaterForecastsByTimeShouldReturnHttpStatusOk200() throws Exception {
     mockMvc.perform(
-        delete("/waterForecast/deleteallbytime")
+        delete("/waterforecast/deleteallbytime")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(LocalDateTime.now()))
     )

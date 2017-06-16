@@ -18,4 +18,6 @@ public interface WaterForecastRepository extends CrudRepository<WaterForecast, L
   Optional<WaterForecast> findByStartAndAddress_Address(LocalDateTime startTime, String address);
 
   void deleteWaterForecastsByStart(LocalDateTime startTime);
+
+  List<WaterForecast> findWaterForecastsByStartLessThanEqualAndEstimatedStopGreaterThan(LocalDateTime checkStart, LocalDateTime checkEnd);
 }

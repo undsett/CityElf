@@ -118,4 +118,14 @@ public class WaterForecastService {
         .map(WaterForecast::getAddress)
         .collect(Collectors.toSet());
   }
+
+  /**
+   * This will return a List of WaterForecast objects which are current for the specified time
+   * @param checkedTime date and time what we are checking
+   * @return the List of water forecasts
+   */
+  public List<WaterForecast> getCurrentWaterForecasts(LocalDateTime checkedTime) {
+    return waterForecastRepository
+        .findWaterForecastsByStartLessThanEqualAndEstimatedStopGreaterThan(checkedTime, checkedTime);
+  }
 }

@@ -73,4 +73,9 @@ public class WaterForecastController {
     waterForecastService.deleteWaterForecastsByTime(startTime);
   }
 
+  @RequestMapping(value = "/getcurrent", method = RequestMethod.GET)
+  public List<WaterForecast> getCurrentWaterForecasts() {
+    return waterForecastService.getCurrentWaterForecasts(LocalDateTime.now());
+  }
+
 }
