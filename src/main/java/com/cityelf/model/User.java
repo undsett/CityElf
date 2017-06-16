@@ -28,28 +28,37 @@ public class User {
   private LocalDateTime expirationDate;
   @Column(name = "activated")
   private boolean activated;
-  //private List<String> recentAddresses = new ArrayList<>();
+  @Column(name = "authorized")
+  private String authorized;
+  @Column(name = "firebase_id")
+  private String firebaseId;
 
   public User() {
+    this.email = null;
+    this.phone = null;
+    this.password = null;
     this.activated = false;
     this.token = null;
     this.expirationDate = null;
-    this.activated = false;
     this.notification = new Notification();
+    this.authorized = "n/a";
+    this.firebaseId = null;
   }
 
-  public User(String firstname, String lastname, String email,
-      String phone, String password) {
-    this.id = 0;
-    this.email = email;
-    this.phone = phone;
-    this.password = password;
-    this.activated = false;
-    this.token = null;
-    this.expirationDate = null;
-    this.activated = false;
-    this.notification = null;
-    this.notification = new Notification();
+  public String getAuthorized() {
+    return authorized;
+  }
+
+  public void setAuthorized(String authorized) {
+    this.authorized = authorized;
+  }
+
+  public String getFirebaseId() {
+    return firebaseId;
+  }
+
+  public void setFirebaseId(String firebaseId) {
+    this.firebaseId = firebaseId;
   }
 
   public Notification getNotification() {
@@ -72,8 +81,8 @@ public class User {
     this.token = token;
   }
 
-  public void setExpirationDate() {
-    this.expirationDate = LocalDateTime.now().plusDays(1);
+  public void setExpirationDate(LocalDateTime localDateTime) {
+    this.expirationDate = localDateTime;
   }
 
   public String getToken() {
@@ -111,6 +120,4 @@ public class User {
   public void setPhone(String phone) {
     this.phone = phone;
   }
-
-
 }
