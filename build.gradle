@@ -1,14 +1,14 @@
 buildscript {
-	ext {
-		springBootVersion = '1.5.4.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		classpath('se.transmode.gradle:gradle-docker:1.2')
-	}
+    ext {
+        springBootVersion = '1.5.4.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath('se.transmode.gradle:gradle-docker:1.2')
+    }
 }
 
 group = 'cityelf'
@@ -23,22 +23,22 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
 task buildDocker(type: Docker, dependsOn: build) {
-	push = true
-	applicationName = jar.baseName
-	dockerfile = file('src/main/docker/Dockerfile')
-	doFirst {
-		copy {
-			from jar
-			into stageDir
-		}
-	}
+    push = true
+    applicationName = jar.baseName
+    dockerfile = file('src/main/docker/Dockerfile')
+    doFirst {
+        copy {
+            from jar
+            into stageDir
+        }
+    }
 }
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '3.3'
+    gradleVersion = '3.3'
 }
 
 dependencies {
@@ -56,10 +56,11 @@ dependencies {
 	testCompile('org.springframework.security:spring-security-test')
 	compile group: 'mysql', name: 'mysql-connector-java', version: '6.0.6'
 	compile group: 'org.json', name: 'json', version: '20160810'
+    compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.8')
 }
 
 checkstyle {
-	configFile = rootProject.file('config/checkstyle/checkstyle.xml')
-	checkstyleTest.enabled = false
-	toolVersion = '7.1.2'
+    configFile = rootProject.file('config/checkstyle/checkstyle.xml')
+    checkstyleTest.enabled = false
+    toolVersion = '7.1.2'
 }
