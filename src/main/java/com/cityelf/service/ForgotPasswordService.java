@@ -20,14 +20,14 @@ public class ForgotPasswordService {
   private UserRepository userRepository;
 
   @Autowired
-  MailSenderService mailSender;
+  private MailSenderService mailSender;
 
   @Transactional
   public void forgotPassword(String userEmail) throws UserNotFoundException {
     User user = getUserByEmail(userEmail);
     String token = UUID.randomUUID().toString();
     user.setToken(token);
-    user.setExpirationDate();
+    user.setExpirationDate(LocalDateTime.now().plusDays(1));
     userRepository.save(user);
     sendResetTokenEmail(userEmail, token);
   }
@@ -56,6 +56,7 @@ public class ForgotPasswordService {
       if (user.getToken().equals(token) && user.getExpirationDate().isAfter(LocalDateTime.now())) {
         user.setPassword(newPassword);
         user.setToken(null);
+        user.setExpirationDate(null);
         userRepository.save(user);
       }
     } else {
