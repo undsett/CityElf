@@ -1,7 +1,8 @@
 package com.cityelf.utils;
 
+import com.cityelf.domain.ForcastData;
 import com.cityelf.domain.Report;
-import com.cityelf.domain.WaterForcastData;
+import com.cityelf.exceptions.ParserUnavailableException;
 import com.cityelf.exceptions.WaterParserUnavailableException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -14,16 +15,16 @@ import java.net.URL;
 import java.util.List;
 
 @Component
-public class Parser {
+public class ParserWater {
 
-  @Value("http://infoxvod.com.ua/avr/data.php")
+  @Value("${infox.data.url}")
   private URL urlToParse;
   @Autowired
-  private WaterContentLoader loader;
+  private ContentLoader loader;
   @Autowired
   private WaterForcaster forcaster;
 
-  public void setLoader(WaterContentLoader loader) {
+  public void setLoader(ContentLoader loader) {
     this.loader = loader;
   }
 
@@ -41,7 +42,7 @@ public class Parser {
     }
   }
 
-  public List<WaterForcastData> getForcastDataList() throws WaterParserUnavailableException {
+  public List<ForcastData> getForcastDataList() throws ParserUnavailableException {
     String content = loader.load(urlToParse);
     Report[] reports = toJavaObject(content, new Report[0].getClass());
     return forcaster.getForcastsData(reports);

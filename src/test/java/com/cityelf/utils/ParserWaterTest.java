@@ -5,8 +5,8 @@ import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.cityelf.domain.WaterForcastData;
-import com.cityelf.exceptions.WaterParserUnavailableException;
+import com.cityelf.domain.ForcastData;
+import com.cityelf.exceptions.ParserUnavailableException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,10 +19,10 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ParserTest {
+public class ParserWaterTest {
 
   @Autowired
-  private Parser parser;
+  private ParserWater parserWater;
   private String json = "[{"
       +
       "\"text\":\"Проведение аварийных работ по устранению течи  водопровода по адресу МАРШАЛА ЖУКОВА ПР. 100 \","
@@ -45,15 +45,15 @@ public class ParserTest {
 
   @Before
   public void setUp() throws Exception {
-    WaterContentLoader loader = mock(WaterContentLoader.class);
+    ContentLoader loader = mock(ContentLoader.class);
     when(loader.load(anyObject()))
         .thenReturn(json);
-    parser.setLoader(loader);
+    parserWater.setLoader(loader);
   }
 
   @Test
-  public void parserTest() throws WaterParserUnavailableException {
-    List<WaterForcastData> forcastDataList = parser.getForcastDataList();
+  public void parserTest() throws ParserUnavailableException {
+    List<ForcastData> forcastDataList = parserWater.getForcastDataList();
 
     assertThat(forcastDataList.size())
         .isEqualTo(1);
