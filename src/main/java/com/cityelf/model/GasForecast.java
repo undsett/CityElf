@@ -1,7 +1,13 @@
 package com.cityelf.model;
 
-import javax.persistence.*;
-import java.time.LocalDate;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,8 +28,8 @@ public class GasForecast {
     @Column(name = "address_id")
     private long address_id;
 
-    @Column(name = "people_report")
-    private boolean people_report;
+    @Column(name = "peopleReport")
+    private boolean peopleReport;
 
     @ManyToOne
     @JoinColumn(name = "address_id")
@@ -36,11 +42,16 @@ public class GasForecast {
         address = new Address();
     }
 
-    public GasForecast(LocalDateTime start, LocalDateTime estimatedStop, boolean people_report, Address address) {
+    public GasForecast(LocalDateTime start, LocalDateTime estimatedStop, boolean peopleReport, Address address) {
+        this.id = 0;
         this.start = start;
         this.estimatedStop = estimatedStop;
-        this.people_report = people_report;
+        this.peopleReport = peopleReport;
         this.address = address;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public LocalDateTime getStart() {
@@ -67,12 +78,20 @@ public class GasForecast {
         this.address_id = address_id;
     }
 
-    public boolean isPeople_report() {
-        return people_report;
+    public boolean isPeopleReport() {
+        return peopleReport;
     }
 
-    public void setPeople_report(boolean people_report) {
-        this.people_report = people_report;
+    public void setPeopleReport(boolean peopleReport) {
+        this.peopleReport = peopleReport;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
 

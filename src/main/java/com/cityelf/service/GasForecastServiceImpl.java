@@ -13,32 +13,33 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * Created by Антон on 17.06.2017.
- */
 @Service
-public class GasForecastServiceImpl {
+public class GasForecastServiceImpl implements GasForecastService {
 
     @Autowired
-    private GasForecastRepository waterForecastRepository;
+    private GasForecastRepository gasForecastRepository;
 
     /**
-     * Get all water forecasts in repository. If we clear repository every few hours, it will return only
+     * Get all gas forecasts in repository. If we clear repository every few hours, it will return only
      * actual or just ended forecasts.
+     *
      * @return an Iterable object
      */
+    @Override
     public Iterable<GasForecast> getAll() {
-        return waterForecastRepository.findAll();
+        return gasForecastRepository.findAll();
     }
 
     /**
-     * Get water forecast by ID
-     * @param id the ID of the water forecast
-     * @return returns the WaterForecast object with specified ID (if exists)
+     * Get gas forecast by ID
+     *
+     * @param id the ID of the gas forecast
+     * @return returns the GasForecast object with specified ID (if exists)
      * @throws ForecastNotFoundException if object doesn't exist
      */
+    @Override
     public GasForecast getForecast(long id) throws ForecastNotFoundException {
-        GasForecast forecast = waterForecastRepository.findOne(id);
+        GasForecast forecast = gasForecastRepository.findOne(id);
         if (forecast == null) {
             throw new ForecastNotFoundException();
         }
@@ -47,74 +48,88 @@ public class GasForecastServiceImpl {
 
     /**
      * Get forecast by start time and address.
+     *
      * @param startTime date and time when forecast starts
-     * @param address the address, where forecast will be (column "street" in data base)
+     * @param address   the address, where forecast will be (column "street" in data base)
      * @return a WaterForecast object (if exists)
      * @throws ForecastNotFoundException if the object doesn't exist
      */
+    @Override
     public GasForecast getForecast(LocalDateTime startTime, String address) throws ForecastNotFoundException {
-        return waterForecastRepository.findByStartAndAddress_Address(startTime, address)
+        return gasForecastRepository.findByStartAndAddress_Address(startTime, address)
                 .orElseThrow(ForecastNotFoundException::new);
     }
 
     /**
      * Get all forecasts, started at signed time.
+     *
      * @param startTime date and time when forecast starts
-     * @return the List of WaterForecast, started at the specified time
+     * @return the List of GasForecast, started at the specified time
      */
+    @Override
     public List<GasForecast> getForecastsByTime(LocalDateTime startTime) {
-        return waterForecastRepository.findByStart(startTime);
+        return gasForecastRepository.findByStart(startTime);
     }
 
     /**
-     * This will add new water forecast to the repository if there is no one with the same start time and address.
-     * @param forecast new WaterForecast object to add into repository
+     * This method will add new gas forecast to the repository if there is no one with the same start time and address.
+     *
+     * @param forecast new GasForecast object to add into repository
      * @throws ForecastAlreadyExistsException if the object with the same start time and address exists
      */
-    public void addNewWaterForecast(GasForecast forecast) throws ForecastAlreadyExistsException {
-        if (waterForecastRepository.findByStartAndAddress(forecast.getStart(), forecast.getAddress()).isPresent()) {
+    @Override
+    public void addNewGasForecast(GasForecast forecast) throws ForecastAlreadyExistsException {
+        if (gasForecastRepository.findByStartAndAddress(forecast.getStart(), forecast.getAddress()).isPresent()) {
             throw new ForecastAlreadyExistsException();
         }
-        waterForecastRepository.save(forecast);
+        gasForecastRepository.save(forecast);
     }
 
     /**
-     * This will update an existing forecast or will throw an exception if there is no such forecasts in the repo.
-     * @param forecast an existed WaterForecast object which we need to update
+     * This method will update an existing forecast or will throw an exception if there is no such forecasts in the repo.
+     *
+     * @param forecast an existed GasForecast object which we need to update
      * @throws ForecastNotFoundException if there is no object with the same ID in the repository
      */
-    public void updateWaterForecast(GasForecast forecast) throws ForecastNotFoundException {
-        if (!waterForecastRepository.exists(forecast.getId())) {
+    @Override
+    public void updateGasForecast(GasForecast forecast) throws ForecastNotFoundException {
+        if (!gasForecastRepository.exists(forecast.getId())) {
             throw new ForecastNotFoundException();
         }
-        waterForecastRepository.save(forecast);
+        gasForecastRepository.save(forecast);
     }
 
     /**
-     * This will delete one forecast from the repository or will throw an exception
-     * @param forecast an existed WaterForecast object which we need to remove
+     * This method will delete one forecast from the repository or will throw an exception
+     *
+     * @param forecast an existed GasForecast object which we need to remove
      * @throws ForecastNotFoundException if there is no object with the same ID in the repository
      */
-    public void deleteWaterForecast(GasForecast forecast) throws ForecastNotFoundException {
-        if (!waterForecastRepository.exists(forecast.getId())) {
+    @Override
+    public void deleteGasForecast(GasForecast forecast) throws ForecastNotFoundException {
+        if (!gasForecastRepository.exists(forecast.getId())) {
             throw new ForecastNotFoundException();
         }
-        waterForecastRepository.delete(forecast);
+        gasForecastRepository.delete(forecast);
     }
 
     /**
-     * This will delete from the repository all forecasts started at the signed time.
+     * This method will delete from the repository all forecasts started at the signed time.
+     *
      * @param startTime date and time when forecast starts
      */
-    public void deleteWaterForecastsByTime(LocalDateTime startTime) {
-        waterForecastRepository.delete(getForecastsByTime(startTime));
+    @Override
+    public void deleteGasForecastsByTime(LocalDateTime startTime) {
+        gasForecastRepository.delete(getForecastsByTime(startTime));
     }
 
     /**
-     * This will return a set of addresses, where water forecasts will start at the signed time.
+     * This method will return a set of addresses, where water forecasts will start at the signed time.
+     *
      * @param startTime date and time when forecast starts
      * @return the Set of Addresses, where forecast at the specified time will happen
      */
+    @Override
     public Set<Address> getAddressesByTime(LocalDateTime startTime) {
         return getForecastsByTime(startTime).stream()
                 .map(GasForecast::getAddress)
@@ -122,13 +137,15 @@ public class GasForecastServiceImpl {
     }
 
     /**
-     * This will return a List of WaterForecast objects which are current for the specified time
+     * This method will return a List of GasForecast objects which are current for the specified time
+     *
      * @param checkedTime date and time what we are checking
-     * @return the List of water forecasts
+     * @return the List of gas forecasts
      */
-    public List<GasForecast> getCurrentWaterForecasts(LocalDateTime checkedTime) {
-        return waterForecastRepository
-                .findWaterForecastsByStartLessThanEqualAndEstimatedStopGreaterThan(checkedTime, checkedTime);
+    @Override
+    public List<GasForecast> getCurrentGasForecasts(LocalDateTime checkedTime) {
+        return gasForecastRepository
+                .findGasForecastsByStartLessThanEqualAndEstimatedStopGreaterThan(checkedTime, checkedTime);
     }
 }
 

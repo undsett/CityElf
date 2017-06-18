@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.cityelf.controller.NotificationController;
 import com.cityelf.controller.UserController;
+import com.cityelf.controller.WaterForecastController;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,10 +21,13 @@ public class SmokeTest {
   private NotificationController notificationController;
   @Autowired
   private UserController userController;
+  @Autowired
+  private WaterForecastController waterForecastController;
 
   @Test
   public void contextLoads() {
     assertThat(notificationController).isNotNull();
     assertThat(userController).isNotNull();
+    assertThat(waterForecastController).isNotNull();
   }
 }

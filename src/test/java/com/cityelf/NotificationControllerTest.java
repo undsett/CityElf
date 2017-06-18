@@ -21,6 +21,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Optional;
+
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = NotificationController.class, secure = false)
 public class NotificationControllerTest {
@@ -44,13 +46,12 @@ public class NotificationControllerTest {
     mockMvc.perform(get("/notification/settings/1"))
         .andDo(print())
         .andExpect(status().isNotFound());
-
   }
 
   @Test
   public void getNotificationShouldReturnHttpStatusOk200() throws Exception {
     when(notificationService.getNotification(anyInt()))
-        .thenReturn(notification);
+        .thenReturn(Optional.of(notification));
 
     mockMvc.perform(get("/notification/settings/2"))
         .andDo(print())
@@ -61,12 +62,11 @@ public class NotificationControllerTest {
   @Test
   public void getNotificationShouldReturnJson() throws Exception {
     when(notificationService.getNotification(anyInt()))
-        .thenReturn(notification);
+        .thenReturn(Optional.of(notification));
 
     mockMvc.perform(get("/notification/settings/3"))
         .andDo(print())
         .andExpect(content().contentTypeCompatibleWith("application/json"))
         .andExpect(content().string(objectToJson(notification)));
-
   }
 }

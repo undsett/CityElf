@@ -1,78 +1,107 @@
 package com.cityelf.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "users")
 public class User {
 
+  @Id
   private long id;
-  private String firstname;
-  private String lastname;
-  private String address;
+  @Column(name = "email")
   private String email;
+  @Column(name = "phone")
   private String phone;
+  @Column(name = "password")
   private String password;
+  @Embedded
   private Notification notification;
-  private List<String> recentAddresses = new ArrayList<>();
+  @Column(name = "token")
+  private String token;
+  @Column(name = "expiration_date")
+  private LocalDateTime expirationDate;
+  @Column(name = "activated")
+  private boolean activated;
+  @Column(name = "authorized")
+  private String authorized;
+  @Column(name = "firebase_id")
+  private String firebaseId;
 
   public User() {
-    id = 0;
-    firstname = "None";
-    lastname = "None";
-    address = "None";
-    email = "None";
-    phone = "None";
-    password = "None";
+    this.email = null;
+    this.phone = null;
+    this.password = null;
+    this.activated = false;
+    this.token = null;
+    this.expirationDate = null;
+    this.notification = new Notification();
+    this.authorized = "n/a";
+    this.firebaseId = null;
   }
 
-  public User(long id, String firstname, String lastname, String address, String email,
-      String phone) {
-    this.id = id;
-    this.firstname = firstname;
-    this.lastname = lastname;
-    this.address = address;
-    this.email = email;
-    this.phone = phone;
+  public String getAuthorized() {
+    return authorized;
   }
 
-  public String getPassword() {
-    return password;
+  public void setAuthorized(String authorized) {
+    this.authorized = authorized;
+  }
+
+  public String getFirebaseId() {
+    return firebaseId;
+  }
+
+  public void setFirebaseId(String firebaseId) {
+    this.firebaseId = firebaseId;
+  }
+
+  public Notification getNotification() {
+    return notification;
+  }
+
+  public void setNotification(Notification notification) {
+    this.notification = notification;
+  }
+
+  public boolean isActivated() {
+    return activated;
+  }
+
+  public void setActivated(boolean activated) {
+    this.activated = activated;
+  }
+
+  public void setToken(String token) {
+    this.token = token;
+  }
+
+  public void setExpirationDate(LocalDateTime localDateTime) {
+    this.expirationDate = localDateTime;
+  }
+
+  public String getToken() {
+    return token;
+  }
+
+  public LocalDateTime getExpirationDate() {
+    return expirationDate;
   }
 
   public void setPassword(String password) {
     this.password = password;
   }
 
+  public String getPassword() {
+    return password;
+  }
+
   public long getId() {
     return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
-  public String getFirstname() {
-    return firstname;
-  }
-
-  public void setFirstname(String firstname) {
-    this.firstname = firstname;
-  }
-
-  public String getLastname() {
-    return lastname;
-  }
-
-  public void setLastname(String lastname) {
-    this.lastname = lastname;
-  }
-
-  public String getAddress() {
-    return address;
-  }
-
-  public void setAddress(String address) {
-    this.address = address;
   }
 
   public String getEmail() {
@@ -89,21 +118,5 @@ public class User {
 
   public void setPhone(String phone) {
     this.phone = phone;
-  }
-
-  public Notification getNotification() {
-    return notification;
-  }
-
-  public void setNotification(Notification notification) {
-    this.notification = notification;
-  }
-
-  public List<String> getRecentAddresses() {
-    return recentAddresses;
-  }
-
-  public void setRecentAddresses(List<String> recentAddresses) {
-    this.recentAddresses = recentAddresses;
   }
 }
