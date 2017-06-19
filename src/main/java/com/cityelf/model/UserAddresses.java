@@ -8,39 +8,30 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "user_addresses")
 public class UserAddresses {
+
   @Id
   private long id;
   @Column(name = "user_id")
-  private Integer userId;
+  private long userId;
   @Column(name = "address_id")
-  private Integer addressId;
+  private long addressId;
 
-  public UserAddresses(int user_id, Integer address_id) {
-    this.userId = user_id;
-    this.addressId = address_id;
+
+  public UserAddresses(long userId, long addressId) {
+    this.userId = userId;
+    this.addressId = addressId;
   }
 
   public long getId() {
     return id;
   }
 
-  public void setId(long id) {
-    this.id = id;
-  }
-
-  public Integer getUserId() {
+  public long getUserId() {
     return userId;
   }
 
-  public void setUserId(Integer userId) {
-    this.userId = userId;
-  }
-
-  public Integer getAddressId() {
+  public long getAddressId() {
     return addressId;
   }
-
-  public void setAddressId(Integer addressId) {
-    this.addressId = addressId;
-  }
 }
+

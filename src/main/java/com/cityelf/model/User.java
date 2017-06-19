@@ -33,15 +33,19 @@ public class User {
   @Column(name = "firebase_id")
   private String firebaseId;
 
-  public User(String email, String password) {
+  public User(String email, String password, String firebaseId) {
     this.email = email;
     this.phone = null;
     this.password = password;
-    this.notification = null;
+    this.notification = notification;
     this.token = null;
     this.expirationDate = null;
     this.activated = false;
+    this.authorized = "0";
+    this.firebaseId = firebaseId;
   }
+
+
 
   public User() {
     this.email = null;

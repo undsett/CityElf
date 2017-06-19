@@ -38,10 +38,12 @@ public class UserController {
   }
 
   @RequestMapping(value = "/adduser", method = RequestMethod.POST)
-  public void addNewUser(@RequestParam("login") String email,
-      @RequestParam("password") String password,
-      @RequestParam("adress") String adress) throws UserAlreadyExistsException {
-    userService.addNewUser(email,password,adress);
+  public void addNewUser(@RequestParam(name = "login") String email,
+      @RequestParam(name = "password") String password,
+      @RequestParam(name = "address") String adress,
+      @RequestParam(name = "firebaseid") String fireBaseID)
+      throws UserAlreadyExistsException {
+    userService.addNewUser(email,password,adress, fireBaseID);
   }
 
 
