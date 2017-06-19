@@ -10,7 +10,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "addresses")
 public class Address {
-
+  
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -39,4 +39,3 @@ public class Address {
         this.address = address;
     }
 }
-
