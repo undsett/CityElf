@@ -11,10 +11,10 @@ import javax.persistence.Table;
 @Table(name = "addresses")
 public class Address {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "id")
+  private long id;
 
     @Column(name = "street")
     private String address;
@@ -38,6 +38,3 @@ public class Address {
     public void setAddress(String address) {
         this.address = address;
     }
-
-
-}

@@ -3,7 +3,7 @@ package com.cityelf.domain;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-public class WaterForcastData {
+public class ForcastData {
 
   private LocalDateTime startOff;
   private LocalDateTime endOff;
@@ -16,7 +16,7 @@ public class WaterForcastData {
   }
 
   /**
-   * Return water shut-off start time
+   * Return the service shut-off start time
    *
    * @return LocalDateTime
    */
@@ -25,7 +25,7 @@ public class WaterForcastData {
   }
 
   /**
-   * Return estimated time when water supply will resume
+   * Return estimated time when water/electricity/gas supply will resume
    *
    * @return LocalDateTime or null if time is undefined
    */
@@ -39,7 +39,7 @@ public class WaterForcastData {
 
 
   /**
-   * Return the street that is under water shut-off
+   * Return the street that is under water/electricity/gas shut-off
    *
    * @return string of street name
    */
@@ -52,7 +52,7 @@ public class WaterForcastData {
   }
 
   /**
-   * Return raw message as it is on the website of infox
+   * Return raw message as it is on the website of city services
    *
    * @return string of raw message
    */
@@ -65,10 +65,10 @@ public class WaterForcastData {
   }
 
   /**
-   * Return building numbers on the current street for water shut-off
+   * Return building numbers on the current street for water/electricity/gas shut-off
    *
-   * @return set of some building numbers(or range of numbers) for Water shut-off or empty set if
-   * every buildings on the street is under shut-off
+   * @return set of some building numbers(or range of numbers) for water/electricity/gas shut-off or
+   * empty set if every buildings on the street is under shut-off
    */
   public Set<String> getBuildingNumberList() {
     return buildingNumberList;
@@ -80,7 +80,7 @@ public class WaterForcastData {
 
   @Override
   public String toString() {
-    return "WaterForcastData{"
+    return "ForcastData{"
         +
         "startOff=" + startOff
         +
