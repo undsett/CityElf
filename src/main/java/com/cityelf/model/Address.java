@@ -10,32 +10,32 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "addresses")
 public class Address {
-  
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private long id;
 
-    @Column(name = "street")
-    private String address;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "id")
+  private long id;
 
-    public Address() {
-        this.address = "None";
-    }
+  @Column(name = "street")
+  private String address;
 
-    public Address(String address) {
-        this.address = address;
-    }
+  public Address() {
+    this.address = "None";
+  }
 
-    public long getId() {
-        return id;
-    }
+  public Address(String address) {
+    this.address = address;
+  }
 
-    public String getAddress() {
-        return address;
-    }
+  public long getId() {
+    return id;
+  }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+  public String getAddress() {
+    return address;
+  }
+
+  public void setAddress(String address) {
+    this.address = address;
+  }
 }

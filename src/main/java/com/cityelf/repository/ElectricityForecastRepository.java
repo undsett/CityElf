@@ -11,14 +11,15 @@ import java.util.Optional;
 
 public interface ElectricityForecastRepository extends CrudRepository<ElectricityForecast, Long> {
 
-    List<ElectricityForecast> findByStart(LocalDateTime startTime);
+  List<ElectricityForecast> findByStart(LocalDateTime startTime);
 
-    Optional<ElectricityForecast> findByStartAndAddress(LocalDateTime startTime, Address address);
+  Optional<ElectricityForecast> findByStartAndAddress(LocalDateTime startTime, Address address);
 
-    Optional<ElectricityForecast> findByStartAndAddress_Address(LocalDateTime startTime, String address);
+  Optional<ElectricityForecast> findByStartAndAddress_Address(LocalDateTime startTime,
+      String address);
 
-    void deleteElectricityForecastByStart(LocalDateTime startTime);
+  void deleteElectricityForecastByStart(LocalDateTime startTime);
 
-    List<ElectricityForecast> findElectricityForecastsByStartLessThanEqualAndEstimatedStopGreaterThan(
-            LocalDateTime checkStart, LocalDateTime checkEnd);
+  List<ElectricityForecast> findElectricityForecastsByStartLessThanEqualAndEstimatedStopGreaterThan(
+      LocalDateTime checkStart, LocalDateTime checkEnd);
 }
