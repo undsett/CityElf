@@ -3,6 +3,7 @@ package com.cityelf;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.cityelf.controller.ElectricityForecastController;
 import com.cityelf.controller.NotificationController;
 import com.cityelf.controller.UserController;
 
@@ -20,10 +21,13 @@ public class SmokeTest {
   private NotificationController notificationController;
   @Autowired
   private UserController userController;
+  @Autowired
+  private ElectricityForecastController electricityForecastController;
 
   @Test
   public void contextLoads() {
     assertThat(notificationController).isNotNull();
     assertThat(userController).isNotNull();
+    assertThat(electricityForecastController).isNotNull();
   }
 }
