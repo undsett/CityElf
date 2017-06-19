@@ -1,8 +1,6 @@
 package com.cityelf.exceptions;
 
-import java.io.IOException;
-
-public class WaterParserUnavailableException extends IOException {
+public class WaterParserUnavailableException extends ParserUnavailableException {
 
   public WaterParserUnavailableException(String message, Throwable cause) {
     super(message, cause);

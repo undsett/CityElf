@@ -13,8 +13,9 @@ import java.net.URL;
 public class AppServerFirebase {
 
   @Value("${firebase.authentication.key}")
-  private static String authentificationKeyFirebase;
-  private final static String apiUrlFcm = "https://fcm.googleapis.com/fcm/send";
+  private String authentificationKeyFirebase;
+  @Value("${firebase.apiUrlFcm}")
+  private String apiUrlFcm;
 
   public void pushFCMNotification(String firebaseId, String titleMessage, String bodyMessage)
       throws Exception {

@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.cityelf.domain.Place;
 import com.cityelf.domain.Report;
-import com.cityelf.domain.WaterForcastData;
+import com.cityelf.domain.ForcastData;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
@@ -53,7 +53,7 @@ public class WaterForcasterTest {
 
   @Test
   public void getForcastsData() throws Exception {
-    List<WaterForcastData> forcastsData = waterForcaster.getForcastsData(reports);
+    List<ForcastData> forcastsData = waterForcaster.getForcastsData(reports);
     Assertions.assertThat(forcastsData).isNotEmpty();
   }
 

@@ -19,3 +19,4 @@ Next step:
    in a new line and save it. Once saved, logout and login again.
 7. If you start application from Idea by execution _CityElfApplication_ class you may just add an environment variable to run configuration:
  press Run -> Edit Configurations. Choose CityElfApplication and press edit "Environment variables" field. Press the button "..." and add new variable (look at point 6).
+8. Also you need to introduce CITYELF_DB_PASSWORD and FIREBASE_SERVER_KEY variables. You can do it using instruction at point 6-7.
