@@ -1,10 +1,8 @@
 package com.cityelf.utils;
 
+import com.cityelf.domain.ForcastData;
 import com.cityelf.domain.Place;
 import com.cityelf.domain.Report;
-import com.cityelf.domain.WaterForcastData;
-import com.cityelf.utils.NumberExtractor;
-import com.cityelf.utils.StreetExtractor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,19 +22,19 @@ class WaterForcaster {
   @Autowired
   private StreetExtractor streetExtractor;
 
-  public List<WaterForcastData> getForcastsData(Report[] reports) {
-    List<WaterForcastData> waterDataList = new ArrayList<>();
+  public List<ForcastData> getForcastsData(Report[] reports) {
+    List<ForcastData> waterDataList = new ArrayList<>();
     for (Report report : reports) {
       for (Place place : report.places) {
         try {
-          WaterForcastData waterForcastData = new WaterForcastData();
-          waterForcastData.setAdress(streetExtractor.getStreetName(place.address));
-          waterForcastData.setRawAdress(place.address);
-          waterForcastData
+          ForcastData forcastData = new ForcastData();
+          forcastData.setAdress(streetExtractor.getStreetName(place.address));
+          forcastData.setRawAdress(place.address);
+          forcastData
               .setBuildingNumberList(numberExtractor.getNumbers(place.address));
-          waterForcastData.setStartOff(parseToDate(place.startTime));
-          waterForcastData.setEndOff(parseToDate(place.endTime));
-          waterDataList.add(waterForcastData);
+          forcastData.setStartOff(parseToDate(place.startTime));
+          forcastData.setEndOff(parseToDate(place.endTime));
+          waterDataList.add(forcastData);
         } catch (Exception ex) {
           ex.printStackTrace();
           continue;
