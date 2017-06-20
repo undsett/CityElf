@@ -10,23 +10,24 @@ import java.util.List;
 import java.util.Set;
 
 public interface GasForecastService {
-    Iterable<GasForecast> getAll();
 
-    GasForecast getForecast(long id) throws ForecastNotFoundException;
+  Iterable<GasForecast> getAll();
 
-    GasForecast getForecast(LocalDateTime startTime, String address) throws ForecastNotFoundException;
+  GasForecast getForecast(long id) throws ForecastNotFoundException;
 
-    List<GasForecast> getForecastsByTime(LocalDateTime startTime);
+  GasForecast getForecast(LocalDateTime startTime, String address) throws ForecastNotFoundException;
 
-    void addNewGasForecast(GasForecast forecast) throws ForecastAlreadyExistsException;
+  List<GasForecast> getForecastsByTime(LocalDateTime startTime);
 
-    void updateGasForecast(GasForecast forecast) throws ForecastNotFoundException;
+  void addNewGasForecast(GasForecast forecast) throws ForecastAlreadyExistsException;
 
-    void deleteGasForecast(GasForecast forecast) throws ForecastNotFoundException;
+  void updateGasForecast(GasForecast forecast) throws ForecastNotFoundException;
 
-    void deleteGasForecastsByTime(LocalDateTime startTime);
+  void deleteGasForecast(GasForecast forecast) throws ForecastNotFoundException;
 
-    Set<Address> getAddressesByTime(LocalDateTime startTime);
+  void deleteGasForecastsByTime(LocalDateTime startTime);
 
-    List<GasForecast> getCurrentGasForecasts(LocalDateTime checkedTime);
+  Set<Address> getAddressesByTime(LocalDateTime startTime);
+
+  List<GasForecast> getCurrentGasForecasts(LocalDateTime checkedTime);
 }

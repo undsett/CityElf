@@ -20,59 +20,61 @@ import java.util.Set;
 @RestController
 @RequestMapping("/gasforecast")
 public class GasForecastController {
-    @Autowired
-    private GasForecastService gasForecastService;
 
-    @RequestMapping("/all")
-    public Iterable<GasForecast> getAll() {
-        return gasForecastService.getAll();
-    }
+  @Autowired
+  private GasForecastService gasForecastService;
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public GasForecast getGasForecast(@PathVariable("id") long id) throws ForecastNotFoundException {
-        return gasForecastService.getForecast(id);
-    }
+  @RequestMapping("/all")
+  public Iterable<GasForecast> getAll() {
+    return gasForecastService.getAll();
+  }
 
-    @RequestMapping(value = "/get", method = RequestMethod.GET)
-    public GasForecast getGasForecast(@RequestParam(name = "start") String startTime,
-                                      @RequestParam(name = "address") String address) throws ForecastNotFoundException {
-        return gasForecastService.getForecast(LocalDateTime.parse(startTime), address);
-    }
+  @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+  public GasForecast getGasForecast(@PathVariable("id") long id) throws ForecastNotFoundException {
+    return gasForecastService.getForecast(id);
+  }
 
-    @RequestMapping(value = "/getbystart", method = RequestMethod.GET)
-    public List<GasForecast> getForecastsByTime(@RequestParam(name = "start") String startTime) {
-        return gasForecastService.getForecastsByTime(LocalDateTime.parse(startTime));
-    }
+  @RequestMapping(value = "/get", method = RequestMethod.GET)
+  public GasForecast getGasForecast(@RequestParam(name = "start") String startTime,
+      @RequestParam(name = "address") String address) throws ForecastNotFoundException {
+    return gasForecastService.getForecast(LocalDateTime.parse(startTime), address);
+  }
 
-    @RequestMapping(value = "/getaddressesbytime", method = RequestMethod.GET)
-    public Set<Address> getAddressesByTime(@RequestParam(name = "start") String startTime) {
-        return gasForecastService.getAddressesByTime(LocalDateTime.parse(startTime));
-    }
+  @RequestMapping(value = "/getbystart", method = RequestMethod.GET)
+  public List<GasForecast> getForecastsByTime(@RequestParam(name = "start") String startTime) {
+    return gasForecastService.getForecastsByTime(LocalDateTime.parse(startTime));
+  }
 
-    @RequestMapping(value = "/addnew", method = RequestMethod.POST)
-    public void addNewGasForecast(@RequestBody GasForecast forecast) throws ForecastAlreadyExistsException {
-        gasForecastService.addNewGasForecast(forecast);
-    }
+  @RequestMapping(value = "/getaddressesbytime", method = RequestMethod.GET)
+  public Set<Address> getAddressesByTime(@RequestParam(name = "start") String startTime) {
+    return gasForecastService.getAddressesByTime(LocalDateTime.parse(startTime));
+  }
 
-    @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public void updateGasForecast(@RequestBody GasForecast forecast)
-            throws ForecastNotFoundException {
-        gasForecastService.updateGasForecast(forecast);
-    }
+  @RequestMapping(value = "/addnew", method = RequestMethod.POST)
+  public void addNewGasForecast(@RequestBody GasForecast forecast)
+      throws ForecastAlreadyExistsException {
+    gasForecastService.addNewGasForecast(forecast);
+  }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public void deleteGasForecast(@RequestBody GasForecast forecast)
-            throws ForecastNotFoundException {
-        gasForecastService.deleteGasForecast(forecast);
-    }
+  @RequestMapping(value = "/update", method = RequestMethod.PUT)
+  public void updateGasForecast(@RequestBody GasForecast forecast)
+      throws ForecastNotFoundException {
+    gasForecastService.updateGasForecast(forecast);
+  }
 
-    @RequestMapping(value = "/deleteallbytime", method = RequestMethod.DELETE)
-    public void deleteGasForecastsByTime(@RequestBody LocalDateTime startTime) {
-        gasForecastService.deleteGasForecastsByTime(startTime);
-    }
+  @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+  public void deleteGasForecast(@RequestBody GasForecast forecast)
+      throws ForecastNotFoundException {
+    gasForecastService.deleteGasForecast(forecast);
+  }
 
-    @RequestMapping(value = "/getcurrent", method = RequestMethod.GET)
-    public List<GasForecast> getCurrentGasForecasts() {
-        return gasForecastService.getCurrentGasForecasts(LocalDateTime.now());
-    }
+  @RequestMapping(value = "/deleteallbytime", method = RequestMethod.DELETE)
+  public void deleteGasForecastsByTime(@RequestBody LocalDateTime startTime) {
+    gasForecastService.deleteGasForecastsByTime(startTime);
+  }
+
+  @RequestMapping(value = "/getcurrent", method = RequestMethod.GET)
+  public List<GasForecast> getCurrentGasForecasts() {
+    return gasForecastService.getCurrentGasForecasts(LocalDateTime.now());
+  }
 }

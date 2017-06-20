@@ -10,15 +10,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface  GasForecastRepository extends CrudRepository<GasForecast, Long> {
-    List<GasForecast> findByStart(LocalDateTime startTime);
+public interface GasForecastRepository extends CrudRepository<GasForecast, Long> {
 
-    Optional<GasForecast> findByStartAndAddress(LocalDateTime startTime, Address address);
+  List<GasForecast> findByStart(LocalDateTime startTime);
 
-    Optional<GasForecast> findByStartAndAddress_Address(LocalDateTime startTime, String address);
+  Optional<GasForecast> findByStartAndAddress(LocalDateTime startTime, Address address);
 
-    void deleteGasForecastsByStart(LocalDateTime startTime);
+  Optional<GasForecast> findByStartAndAddress_Address(LocalDateTime startTime, String address);
 
-    List<GasForecast> findGasForecastsByStartLessThanEqualAndEstimatedStopGreaterThan(
-            LocalDateTime checkStart, LocalDateTime checkEnd);
+  void deleteGasForecastsByStart(LocalDateTime startTime);
+
+  List<GasForecast> findGasForecastsByStartLessThanEqualAndEstimatedStopGreaterThan(
+      LocalDateTime checkStart, LocalDateTime checkEnd);
 }

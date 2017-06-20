@@ -30,7 +30,8 @@ public class WaterForecastController {
   }
 
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-  public WaterForecast getWaterForecast(@PathVariable("id") long id) throws ForecastNotFoundException {
+  public WaterForecast getWaterForecast(@PathVariable("id") long id)
+      throws ForecastNotFoundException {
     return waterForecastService.getForecast(id);
   }
 
@@ -51,7 +52,8 @@ public class WaterForecastController {
   }
 
   @RequestMapping(value = "/addnew", method = RequestMethod.POST)
-  public void addNewWaterForecast(@RequestBody WaterForecast forecast) throws ForecastAlreadyExistsException {
+  public void addNewWaterForecast(@RequestBody WaterForecast forecast)
+      throws ForecastAlreadyExistsException {
     waterForecastService.addNewWaterForecast(forecast);
   }
 
