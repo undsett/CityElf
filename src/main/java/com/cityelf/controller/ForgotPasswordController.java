@@ -4,7 +4,6 @@ import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.service.ForgotPasswordService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,8 +17,8 @@ public class ForgotPasswordController {
   private ForgotPasswordService forgotPasswordService;
 
   @RequestMapping(value = "/reset", method = RequestMethod.POST)
-  public void forgotPassword(@RequestBody String userEmail) throws UserNotFoundException {
-    forgotPasswordService.forgotPassword(userEmail);
+  public void forgotPassword(@RequestParam String email) throws UserNotFoundException {
+    forgotPasswordService.forgotPassword(email);
   }
 
   @RequestMapping(value = "/newPassword", method = RequestMethod.POST)

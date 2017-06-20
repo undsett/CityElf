@@ -32,7 +32,16 @@ public class UserService {
   }
 
   public void addNewUser(User user) throws UserAlreadyExistsException {
-    if (userRepository.findByEmail(user.getEmail()) == null) {
+    if (user.getEmail() == null && userRepository.findByFirebaseId(user.getFirebaseId()) == null) {
+      user.setAuthorized("not_authorized");
+      userRepository.save(user);
+    } else if (user.getFirebaseId() == null
+        && userRepository.findByEmail(user.getEmail()) == null) {
+      user.setAuthorized("authorized");
+      userRepository.save(user);
+    } else if (userRepository.findByFirebaseId(user.getFirebaseId()) == null
+        && userRepository.findByEmail(user.getEmail()) == null) {
+      user.setAuthorized("authorized");
       userRepository.save(user);
     } else {
       throw new UserAlreadyExistsException();
@@ -41,6 +50,16 @@ public class UserService {
 
   public void updateUser(User user) throws UserNotFoundException {
     if (userRepository.exists(user.getId())) {
+      User userFromDB = userRepository.findOne(user.getId());
+      if (user.getPassword() == null) {
+        user.setPassword(userFromDB.getPassword());
+      }
+      if (user.getFirebaseId() == null) {
+        user.setFirebaseId(userFromDB.getFirebaseId());
+      }
+      if (user.getEmail() == null) {
+        user.setEmail(userFromDB.getEmail());
+      }
       userRepository.save(user);
     } else {
       throw new UserNotFoundException();
