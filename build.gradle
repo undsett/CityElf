@@ -42,7 +42,6 @@ task wrapper(type: Wrapper) {
 }
 
 dependencies {
-<<<<<<< HEAD
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-security')
     compile('org.springframework.boot:spring-boot-starter-mail')
@@ -57,22 +56,6 @@ dependencies {
     testCompile('org.springframework.security:spring-security-test')
     compile group: 'mysql', name: 'mysql-connector-java', version: '6.0.6'
     compile group: 'org.json', name: 'json', version: '20160810'
-=======
-	compile('org.springframework.boot:spring-boot-starter-web')
-	compile('org.springframework.boot:spring-boot-starter-security')
-	compile('org.springframework.boot:spring-boot-starter-mail')
-	compile("org.springframework.boot:spring-boot-starter-data-jpa") {
-		exclude group: 'org.hibernate', module: 'hibernate-core'
-		exclude group: 'org.hibernate', module: 'hibernate-entitymanager'
-	}
-	compile group: 'org.hibernate', name: 'hibernate-core', version: '5.2.10.Final'
-	compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.2.10.Final'
-	compile('javax.mail:javax.mail-api:1.5.6')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
-	testCompile('org.springframework.security:spring-security-test')
-	compile group: 'mysql', name: 'mysql-connector-java', version: '6.0.6'
-	compile group: 'org.json', name: 'json', version: '20160810'
->>>>>>> 05555bd10359f5aa5136f261f944eafe1a5dcd5a
     compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.8')
 }
 
@@ -80,8 +63,4 @@ checkstyle {
     configFile = rootProject.file('config/checkstyle/checkstyle.xml')
     checkstyleTest.enabled = false
     toolVersion = '7.1.2'
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 05555bd10359f5aa5136f261f944eafe1a5dcd5a
