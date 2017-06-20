@@ -1,6 +1,5 @@
 package com.cityelf.service;
 
-
 import com.cityelf.exceptions.ForecastAlreadyExistsException;
 import com.cityelf.exceptions.ForecastNotFoundException;
 import com.cityelf.model.Address;

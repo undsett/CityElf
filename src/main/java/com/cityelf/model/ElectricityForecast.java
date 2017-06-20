@@ -117,4 +117,3 @@ public class ElectricityForecast {
     return result;
   }
 }
-

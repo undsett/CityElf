@@ -6,7 +6,7 @@ services:
 - docker
 script:
 - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-- ./gradlew build buildDocker
+- ./gradlew build -x test buildDocker
 before_cache:
 - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
 - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
