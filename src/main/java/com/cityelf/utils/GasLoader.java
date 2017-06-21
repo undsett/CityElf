@@ -1,5 +1,6 @@
 package com.cityelf.utils;
 
+import com.cityelf.exceptions.GasPageStructureChangedException;
 import com.cityelf.exceptions.ParserUnavailableException;
 
 import org.jsoup.Jsoup;
@@ -23,8 +24,7 @@ class GasLoader {
     for (Element newsPiece : this.findNewsBlock()) {
       newsHeader = newsPiece.select("div.news-text-preview").first();
       if (newsHeader == null) {
-        throw new ParserUnavailableException("No news-text-preview block",
-            new Throwable("Gas page structure was changed"));
+        throw new GasPageStructureChangedException("No news-text-preview block");
       }
       newsHeaderText = newsHeader.text();
       if ((newsHeaderText.contains(dateToCheck))
@@ -48,8 +48,7 @@ class GasLoader {
   private Elements findNewsBlock() throws ParserUnavailableException {
     Elements newsBlock = this.loadDocument().select("div.news-content");
     if (newsBlock.isEmpty()) {
-      throw new ParserUnavailableException("No news block found",
-          new Throwable("Gas page structure was changed"));
+      throw new GasPageStructureChangedException("No news block found");
     }
     return newsBlock;
   }

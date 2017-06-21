@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -33,13 +34,17 @@ public class ParserGasTest {
 
   @Before
   public void setUp() throws Exception {
-    File file = new File(".\\src\\test\\java\\com\\cityelf\\utils\\gasWebResponseTest.txt");
-    StringBuilder sb = new StringBuilder();
-    try (BufferedReader reader = new BufferedReader(
-        new InputStreamReader(new FileInputStream(file), Charset.forName("UTF-8")))) {
-      reader.lines().forEach(sb::append);
+    StringBuilder stringBuilder = new StringBuilder();
+    ClassLoader classLoader = getClass().getClassLoader();
+    File gasFile = new File(classLoader.getResource("gasWebResponseTest.txt").getFile());
+    BufferedReader reader = new BufferedReader(
+        new InputStreamReader(new FileInputStream(gasFile), Charset.forName("UTF-8")));
+    String line;
+    while ((line = reader.readLine()) != null) {
+      stringBuilder.append(line).append("\n");
     }
-    content = sb.toString().toLowerCase();
+    reader.close();
+    content = stringBuilder.toString();
     GasLoader loader = mock(GasLoader.class);
     when(loader.getNeededNews(anyString(), anyString()))
         .thenReturn(Jsoup.parseBodyFragment(content).select("div.news-content"));
@@ -49,9 +54,20 @@ public class ParserGasTest {
   @Test
   public void getForcastDataList() throws Exception {
     List<ForcastData> forcastDataList = parserGas.getForcastDataList();
-    for (ForcastData forcastData : forcastDataList) {
-      System.out.println(forcastData);
-    }
     assertThat(forcastDataList.size()).isEqualTo(4);
+  }
+
+  @Test
+  public void startDateShouldBeSpecified() throws Exception {
+    ForcastData gotData = parserGas.getForcastDataList().get(0);
+    assertThat(gotData.getStartOff())
+        .isEqualTo(LocalDateTime.of(2017,6,21,8,30));
+  }
+
+  @Test
+  public void endDateShouldBeSpecified() throws Exception {
+    ForcastData gotData = parserGas.getForcastDataList().get(0);
+    assertThat(gotData.getEndOff())
+        .isEqualTo(LocalDateTime.of(2017,6,21,17,30));
   }
 }

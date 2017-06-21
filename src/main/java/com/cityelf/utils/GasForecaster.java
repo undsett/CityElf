@@ -1,7 +1,7 @@
 package com.cityelf.utils;
 
 import com.cityelf.domain.ForcastData;
-import com.cityelf.exceptions.ParserUnavailableException;
+import com.cityelf.exceptions.GasPageStructureChangedException;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -27,16 +27,7 @@ class GasForecaster {
   @Autowired
   private NumberExtractor numberExtractor;
 
-
-  void setStreetExtractor(StreetExtractor streetExtractor) {
-    this.streetExtractor = streetExtractor;
-  }
-
-  void setNumberExtractor(NumberExtractor numberExtractor) {
-    this.numberExtractor = numberExtractor;
-  }
-
-  List<ForcastData> getForecastData(Element pieceOfNews) throws ParserUnavailableException {
+  List<ForcastData> getForecastData(Element pieceOfNews) throws GasPageStructureChangedException {
     List<ForcastData> result = new ArrayList<>();
     String newsText = pieceOfNews.select("div.news-text-preview").text();
     LocalDate date = ParserGas.transformDate(getDate(newsText));
@@ -54,7 +45,7 @@ class GasForecaster {
     LocalDateTime startTime = LocalDateTime.of(date, start);
     LocalDateTime endTime = LocalDateTime.of(date, end);
     for (String raw : rawAddresses) {
-      for (String rawPart : raw.split("([Уу]л\\.)|([Пп]л\\.)|([Пп]р\\.)")) {
+      for (String rawPart : raw.split("([Уу]л\\.)|([Пп]л\\.)|([Пп]р\\.)|([Пп]ер\\.)")) {
         if (!rawPart.isEmpty()) {
           rawPart = rawPart.trim();
           ForcastData forcastData = new ForcastData();
@@ -71,17 +62,16 @@ class GasForecaster {
     return forcastDataList;
   }
 
-  private String getDate(String newText) throws ParserUnavailableException {
+  private String getDate(String newText) throws GasPageStructureChangedException {
     Pattern datePattern = Pattern.compile("\\d\\d\\.\\d\\d\\.20\\d\\d");
     Matcher matcher = datePattern.matcher(newText);
     if (!matcher.find()) {
-      throw new ParserUnavailableException("Date not found",
-          new Throwable("Gas page structure was changed"));
+      throw new GasPageStructureChangedException("Date not found");
     }
     return matcher.group();
   }
 
-  private List<String> getTimes(String newText) throws ParserUnavailableException {
+  private List<String> getTimes(String newText) throws GasPageStructureChangedException {
     List<String> results = new ArrayList<>();
     Pattern timePattern = Pattern.compile("(([0-2]{0,1}[0-9]):([0-5][0-9]))");
     Matcher matcher = timePattern.matcher(newText);
@@ -89,17 +79,15 @@ class GasForecaster {
       results.add(matcher.group());
     }
     if (results.isEmpty()) {
-      throw new ParserUnavailableException("Time not found",
-          new Throwable("Gas page structure was changed"));
+      throw new GasPageStructureChangedException("Time not found");
     }
     if (results.size() > 2) {
-      throw new ParserUnavailableException("This piece of news structure is non-standard",
-          new Throwable("Gas page structure was changed"));
+      throw new GasPageStructureChangedException("This piece of news structure is non-standard");
     }
     return results;
   }
 
-  private int getAddressColumn(Element table) throws ParserUnavailableException {
+  private int getAddressColumn(Element table) throws GasPageStructureChangedException {
     int columnNumber = 0;
     Elements rows = table.select("tr");
     Elements columns = rows.get(0).select("td");
@@ -110,19 +98,17 @@ class GasForecaster {
         break;
       }
       if (indexColumn == columns.size() - 1) {
-        throw new ParserUnavailableException("There is no address column",
-            new Throwable("Gas page structure was changed"));
+        throw new GasPageStructureChangedException("There is no address column");
       }
     }
     return (columnNumber < rows.size()) ? columnNumber : -1;
   }
 
-  private Set<String> getRawAddresses(Element table) throws ParserUnavailableException {
+  private Set<String> getRawAddresses(Element table) throws GasPageStructureChangedException {
     Set<String> rawAddresses = new HashSet<>();
     int addressColumn = getAddressColumn(table);
     if (addressColumn == - 1) {
-      throw new ParserUnavailableException("There is no address column",
-          new Throwable("Gas page structure was changed"));
+      throw new GasPageStructureChangedException("There is no address column");
     }
     Elements rows = table.select("tr");
     rows.remove(0);
