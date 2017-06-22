@@ -10,7 +10,7 @@ public interface AddressesRepository extends CrudRepository<Address, Long> {
 
   Address findById(long id);
 
-  Address save (Address address);
+  Address save(Address address);
 
 
 }

@@ -43,9 +43,8 @@ public class UserController {
       @RequestParam(name = "address") String adress,
       @RequestParam(name = "firebaseid") String fireBaseID)
       throws UserAlreadyExistsException {
-    userService.addNewUser(email,password,adress, fireBaseID);
+    userService.addNewUser(email, password, adress, fireBaseID);
   }
-
 
 
   @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)

@@ -52,7 +52,8 @@ public class UserService {
       newUser = new User(email, password, firebaseId);
       userRepository.save(newUser);
       long idAddress = addressesRepository.findByAddress(address).getId();
-      UserAddresses userAddresses = new UserAddresses(userRepository.findByFirebaseId(firebaseId).getId(),idAddress);
+      UserAddresses userAddresses = new UserAddresses(
+          userRepository.findByFirebaseId(firebaseId).getId(), idAddress);
       userAddressesRepository.save(userAddresses);
 
     } else {
