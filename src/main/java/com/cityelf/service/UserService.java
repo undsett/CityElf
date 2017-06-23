@@ -3,10 +3,15 @@ package com.cityelf.service;
 import com.cityelf.exceptions.UserAlreadyExistsException;
 import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.model.User;
+import com.cityelf.model.UserAddresses;
+import com.cityelf.repository.AddressesRepository;
+import com.cityelf.repository.AddressesRepository;
+import com.cityelf.repository.UserAddressesRepository;
 import com.cityelf.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -15,6 +20,12 @@ public class UserService {
 
   @Autowired
   private UserRepository userRepository;
+
+  @Autowired
+  private UserAddressesRepository userAddressesRepository;
+
+  @Autowired
+  private AddressesRepository addressesRepository;
 
   public UserService() {
   }
@@ -31,20 +42,30 @@ public class UserService {
     return user;
   }
 
-  public void addNewUser(User user) throws UserAlreadyExistsException {
-    if (user.getEmail() == null && userRepository.findByFirebaseId(user.getFirebaseId()) == null) {
-      user.setAuthorized("not_authorized");
-      userRepository.save(user);
-    } else if (user.getFirebaseId() == null
-        && userRepository.findByEmail(user.getEmail()) == null) {
-      user.setAuthorized("authorized");
-      userRepository.save(user);
-    } else if (userRepository.findByFirebaseId(user.getFirebaseId()) == null
-        && userRepository.findByEmail(user.getEmail()) == null) {
-      user.setAuthorized("authorized");
-      userRepository.save(user);
+
+  public void addNewUser(String email, String password, String address, String firebaseId)
+      throws UserAlreadyExistsException {
+    User newUser;
+
+    if (userRepository.findByEmail(email) == null
+        && userRepository.findByFirebaseId(firebaseId) == null) {
+      newUser = new User(email, password, firebaseId);
+      userRepository.save(newUser);
+      long idAddress = addressesRepository.findByAddress(address).getId();
+      UserAddresses userAddresses = new UserAddresses(
+          userRepository.findByFirebaseId(firebaseId).getId(), idAddress);
+      userAddressesRepository.save(userAddresses);
+
     } else {
-      throw new UserAlreadyExistsException();
+      if (firebaseId.equals(userRepository.findByFirebaseId(firebaseId).getFirebaseId())
+          && userRepository.findByEmail(email) == null) {
+        newUser = userRepository.findByFirebaseId(firebaseId);
+        newUser.setEmail(email);
+        newUser.setPassword(password);
+        userRepository.save(newUser);
+      } else {
+        throw new UserAlreadyExistsException();
+      }
     }
   }
 

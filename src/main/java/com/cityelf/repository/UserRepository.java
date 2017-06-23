@@ -10,5 +10,9 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
   User findByToken(String token);
 
+
+  User save(User user);
+
   User findByFirebaseId(String firebaseId);
+
 }
