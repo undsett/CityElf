@@ -21,8 +21,9 @@ public class WaterForecastService {
   private WaterForecastRepository waterForecastRepository;
 
   /**
-   * Get all water forecasts in repository. If we clear repository every few hours, it will return only
-   * actual or just ended forecasts.
+   * Get all water forecasts in repository. If we clear repository every few hours, it will return
+   * only actual or just ended forecasts.
+   *
    * @return an Iterable object
    */
   public Iterable<WaterForecast> getAll() {
@@ -31,6 +32,7 @@ public class WaterForecastService {
 
   /**
    * Get water forecast by ID
+   *
    * @param id the ID of the water forecast
    * @return returns the WaterForecast object with specified ID (if exists)
    * @throws ForecastNotFoundException if object doesn't exist
@@ -45,18 +47,21 @@ public class WaterForecastService {
 
   /**
    * Get forecast by start time and address.
+   *
    * @param startTime date and time when forecast starts
    * @param address the address, where forecast will be (column "street" in data base)
    * @return a WaterForecast object (if exists)
    * @throws ForecastNotFoundException if the object doesn't exist
    */
-  public WaterForecast getForecast(LocalDateTime startTime, String address) throws ForecastNotFoundException {
+  public WaterForecast getForecast(LocalDateTime startTime, String address)
+      throws ForecastNotFoundException {
     return waterForecastRepository.findByStartAndAddress_Address(startTime, address)
         .orElseThrow(ForecastNotFoundException::new);
   }
 
   /**
    * Get all forecasts, started at signed time.
+   *
    * @param startTime date and time when forecast starts
    * @return the List of WaterForecast, started at the specified time
    */
@@ -65,19 +70,25 @@ public class WaterForecastService {
   }
 
   /**
-   * This will add new water forecast to the repository if there is no one with the same start time and address.
+   * This will add new water forecast to the repository if there is no one with the same start time
+   * and address.
+   *
    * @param forecast new WaterForecast object to add into repository
-   * @throws ForecastAlreadyExistsException if the object with the same start time and address exists
+   * @throws ForecastAlreadyExistsException if the object with the same start time and address
+   * exists
    */
   public void addNewWaterForecast(WaterForecast forecast) throws ForecastAlreadyExistsException {
-    if (waterForecastRepository.findByStartAndAddress(forecast.getStart(), forecast.getAddress()).isPresent()) {
+    if (waterForecastRepository.findByStartAndAddress(forecast.getStart(), forecast.getAddress())
+        .isPresent()) {
       throw new ForecastAlreadyExistsException();
     }
     waterForecastRepository.save(forecast);
   }
 
   /**
-   * This will update an existing forecast or will throw an exception if there is no such forecasts in the repo.
+   * This will update an existing forecast or will throw an exception if there is no such forecasts
+   * in the repo.
+   *
    * @param forecast an existed WaterForecast object which we need to update
    * @throws ForecastNotFoundException if there is no object with the same ID in the repository
    */
@@ -90,6 +101,7 @@ public class WaterForecastService {
 
   /**
    * This will delete one forecast from the repository or will throw an exception
+   *
    * @param forecast an existed WaterForecast object which we need to remove
    * @throws ForecastNotFoundException if there is no object with the same ID in the repository
    */
@@ -102,6 +114,7 @@ public class WaterForecastService {
 
   /**
    * This will delete from the repository all forecasts started at the signed time.
+   *
    * @param startTime date and time when forecast starts
    */
   public void deleteWaterForecastsByTime(LocalDateTime startTime) {
@@ -110,6 +123,7 @@ public class WaterForecastService {
 
   /**
    * This will return a set of addresses, where water forecasts will start at the signed time.
+   *
    * @param startTime date and time when forecast starts
    * @return the Set of Addresses, where forecast at the specified time will happen
    */
@@ -121,11 +135,13 @@ public class WaterForecastService {
 
   /**
    * This will return a List of WaterForecast objects which are current for the specified time
+   *
    * @param checkedTime date and time what we are checking
    * @return the List of water forecasts
    */
   public List<WaterForecast> getCurrentWaterForecasts(LocalDateTime checkedTime) {
     return waterForecastRepository
-        .findWaterForecastsByStartLessThanEqualAndEstimatedStopGreaterThan(checkedTime, checkedTime);
+        .findWaterForecastsByStartLessThanEqualAndEstimatedStopGreaterThan(checkedTime,
+            checkedTime);
   }
 }

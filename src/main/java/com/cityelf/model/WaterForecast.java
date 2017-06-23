@@ -1,6 +1,7 @@
 package com.cityelf.model;
 
 import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -29,8 +30,8 @@ public class WaterForecast {
   private boolean peopleReport;
 
   public WaterForecast() {
-    start = LocalDateTime.of(1900,1,1,0,0,0);
-    estimatedStop = LocalDateTime.of(1900,1,1,0,0,0);
+    start = LocalDateTime.of(1900, 1, 1, 0, 0, 0);
+    estimatedStop = LocalDateTime.of(1900, 1, 1, 0, 0, 0);
     peopleReport = false;
     address = new Address();
   }
@@ -89,16 +90,32 @@ public class WaterForecast {
       return false;
     }
 
-    WaterForecast forecast = (WaterForecast) obj;
+    WaterForecast that = (WaterForecast) obj;
 
-    return (start != null ? start.equals(forecast.start) : forecast.start == null) && (
-        address != null ? address.equals(forecast.address) : forecast.address == null);
+    if (id != that.id) {
+      return false;
+    }
+    if (peopleReport != that.peopleReport) {
+      return false;
+    }
+    if (start != null ? !start.equals(that.start) : that.start != null) {
+      return false;
+    }
+    if (estimatedStop != null ? !estimatedStop.equals(that.estimatedStop)
+        : that.estimatedStop != null) {
+      return false;
+    }
+    return address != null ? address.equals(that.address) : that.address == null;
+
   }
 
   @Override
   public int hashCode() {
-    int result = start != null ? start.hashCode() : 0;
+    int result = (int) (id ^ (id >>> 32));
+    result = 31 * result + (start != null ? start.hashCode() : 0);
+    result = 31 * result + (estimatedStop != null ? estimatedStop.hashCode() : 0);
     result = 31 * result + (address != null ? address.hashCode() : 0);
+    result = 31 * result + (peopleReport ? 1 : 0);
     return result;
   }
 }

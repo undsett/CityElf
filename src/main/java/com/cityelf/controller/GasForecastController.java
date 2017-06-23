@@ -3,8 +3,8 @@ package com.cityelf.controller;
 import com.cityelf.exceptions.ForecastAlreadyExistsException;
 import com.cityelf.exceptions.ForecastNotFoundException;
 import com.cityelf.model.Address;
-import com.cityelf.model.WaterForecast;
-import com.cityelf.service.WaterForecastService;
+import com.cityelf.model.GasForecast;
+import com.cityelf.service.GasForecastService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,65 +18,63 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/waterforecast")
-public class WaterForecastController {
+@RequestMapping("/gasforecast")
+public class GasForecastController {
 
   @Autowired
-  private WaterForecastService waterForecastService;
+  private GasForecastService gasForecastService;
 
   @RequestMapping("/all")
-  public Iterable<WaterForecast> getAll() {
-    return waterForecastService.getAll();
+  public Iterable<GasForecast> getAll() {
+    return gasForecastService.getAll();
   }
 
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-  public WaterForecast getWaterForecast(@PathVariable("id") long id)
-      throws ForecastNotFoundException {
-    return waterForecastService.getForecast(id);
+  public GasForecast getGasForecast(@PathVariable("id") long id) throws ForecastNotFoundException {
+    return gasForecastService.getForecast(id);
   }
 
   @RequestMapping(value = "/get", method = RequestMethod.GET)
-  public WaterForecast getWaterForecast(@RequestParam(name = "start") String startTime,
+  public GasForecast getGasForecast(@RequestParam(name = "start") String startTime,
       @RequestParam(name = "address") String address) throws ForecastNotFoundException {
-    return waterForecastService.getForecast(LocalDateTime.parse(startTime), address);
+    return gasForecastService.getForecast(LocalDateTime.parse(startTime), address);
   }
 
   @RequestMapping(value = "/getbystart", method = RequestMethod.GET)
-  public List<WaterForecast> getForecastsByTime(@RequestParam(name = "start") String startTime) {
-    return waterForecastService.getForecastsByTime(LocalDateTime.parse(startTime));
+  public List<GasForecast> getForecastsByTime(@RequestParam(name = "start") String startTime) {
+    return gasForecastService.getForecastsByTime(LocalDateTime.parse(startTime));
   }
 
   @RequestMapping(value = "/getaddressesbytime", method = RequestMethod.GET)
   public Set<Address> getAddressesByTime(@RequestParam(name = "start") String startTime) {
-    return waterForecastService.getAddressesByTime(LocalDateTime.parse(startTime));
+    return gasForecastService.getAddressesByTime(LocalDateTime.parse(startTime));
   }
 
   @RequestMapping(value = "/addnew", method = RequestMethod.POST)
-  public void addNewWaterForecast(@RequestBody WaterForecast forecast)
+  public void addNewGasForecast(@RequestBody GasForecast forecast)
       throws ForecastAlreadyExistsException {
-    waterForecastService.addNewWaterForecast(forecast);
+    gasForecastService.addNewGasForecast(forecast);
   }
 
   @RequestMapping(value = "/update", method = RequestMethod.PUT)
-  public void updateWaterForecast(@RequestBody WaterForecast forecast)
+  public void updateGasForecast(@RequestBody GasForecast forecast)
       throws ForecastNotFoundException {
-    waterForecastService.updateWaterForecast(forecast);
+    gasForecastService.updateGasForecast(forecast);
   }
 
   @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-  public void deleteWaterForecast(@RequestBody WaterForecast forecast)
+  public void deleteGasForecast(@RequestBody GasForecast forecast)
       throws ForecastNotFoundException {
-    waterForecastService.deleteWaterForecast(forecast);
+    gasForecastService.deleteGasForecast(forecast);
   }
 
   @RequestMapping(value = "/deleteallbytime", method = RequestMethod.DELETE)
-  public void deleteWaterForecastsByTime(@RequestBody LocalDateTime startTime) {
-    waterForecastService.deleteWaterForecastsByTime(startTime);
+  public void deleteGasForecastsByTime(@RequestBody LocalDateTime startTime) {
+    gasForecastService.deleteGasForecastsByTime(startTime);
   }
 
   @RequestMapping(value = "/getcurrent", method = RequestMethod.GET)
-  public List<WaterForecast> getCurrentWaterForecasts() {
-    return waterForecastService.getCurrentWaterForecasts(LocalDateTime.now());
+  public List<GasForecast> getCurrentGasForecasts() {
+    return gasForecastService.getCurrentGasForecasts(LocalDateTime.now());
   }
-
 }
