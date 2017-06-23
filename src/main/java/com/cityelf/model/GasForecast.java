@@ -1,5 +1,7 @@
 package com.cityelf.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "gas_forecasts")
@@ -26,7 +27,7 @@ public class GasForecast {
   private LocalDateTime estimatedStop;
 
   @Column(name = "address_id")
-  private long address_id;
+  private long addressId;
 
   @Column(name = "peopleReport")
   private boolean peopleReport;
@@ -71,12 +72,12 @@ public class GasForecast {
     this.estimatedStop = estimatedStop;
   }
 
-  public long getAddress_id() {
-    return address_id;
+  public long getAddressId() {
+    return addressId;
   }
 
-  public void setAddress_id(long address_id) {
-    this.address_id = address_id;
+  public void setAddressId(long addressId) {
+    this.addressId = addressId;
   }
 
   public boolean isPeopleReport() {
