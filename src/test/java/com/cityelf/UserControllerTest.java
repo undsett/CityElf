@@ -56,7 +56,7 @@ public class UserControllerTest {
 
   @Test
   public void addNewUserShouldReturnHttpStatusOk200() throws Exception {
-    doNothing().when(userService).addNewUser(any());
+    doNothing().when(userService).addNewUser("email","pass", "adr1", "fireBaseID111");
 
     mockMvc.perform(post("/users/addUser/")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
