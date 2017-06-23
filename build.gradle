@@ -57,7 +57,7 @@ dependencies {
     compile group: 'org.json', name: 'json', version: '20160810'
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('org.springframework.security:spring-security-test')
-
+    compile group: 'org.jsoup', name: 'jsoup', version: '1.10.3'
 }
 
 checkstyle {

@@ -37,7 +37,8 @@ public class ElectricityForecastController {
   }
 
   @RequestMapping(value = "/get", method = RequestMethod.GET)
-  public ElectricityForecast getElectricityForecast(@RequestParam(name = "start") String startTime,
+  public ElectricityForecast getElectricityForecast(
+      @RequestParam(name = "start") String startTime,
       @RequestParam(name = "address") String address) throws ForecastNotFoundException {
     return electricityForecastService.getForecast(LocalDateTime.parse(startTime), address);
   }
