@@ -29,22 +29,6 @@ public class WaterForecast {
   @Column(name = "people_report")
   private boolean peopleReport;
 
-  public WaterForecast() {
-    start = LocalDateTime.of(1900, 1, 1, 0, 0, 0);
-    estimatedStop = LocalDateTime.of(1900, 1, 1, 0, 0, 0);
-    peopleReport = false;
-    address = new Address();
-  }
-
-  public WaterForecast(LocalDateTime start, LocalDateTime estimatedStop, Address address,
-      boolean peopleReport) {
-    this.id = 0;
-    this.start = start;
-    this.estimatedStop = estimatedStop;
-    this.address = address;
-    this.peopleReport = peopleReport;
-  }
-
   public long getId() {
     return id;
   }
