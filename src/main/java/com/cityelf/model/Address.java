@@ -10,7 +10,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "addresses")
 public class Address {
-  
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "id")
@@ -19,12 +19,20 @@ public class Address {
   @Column(name = "street")
   private String address;
 
-  public long getId() {
-    return id;
+  public Address() {
+    this.address = "None";
+  }
+
+  public Address(String address) {
+    this.address = address;
   }
 
   public void setId(long id) {
     this.id = id;
+  }
+
+  public long getId() {
+    return id;
   }
 
   public String getAddress() {
@@ -34,6 +42,4 @@ public class Address {
   public void setAddress(String address) {
     this.address = address;
   }
-
-
 }

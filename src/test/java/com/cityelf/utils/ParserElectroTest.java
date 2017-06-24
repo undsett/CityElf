@@ -31,7 +31,10 @@ public class ParserElectroTest {
 
   @Before
   public void setUp() throws Exception {
-    File file = new File(".\\src\\test\\java\\com\\cityelf\\utils\\electroWebResponseTest.txt");
+    File file = new File(getClass()
+        .getClassLoader()
+        .getResource("electroWebResponseTest.txt")
+        .getFile());
     StringBuilder sb = new StringBuilder();
     try (BufferedReader reader = new BufferedReader(
         new InputStreamReader(new FileInputStream(file), Charset.forName("UTF-16")))) {
