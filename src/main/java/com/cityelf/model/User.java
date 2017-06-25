@@ -1,12 +1,20 @@
 package com.cityelf.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "users")
@@ -14,6 +22,7 @@ public class User {
 
   @Id
   private long id;
+
   @Column(name = "email")
   private String email;
   @Column(name = "phone")
@@ -21,6 +30,7 @@ public class User {
   @Column(name = "password")
   private String password;
   @Embedded
+  @NotNull
   private Notification notification;
   @Column(name = "token")
   private String token;
@@ -31,7 +41,14 @@ public class User {
   @Column(name = "authorized")
   private String authorized;
   @Column(name = "firebase_id")
+  @NotNull
   private String firebaseId;
+  @OneToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+      name = "user_addresses",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "address_id"))
+  private List<Address> addresses;
 
   public User() {
     this.email = null;
@@ -43,6 +60,31 @@ public class User {
     this.notification = new Notification();
     this.authorized = "n/a";
     this.firebaseId = null;
+    this.addresses = new ArrayList<>();
+  }
+
+  public User(String email, String password, String firebaseId) {
+    this.email = email;
+    this.phone = null;
+    this.password = password;
+    this.notification = notification;
+    this.token = null;
+    this.expirationDate = null;
+    this.activated = false;
+    this.authorized = "0";
+    this.firebaseId = firebaseId;
+  }
+
+  public List<Address> getAddresses() {
+    return addresses;
+  }
+
+  public void setAddresses(List<Address> addresses) {
+    this.addresses = addresses;
+  }
+
+  public void setId(long id) {
+    this.id = id;
   }
 
   public String getAuthorized() {
@@ -119,5 +161,24 @@ public class User {
 
   public void setPhone(String phone) {
     this.phone = phone;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+    User another = (User) obj;
+    return Objects.equals(id, another.id)
+        && Objects.equals(email, another.email)
+        && Objects.equals(phone, another.phone)
+        & Objects.equals(password, another.password)
+        & Objects.equals(authorized, another.authorized)
+        && Objects.equals(firebaseId, another.firebaseId);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, email, phone, password, authorized, firebaseId);
   }
 }

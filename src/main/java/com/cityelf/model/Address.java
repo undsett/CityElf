@@ -10,7 +10,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "addresses")
 public class Address {
-  
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "id")
@@ -25,6 +25,10 @@ public class Address {
 
   public Address(String address) {
     this.address = address;
+  }
+
+  public void setId(long id) {
+    this.id = id;
   }
 
   public long getId() {

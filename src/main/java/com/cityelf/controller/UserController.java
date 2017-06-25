@@ -1,6 +1,6 @@
 package com.cityelf.controller;
 
-import com.cityelf.exceptions.UserAlreadyExistsException;
+import com.cityelf.exceptions.UserException;
 import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.model.User;
 import com.cityelf.service.UserService;
@@ -32,13 +32,13 @@ public class UserController {
   }
 
   @RequestMapping(value = "/updateUser", method = RequestMethod.PUT)
-  public void updateUser(@RequestBody User user) throws UserNotFoundException {
+  public void updateUser(@RequestBody User user) throws UserException {
     userService.updateUser(user);
   }
 
   @RequestMapping(value = "/addUser", method = RequestMethod.POST)
-  public void addNewUser(@RequestBody User user) throws UserAlreadyExistsException {
-    userService.addNewUser(user);
+  public User addNewUser(@RequestBody User user) throws UserException {
+    return userService.addNewUser(user);
   }
 
   @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
