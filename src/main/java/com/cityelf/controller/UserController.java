@@ -1,6 +1,6 @@
 package com.cityelf.controller;
 
-import com.cityelf.exceptions.UserAlreadyExistsException;
+import com.cityelf.exceptions.UserException;
 import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.model.User;
 import com.cityelf.service.UserService;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -33,19 +32,14 @@ public class UserController {
   }
 
   @RequestMapping(value = "/updateUser", method = RequestMethod.PUT)
-  public void updateUser(@RequestBody User user) throws UserNotFoundException {
+  public void updateUser(@RequestBody User user) throws UserException {
     userService.updateUser(user);
   }
 
-  @RequestMapping(value = "/adduser", method = RequestMethod.POST)
-  public void addNewUser(@RequestParam(name = "login") String email,
-      @RequestParam(name = "password") String password,
-      @RequestParam(name = "address") String adress,
-      @RequestParam(name = "firebaseid") String fireBaseID)
-      throws UserAlreadyExistsException {
-    userService.addNewUser(email, password, adress, fireBaseID);
+  @RequestMapping(value = "/addUser", method = RequestMethod.POST)
+  public User addNewUser(@RequestBody User user) throws UserException {
+    return userService.addNewUser(user);
   }
-
 
   @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
   public void deleteUser(@PathVariable("userId") long id) throws UserNotFoundException {

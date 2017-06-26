@@ -23,33 +23,18 @@ public class GasForecast {
   @Column(name = "start")
   private LocalDateTime start;
 
-  @Column(name = "estimatedStop")
+  @Column(name = "estimated_stop")
   private LocalDateTime estimatedStop;
 
-  @Column(name = "address_id")
-  private long addressId;
-
-  @Column(name = "peopleReport")
+  @Column(name = "people_report")
   private boolean peopleReport;
 
   @ManyToOne
   @JoinColumn(name = "address_id")
   private Address address;
 
-  public GasForecast() {
-    start = LocalDateTime.of(1900, 1, 1, 0, 0, 0);
-    estimatedStop = LocalDateTime.of(1900, 1, 1, 0, 0, 0);
-    peopleReport = false;
-    address = new Address();
-  }
-
-  public GasForecast(LocalDateTime start, LocalDateTime estimatedStop, boolean peopleReport,
-      Address address) {
-    this.id = 0;
-    this.start = start;
-    this.estimatedStop = estimatedStop;
-    this.peopleReport = peopleReport;
-    this.address = address;
+  public void setId(long id) {
+    this.id = id;
   }
 
   public long getId() {
@@ -70,14 +55,6 @@ public class GasForecast {
 
   public void setEstimatedStop(LocalDateTime estimatedStop) {
     this.estimatedStop = estimatedStop;
-  }
-
-  public long getAddressId() {
-    return addressId;
-  }
-
-  public void setAddressId(long addressId) {
-    this.addressId = addressId;
   }
 
   public boolean isPeopleReport() {
