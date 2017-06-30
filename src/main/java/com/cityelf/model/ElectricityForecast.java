@@ -33,6 +33,10 @@ public class ElectricityForecast {
   private boolean peopleReport;
 
   public ElectricityForecast() {
+    start = LocalDateTime.of(1900, 1, 1, 0, 0, 0);
+    estimatedStop = LocalDateTime.of(1900, 1, 1, 0, 0, 0);
+    peopleReport = false;
+    address = new Address();
   }
 
   public ElectricityForecast(LocalDateTime start, LocalDateTime estimatedStop, Address address,
