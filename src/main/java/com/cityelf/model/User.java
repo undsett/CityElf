@@ -1,5 +1,9 @@
 package com.cityelf.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import org.hibernate.validator.constraints.Email;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +28,9 @@ public class User {
   private long id;
 
   @Column(name = "email")
+  @Email(message = "invalid email format",
+      regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+          + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")
   private String email;
   @Column(name = "phone")
   private String phone;
@@ -35,10 +42,13 @@ public class User {
   @Column(name = "token")
   private String token;
   @Column(name = "expiration_date")
+  @JsonIgnore
   private LocalDateTime expirationDate;
   @Column(name = "activated")
+  @JsonIgnore
   private boolean activated;
   @Column(name = "authorized")
+  @JsonIgnore
   private String authorized;
   @Column(name = "firebase_id")
   @NotNull
