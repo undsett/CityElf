@@ -67,12 +67,13 @@ public class User {
     this.email = email;
     this.phone = null;
     this.password = password;
-    this.notification = notification;
+    this.notification = new Notification();;
     this.token = null;
     this.expirationDate = null;
     this.activated = false;
-    this.authorized = "0";
+    this.authorized = "n/a";
     this.firebaseId = firebaseId;
+    this.addresses = new ArrayList<>();
   }
 
   public List<Address> getAddresses() {

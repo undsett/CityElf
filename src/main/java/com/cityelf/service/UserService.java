@@ -6,6 +6,7 @@ import com.cityelf.exceptions.UserNoFirebaseIdException;
 import com.cityelf.exceptions.UserNotAuthorizedException;
 import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.model.User;
+import com.cityelf.model.UserAddresses;
 import com.cityelf.repository.AddressesRepository;
 import com.cityelf.repository.UserAddressesRepository;
 import com.cityelf.repository.UserRepository;
@@ -46,24 +47,30 @@ public class UserService {
   }
 
 
-  public User addNewUser(User user)
-      throws UserException {
-    String firebaseId = user.getFirebaseId();
-    if (firebaseId == null) {
-      throw new UserNoFirebaseIdException();
+  public void addNewUser(String email, String password, String address, String firebaseId)
+      throws UserAlreadyExistsException {
+    User newUser;
+    if (userRepository.findByEmail(email) == null
+        && userRepository.findByFirebaseId(firebaseId) == null) {
+      newUser = new User(email, password, firebaseId);
+      userRepository.save(newUser);
+      long idAddress = addressesRepository.findByAddress(address).getId();
+      UserAddresses userAddresses = new UserAddresses(
+          userRepository.findByFirebaseId(firebaseId).getId(), idAddress);
+      userAddressesRepository.save(userAddresses);
     } else {
-      if (userRepository.findByFirebaseId(firebaseId) != null) {
-        throw new UserAlreadyExistsException();
+      if (firebaseId.equals(userRepository.findByFirebaseId(firebaseId).getFirebaseId())
+          && userRepository.findByEmail(email) == null) {
+        newUser = userRepository.findByFirebaseId(firebaseId);
+        newUser.setEmail(email);
+        newUser.setPassword(password);
+        userRepository.save(newUser);
       } else {
-        if (user.getEmail() != null && user.getPassword() != null) {
-          user.setAuthorized("authorized");
-        } else {
-          user.setAuthorized("not_authorized");
-        }
-        return userRepository.save(user);
+        throw new UserAlreadyExistsException();
       }
     }
   }
+
 
   public void updateUser(User user) throws UserException {
     User userFromDb = userRepository.findOne(user.getId());
