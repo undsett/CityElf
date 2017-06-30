@@ -12,5 +12,5 @@ public interface AddressesRepository extends CrudRepository<Address, Long> {
 
   Address save(Address address);
 
-
+  Address findByAddressUa(String address);
 }
