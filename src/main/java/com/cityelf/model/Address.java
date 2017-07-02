@@ -19,12 +19,21 @@ public class Address {
   @Column(name = "street")
   private String address;
 
+  @Column(name = "street_ua")
+  private String addressUa;
+
   public Address() {
     this.address = "None";
+    this.addressUa = "None";
   }
 
   public Address(String address) {
     this.address = address;
+  }
+
+  public Address(String address, String addressUa) {
+    this.address = address;
+    this.addressUa = addressUa;
   }
 
   public void setId(long id) {
@@ -41,5 +50,35 @@ public class Address {
 
   public void setAddress(String address) {
     this.address = address;
+  }
+
+  public String getAddressUa() {
+    return addressUa;
+  }
+
+  public void setAddressUa(String addressUa) {
+    this.addressUa = addressUa;
+  }
+
+  @Override
+  public String toString() {
+    return "Address{" +
+        "id=" + id +
+        ", address='" + address + '\'' +
+        ", addressUa='" + addressUa + '\'' +
+        '}';
+  }
+
+  @Override
+  public boolean equals(Object object) {
+    if (this == object) {
+      return true;
+    }
+    if (object == null || getClass() != object.getClass()) {
+      return false;
+    }
+    Address that = (Address)object;
+    return ((this.getAddress().equals(that.getAddress())
+        || (this.getAddressUa().equals(that.getAddressUa()))));
   }
 }
