@@ -30,4 +30,6 @@ public interface GasForecastService {
   Set<Address> getAddressesByTime(LocalDateTime startTime);
 
   List<GasForecast> getCurrentGasForecasts(LocalDateTime checkedTime);
+
+  void save(Iterable<GasForecast> gasForecasts);
 }

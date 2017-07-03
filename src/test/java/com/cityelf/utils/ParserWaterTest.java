@@ -35,13 +35,13 @@ public class ParserWaterTest {
       +
       "\"state\":\"complete\","
       +
-      "\"sTime\":\"13.06.2017 10:30\","
+      "\"stime\":\"13.06.2017 10:30\","
       +
-      "\"sState\":\"fact\","
+      "\"sstate\":\"fact\","
       +
-      "\"rTime\":\"13.06.2017 17:00\","
+      "\"rtime\":\"13.06.2017 17:00\","
       +
-      "\"rState\":\"fact\"}]}]";
+      "\"rstate\":\"fact\"}]}]";
 
   @Before
   public void setUp() throws Exception {
