@@ -1,9 +1,8 @@
 package com.cityelf.service;
 
-import com.cityelf.exceptions.Statuses;
+import com.cityelf.exceptions.Status;
 import com.cityelf.exceptions.UserAlreadyExistsException;
 import com.cityelf.exceptions.UserException;
-import com.cityelf.exceptions.UserNoFirebaseIdException;
 import com.cityelf.exceptions.UserNotAuthorizedException;
 import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.model.Address;
@@ -21,8 +20,6 @@ import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
-import java.security.PublicKey;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -59,7 +56,7 @@ public class UserService {
   }
 
 
-  public Statuses addNewUser(String firebaseId, String address)
+  public Status addNewUser(String firebaseId, String address)
       throws UserAlreadyExistsException {
     User newUser;
 
@@ -71,13 +68,13 @@ public class UserService {
       userAddressesRepository
           .save(new UserAddresses(newUser.getId(), idAddress));
       userRoleRepository.save(new UserRole(newUser.getId(), 1));
-      return Statuses.USER_ADD_IN_DB_OK;
+      return Status.USER_ADD_IN_DB_OK;
     } else {
-      return Statuses.USER_EXIIST;
+      return Status.USER_EXIIST;
     }
   }
 
-  public Statuses registration(String fireBaseID, String email, String password) {
+  public Status registration(String fireBaseID, String email, String password) {
     User newUser = userRepository.findByFirebaseId(fireBaseID);
 
     if (newUser != null && !fireBaseID.equals("WEB")) {
@@ -89,23 +86,21 @@ public class UserService {
           + "&email=" + email;
       mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
 
-      return Statuses.USER_REGISTRATION_OK;
-    } else {
-      if (fireBaseID.equals("WEB") && userRepository.findByEmail(email) == null) {
-        userRepository.save(new User(email, password, "WEB"));
-        newUser = userRepository.findByEmail(email);
-        String msg =
-            "http://localhost:8088/services/users/confirmregistration?id=" + newUser.getId()
-                + "&email=" + email;
-        mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
-        return Statuses.USER_REGISTRATION_OK;
-      }
+      return Status.USER_REGISTRATION_OK;
     }
-
-    return Statuses.EMAIL_EXIST;
+    if (fireBaseID.equals("WEB") && userRepository.findByEmail(email) == null) {
+      userRepository.save(new User(email, password, "WEB"));
+      newUser = userRepository.findByEmail(email);
+      String msg =
+          "http://localhost:8088/services/users/confirmregistration?id=" + newUser.getId()
+              + "&email=" + email;
+      mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
+      return Status.USER_REGISTRATION_OK;
+    }
+    return Status.EMAIL_EXIST;
   }
 
-  public Statuses confirmRegistration(String id, String email) {
+  public Status confirmRegistration(String id, String email) {
     long idUser = Long.parseLong(id);
     User user = userRepository.findByEmail(email);
     if (user.getId() == idUser) {
@@ -119,18 +114,18 @@ public class UserService {
         userRoleRepository.save(userRole);
       }
 
-      return Statuses.EMAIL_CONFIRMED;
+      return Status.EMAIL_CONFIRMED;
     }
-    return Statuses.EMAIL_NOT_CONFIRMED;
+    return Status.EMAIL_NOT_CONFIRMED;
   }
 
-  public Statuses login(String email, String password) {
+  public Status login(String email, String password) {
     if (userRepository.findByEmail(email) == null) {
-      return Statuses.LOGIN_INCORRECT;
+      return Status.LOGIN_INCORRECT;
     } else if (userRepository.findByEmail(email).getPassword().equals(password)) {
-      return Statuses.LOGIN_PASSWORD_OK;
+      return Status.LOGIN_PASSWORD_OK;
     }
-    return Statuses.PASSWORD_INCORRECT;
+    return Status.PASSWORD_INCORRECT;
 
   }
 

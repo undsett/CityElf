@@ -3,9 +3,9 @@ package com.cityelf.exceptions;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public enum Statuses {
+public enum Status {
 
-  USER_ADD_IN_DB_OK (001,"User registration OK "),
+  USER_ADD_IN_DB_OK (001,"User added to DB"),
   USER_EXIIST(2,"User with this fireBaseId exist in DB"),
   USER_REGISTRATION_OK(11,"User registration OK"),
   EMAIL_EXIST(12,"User with this E-mail exist in DB"),
@@ -13,9 +13,9 @@ public enum Statuses {
   EMAIL_NOT_CONFIRMED(22,"Email didn't confirm"),
   LOGIN_INCORRECT(31,"Your Login is incorrect"),
   PASSWORD_INCORRECT(32,"Your Password is incorrect"),
-  LOGIN_PASSWORD_OK(33,"Your login adn password is correct");
+  LOGIN_PASSWORD_OK(33,"Your login and password is correct");
 
-  Statuses(int code, String message) {
+  Status(int code, String message) {
     this.code = code;
     this.message = message;
 
