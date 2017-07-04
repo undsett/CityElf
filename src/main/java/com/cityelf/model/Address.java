@@ -34,12 +34,21 @@ public class Address {
       inverseJoinColumns = @JoinColumn(name = "user_id"))
   private List<User> users;
 
+  @Column(name = "street_ua")
+  private String addressUa;
+
   public Address() {
     this.address = "None";
+    this.addressUa = "None";
   }
 
   public Address(String address) {
     this.address = address;
+  }
+
+  public Address(String address, String addressUa) {
+    this.address = address;
+    this.addressUa = addressUa;
   }
 
   public void setId(long id) {
@@ -65,27 +74,31 @@ public class Address {
   public void setAddressUa(String addressUa) {
     this.addressUa = addressUa;
   }
-
+  
   @Override
   public int hashCode() {
     return Objects.hash(id, address, addressUa);
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == null || obj.getClass() != getClass()) {
-      return false;
-    }
-    Address another = (Address) obj;
-    return Objects.equals(id, another.id)
-        && Objects.equals(address, another.address)
-        && Objects.equals(addressUa, another.addressUa);
+  public String toString() {
+    return "Address{" +
+        "id=" + id +
+        ", address='" + address + '\'' +
+        ", addressUa='" + addressUa + '\'' +
+        '}';
   }
 
   @Override
-  public String toString() {
-    return "Address{"
-        + "address='" + address + '\''
-        + '}';
+  public boolean equals(Object object) {
+    if (this == object) {
+      return true;
+    }
+    if (object == null || getClass() != object.getClass()) {
+      return false;
+    }
+    Address that = (Address)object;
+    return ((this.getAddress().equals(that.getAddress())
+        || (this.getAddressUa().equals(that.getAddressUa()))));
   }
 }
