@@ -13,6 +13,8 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -25,6 +27,7 @@ import javax.validation.constraints.NotNull;
 public class User {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
   @Column(name = "email")
@@ -51,7 +54,6 @@ public class User {
   @JsonIgnore
   private String authorized;
   @Column(name = "firebase_id")
-  @NotNull
   private String firebaseId;
   @OneToMany(fetch = FetchType.LAZY)
   @JoinTable(
@@ -73,16 +75,30 @@ public class User {
     this.addresses = new ArrayList<>();
   }
 
-  public User(String email, String password, String firebaseId) {
-    this.email = email;
+  public User(String firebaseId) {
+    this.firebaseId = firebaseId;
+    this.addresses = new ArrayList<>();
+    this.email = null;
     this.phone = null;
-    this.password = password;
-    this.notification = notification;
+    this.password = null;
+    this.activated = false;
     this.token = null;
     this.expirationDate = null;
-    this.activated = false;
-    this.authorized = "0";
+    this.notification = new Notification();
+    this.authorized = "n/a";
+  }
+
+  public User(String email, String password, String firebaseId) {
+    this.email = email;
+    this.password = password;
     this.firebaseId = firebaseId;
+    this.addresses = new ArrayList<>();
+    this.phone = null;
+    this.activated = false;
+    this.token = null;
+    this.expirationDate = null;
+    this.notification = new Notification();
+    this.authorized = "n/a";
   }
 
   public List<Address> getAddresses() {
@@ -182,8 +198,8 @@ public class User {
     return Objects.equals(id, another.id)
         && Objects.equals(email, another.email)
         && Objects.equals(phone, another.phone)
-        & Objects.equals(password, another.password)
-        & Objects.equals(authorized, another.authorized)
+        && Objects.equals(password, another.password)
+        && Objects.equals(authorized, another.authorized)
         && Objects.equals(firebaseId, another.firebaseId);
   }
 
