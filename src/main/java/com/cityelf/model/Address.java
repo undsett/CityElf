@@ -25,7 +25,8 @@ public class Address {
 
   @Column(name = "street")
   private String address;
-
+  @Column(name = "street_ua")
+  private String addressUa;
   @OneToMany(fetch = FetchType.LAZY)
   @JoinTable(
       name = "user_addresses",
@@ -57,27 +58,34 @@ public class Address {
     this.address = address;
   }
 
-  public List<User> getUsers() {
-    return users;
+  public String getAddressUa() {
+    return addressUa;
   }
 
-  public void setUsers(List<User> users) {
-    this.users = users;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == null || getClass() != obj.getClass()) {
-      return false;
-    }
-    Address another = (Address) obj;
-    return Objects.equals(id, another.id)
-        && Objects.equals(users, another.users)
-        && Objects.equals(address, another.address);
+  public void setAddressUa(String addressUa) {
+    this.addressUa = addressUa;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, address, users);
+    return Objects.hash(id, address, addressUa);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null || obj.getClass() != getClass()) {
+      return false;
+    }
+    Address another = (Address) obj;
+    return Objects.equals(id, another.id)
+        && Objects.equals(address, another.address)
+        && Objects.equals(addressUa, another.addressUa);
+  }
+
+  @Override
+  public String toString() {
+    return "Address{"
+        + "address='" + address + '\''
+        + '}';
   }
 }

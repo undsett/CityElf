@@ -100,31 +100,31 @@ public class WaterForecastControllerTest {
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(content().string(objectToJson(waterForecast)));
   }
-//TODO
-//  @Test
-//  public void getWaterForecastByTimeAndAddressShouldReturnHttpStatusOk200() throws Exception {
-//    when(waterForecastService.getForecast(any(LocalDateTime.class), any(String.class)))
-//        .thenReturn(waterForecast);
-//
-//    mockMvc.perform(get("/waterforecast/get")
-//        .param("start", waterForecast.getStart().toString())
-//        .param("address", waterForecast.getAddress().getAddress()))
-//        .andDo(print())
-//        .andExpect(status().isOk());
-//  }
-//
-//  @Test
-//  public void getWaterForecastByTimeAndAddressShouldReturnJson() throws Exception {
-//    when(waterForecastService.getForecast(any(LocalDateTime.class), any(String.class)))
-//        .thenReturn(waterForecast);
-//
-//    mockMvc.perform(get("/waterforecast/get")
-//        .param("start", waterForecast.getStart().toString())
-//        .param("address", waterForecast.getAddress().getAddress()))
-//        .andDo(print())
-//        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-//        .andExpect(content().string(objectToJson(waterForecast)));
-//  }
+
+  @Test
+  public void getWaterForecastByTimeAndAddressShouldReturnHttpStatusOk200() throws Exception {
+    when(waterForecastService.getForecast(any(LocalDateTime.class), any(String.class)))
+        .thenReturn(waterForecast);
+
+    mockMvc.perform(get("/waterforecast/get")
+        .param("start", waterForecast.getStart().toString())
+        .param("address", waterForecast.getAddress().getAddress()))
+        .andDo(print())
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  public void getWaterForecastByTimeAndAddressShouldReturnJson() throws Exception {
+    when(waterForecastService.getForecast(any(LocalDateTime.class), any(String.class)))
+        .thenReturn(waterForecast);
+
+    mockMvc.perform(get("/waterforecast/get")
+        .param("start", waterForecast.getStart().toString())
+        .param("address", waterForecast.getAddress().getAddress()))
+        .andDo(print())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().string(objectToJson(waterForecast)));
+  }
 
   @Test
   public void getWaterForecastsByStartTimeShouldReturnHttpStatusOk200() throws Exception {
