@@ -13,6 +13,8 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -25,6 +27,7 @@ import javax.validation.constraints.NotNull;
 public class User {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
   @Column(name = "email")
@@ -181,8 +184,8 @@ public class User {
     return Objects.equals(id, another.id)
         && Objects.equals(email, another.email)
         && Objects.equals(phone, another.phone)
-        & Objects.equals(password, another.password)
-        & Objects.equals(authorized, another.authorized)
+        && Objects.equals(password, another.password)
+        && Objects.equals(authorized, another.authorized)
         && Objects.equals(firebaseId, another.firebaseId);
   }
 

@@ -53,7 +53,7 @@ public class ForgotPasswordService {
   public void settingNewPassword(String token, String newPassword) throws Exception {
     User user = userRepository.findByToken(token);
     if (user != null) {
-      if (user.getToken().equals(token) && user.getExpirationDate().isAfter(LocalDateTime.now())) {
+      if (user.getToken().equals(token) && user.getExpirationDate().isBefore(LocalDateTime.now().plusDays(1))) {
         user.setPassword(newPassword);
         user.setToken(null);
         user.setExpirationDate(null);
