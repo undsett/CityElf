@@ -6,9 +6,9 @@ public class Place {
 
   @JsonProperty("n")
   public int id;
-  @JsonProperty("rState")
+  @JsonProperty("rstate")
   public String plan;
-  @JsonProperty("sState")
+  @JsonProperty("sstate")
   public String fact;
   @JsonProperty("progress")
   public String progress;
@@ -16,8 +16,8 @@ public class Place {
   public String state;
   @JsonProperty("address")
   public String address;
-  @JsonProperty("sTime")
+  @JsonProperty("stime")
   public String startTime;
-  @JsonProperty("rTime")
+  @JsonProperty("rtime")
   public String endTime;
 }

@@ -51,7 +51,6 @@ public class User {
   @JsonIgnore
   private String authorized;
   @Column(name = "firebase_id")
-  @NotNull
   private String firebaseId;
   @OneToMany(fetch = FetchType.LAZY)
   @JoinTable(
