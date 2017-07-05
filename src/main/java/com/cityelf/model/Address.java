@@ -82,11 +82,11 @@ public class Address {
 
   @Override
   public String toString() {
-    return "Address{" +
-        "id=" + id +
-        ", address='" + address + '\'' +
-        ", addressUa='" + addressUa + '\'' +
-        '}';
+    return "Address{"
+        + "id=" + id
+        + ", address='" + address + '\''
+        + ", addressUa='" + addressUa + '\''
+        + '}';
   }
 
   @Override
@@ -97,7 +97,7 @@ public class Address {
     if (object == null || getClass() != object.getClass()) {
       return false;
     }
-    Address that = (Address)object;
+    Address that = (Address) object;
     return ((this.getAddress().equals(that.getAddress())
         || (this.getAddressUa().equals(that.getAddressUa()))));
   }
