@@ -10,6 +10,8 @@ import com.cityelf.repository.GasForecastRepository;
 import com.cityelf.repository.WaterForecastRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,18 +28,19 @@ public class ShutdownsInfoService {
   @Autowired
   private ElectricityForecastRepository electricityForecastRepository;
 
-  public ArrayList getAllForecasts(LocalDateTime startTime, String address)
-       {
+  public Map<String, Object> getAllForecasts(LocalDateTime startTime, String address) {
     Optional<WaterForecast> forecastWater = waterForecastRepository.findByStartAndAddress_Address(
         startTime, address);
-    Optional<ElectricityForecast> forecastElectricity = electricityForecastRepository.findByStartAndAddress_Address(startTime, address);
-    Optional<GasForecast> forecastGas = gasForecastRepository.findByStartAndAddress_Address(startTime, address);
-    ArrayList forecastList = new ArrayList();
+    Optional<ElectricityForecast> forecastElectricity = electricityForecastRepository
+        .findByStartAndAddress_Address(startTime, address);
+    Optional<GasForecast> forecastGas = gasForecastRepository
+        .findByStartAndAddress_Address(startTime, address);
+    Map<String, Object> forecastMap = new HashMap<>();
 
-    forecastList.add(forecastWater);
-    forecastList.add(forecastElectricity);
-    forecastList.add(forecastGas);
-    return forecastList;
+    forecastWater.ifPresent(f -> forecastMap.put("Water", f));
+    forecastElectricity.ifPresent(f -> forecastMap.put("Electricity", f));
+    forecastGas.ifPresent(f -> forecastMap.put("Gas", f));
+    return forecastMap;
   }
 
 }

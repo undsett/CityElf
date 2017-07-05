@@ -4,6 +4,7 @@ import com.cityelf.exceptions.ForecastNotFoundException;
 import com.cityelf.service.ShutdownsInfoService;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,7 +19,7 @@ public class ShutdownsInfoController {
   private ShutdownsInfoService shutdownsInfoService;
 
   @RequestMapping(value = "/get", method = RequestMethod.GET)
-  public ArrayList getAllForecasts(@RequestParam(name = "start") String startTime,
+  public Map<String, Object> getAllForecasts(@RequestParam(name = "start") String startTime,
       @RequestParam(name = "address") String address) {
     return shutdownsInfoService.getAllForecasts(LocalDateTime.parse(startTime), address);
   }
