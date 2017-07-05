@@ -25,17 +25,16 @@ public class Address {
 
   @Column(name = "street")
   private String address;
+
   @Column(name = "street_ua")
   private String addressUa;
+
   @OneToMany(fetch = FetchType.LAZY)
   @JoinTable(
       name = "user_addresses",
       joinColumns = @JoinColumn(name = "address_id"),
       inverseJoinColumns = @JoinColumn(name = "user_id"))
   private List<User> users;
-
-  @Column(name = "street_ua")
-  private String addressUa;
 
   public Address() {
     this.address = "None";
@@ -44,6 +43,7 @@ public class Address {
 
   public Address(String address) {
     this.address = address;
+    this.addressUa = address;
   }
 
   public Address(String address, String addressUa) {
@@ -74,7 +74,7 @@ public class Address {
   public void setAddressUa(String addressUa) {
     this.addressUa = addressUa;
   }
-  
+
   @Override
   public int hashCode() {
     return Objects.hash(id, address, addressUa);
