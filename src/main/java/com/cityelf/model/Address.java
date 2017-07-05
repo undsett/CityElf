@@ -75,6 +75,14 @@ public class Address {
     this.addressUa = addressUa;
   }
 
+  public List<User> getUsers() {
+    return users;
+  }
+
+  public void setUsers(List<User> users) {
+    this.users = users;
+  }
+
   @Override
   public int hashCode() {
     return Objects.hash(id, address, addressUa);
@@ -90,15 +98,13 @@ public class Address {
   }
 
   @Override
-  public boolean equals(Object object) {
-    if (this == object) {
-      return true;
-    }
-    if (object == null || getClass() != object.getClass()) {
+  public boolean equals(Object obj) {
+    if (obj == null || obj.getClass() != getClass()) {
       return false;
     }
-    Address that = (Address) object;
-    return ((this.getAddress().equals(that.getAddress())
-        || (this.getAddressUa().equals(that.getAddressUa()))));
+    Address another = (Address) obj;
+    return Objects.equals(id, another.id)
+        && Objects.equals(address, another.address)
+        && Objects.equals(addressUa, another.addressUa);
   }
 }
