@@ -43,4 +43,5 @@ public interface AddressesRepository extends CrudRepository<Address, Long> {
     }
   }
 
+  Address findByAddressUa(String address);
 }

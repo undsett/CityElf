@@ -25,15 +25,16 @@ public class Address {
 
   @Column(name = "street")
   private String address;
+
   @Column(name = "street_ua")
   private String addressUa;
+
   @OneToMany(fetch = FetchType.LAZY)
   @JoinTable(
       name = "user_addresses",
       joinColumns = @JoinColumn(name = "address_id"),
       inverseJoinColumns = @JoinColumn(name = "user_id"))
   private List<User> users;
-
 
 
   public Address() {
@@ -43,6 +44,7 @@ public class Address {
 
   public Address(String address) {
     this.address = address;
+    this.addressUa = address;
   }
 
   public Address(String address, String addressUa) {
@@ -81,11 +83,11 @@ public class Address {
 
   @Override
   public String toString() {
-    return "Address{" +
-        "id=" + id +
-        ", address='" + address + '\'' +
-        ", addressUa='" + addressUa + '\'' +
-        '}';
+    return "Address{"
+        + "id=" + id
+        + ", address='" + address + '\''
+        + ", addressUa='" + addressUa + '\''
+        + '}';
   }
 
   @Override
@@ -96,7 +98,7 @@ public class Address {
     if (object == null || getClass() != object.getClass()) {
       return false;
     }
-    Address that = (Address)object;
+    Address that = (Address) object;
     return ((this.getAddress().equals(that.getAddress())
         || (this.getAddressUa().equals(that.getAddressUa()))));
   }
