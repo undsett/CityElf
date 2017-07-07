@@ -10,6 +10,7 @@ import com.cityelf.model.WaterForecast;
 import com.cityelf.service.ElectricityForecastService;
 import com.cityelf.service.GasForecastService;
 import com.cityelf.service.WaterForecastService;
+import com.cityelf.utils.address.finder.utils.AddressDbFinder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +52,7 @@ public class ForecastCollector {
     try {
       forcastDataList = parserWater.getForcastDataList();
       for (ForcastData forcastData : forcastDataList) {
-        logger.info("WaterForecastData:" + forcastData.toString());
+        logger.trace(forcastData.toString());
         Collection<Address> addresses = addressDbFinder
             .getAddresses(forcastData.getAdress(), forcastData.getBuildingNumberList());
         for (Address address : addresses) {
@@ -59,7 +60,7 @@ public class ForecastCollector {
           forecast.setStart(forcastData.getStartOff());
           forecast.setEstimatedStop(forcastData.getEndOff());
           forecast.setAddress(address);
-          logger.info("WaterForecast:" + forecast);
+          logger.info(forecast.toString());
           forecasts.add(forecast);
         }
       }
@@ -70,7 +71,7 @@ public class ForecastCollector {
     try {
       forcastDataList = parserElectro.getForcastDataList();
       for (ForcastData forcastData : forcastDataList) {
-        logger.info("ElectricityForecastData:" + forcastData.toString());
+        logger.trace(forcastData.toString());
         Collection<Address> addresses = addressDbFinder
             .getAddresses(forcastData.getAdress(), forcastData.getBuildingNumberList());
         for (Address address : addresses) {
@@ -78,7 +79,7 @@ public class ForecastCollector {
           forecast.setStart(forcastData.getStartOff());
           forecast.setEstimatedStop(forcastData.getEndOff());
           forecast.setAddress(address);
-          logger.info("ElectricityForecast:" + forecast);
+          logger.trace(forecast.toString());
           forecasts.add(forecast);
         }
       }
@@ -89,7 +90,7 @@ public class ForecastCollector {
     try {
       forcastDataList = parserGas.getForcastDataList();
       for (ForcastData forcastData : forcastDataList) {
-        logger.info("GasForecastData:" + forcastData.toString());
+        logger.trace(forcastData.toString());
         Collection<Address> addresses = addressDbFinder
             .getAddresses(forcastData.getAdress(), forcastData.getBuildingNumberList());
         for (Address address : addresses) {
@@ -97,7 +98,7 @@ public class ForecastCollector {
           forecast.setStart(forcastData.getStartOff());
           forecast.setEstimatedStop(forcastData.getEndOff());
           forecast.setAddress(address);
-          logger.info("GasForecast:" + forecast);
+          logger.trace(forecast.toString());
           forecasts.add(forecast);
         }
       }
