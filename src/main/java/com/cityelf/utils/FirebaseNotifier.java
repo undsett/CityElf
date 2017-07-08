@@ -24,6 +24,7 @@ public class FirebaseNotifier {
   @Autowired
   AppServerFirebase appServerFirebase;
 
+  String webUserFirebaseId = "WEB";
 
   public void firebaseNotificate(Collection<Forecast> forecasts) {
     for (Forecast forecast : forecasts) {
@@ -37,17 +38,19 @@ public class FirebaseNotifier {
     List<User> users = forecast.getAddress().getUsers();
     if (users != null) {
       for (User user : users) {
-        notificationToken = new NotificationToken(forecast.getAddress().getAddress(),
-            forecast.getStart(),
-            forecast.getEstimatedStop(), user.getId());
-        if (firebaseNotificationRepository.findByTextHash(notificationToken.getTextHash())
-            == null) {
-          try {
-            appServerFirebase.pushFCMNotification(user.getFirebaseId(), "Отключение!",
-                createMessageToFirebase(forecast));
-            firebaseNotificationRepository.save(notificationToken);
-          } catch (Exception exception) {
-            exception.printStackTrace();
+        if (!user.getFirebaseId().equals(webUserFirebaseId)) {
+          notificationToken = new NotificationToken(forecast.getAddress().getAddress(),
+              forecast.getStart(),
+              forecast.getEstimatedStop(), user.getId());
+          if (firebaseNotificationRepository.findByTextHash(notificationToken.getTextHash())
+              == null) {
+            try {
+              appServerFirebase.pushFCMNotification(user.getFirebaseId(), "Отключение!",
+                  createMessageToFirebase(forecast));
+              firebaseNotificationRepository.save(notificationToken);
+            } catch (Exception exception) {
+              exception.printStackTrace();
+            }
           }
         }
       }
