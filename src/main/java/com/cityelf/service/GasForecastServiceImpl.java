@@ -158,7 +158,7 @@ public class GasForecastServiceImpl implements GasForecastService {
   /**
    * This will rewrite a List of GasForecast objects which are current
    *
-   * @param Iterable collection of GasForecast objects
+   * @param gasForecasts collection of GasForecast objects
    * @return void
    */
   public void save(Iterable<GasForecast> gasForecasts) {
