@@ -5,6 +5,7 @@ import com.cityelf.exceptions.ForecastNotFoundException;
 import com.cityelf.model.Address;
 import com.cityelf.model.GasForecast;
 import com.cityelf.repository.GasForecastRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -152,6 +153,17 @@ public class GasForecastServiceImpl implements GasForecastService {
   public List<GasForecast> getCurrentGasForecasts(LocalDateTime checkedTime) {
     return gasForecastRepository
         .findGasForecastsByStartLessThanEqualAndEstimatedStopGreaterThan(checkedTime, checkedTime);
+  }
+
+  /**
+   * This will rewrite a List of GasForecast objects which are current
+   *
+   * @param gasForecasts collection of GasForecast objects
+   * @return void
+   */
+  public void save(Iterable<GasForecast> gasForecasts) {
+    gasForecastRepository.deleteAll();
+    gasForecastRepository.save(gasForecasts);
   }
 }
 

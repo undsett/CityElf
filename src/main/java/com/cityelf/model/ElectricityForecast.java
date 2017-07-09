@@ -1,6 +1,7 @@
 package com.cityelf.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,10 +14,11 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "electricity_forecasts")
-public class ElectricityForecast {
+public class ElectricityForecast extends Forecast {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "id")
   private long id;
 
   @Column(name = "start")
@@ -81,39 +83,29 @@ public class ElectricityForecast {
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null || getClass() != obj.getClass()) {
-      return false;
-    }
-
-    ElectricityForecast that = (ElectricityForecast) obj;
-
-    if (id != that.id) {
-      return false;
-    }
-    if (peopleReport != that.peopleReport) {
-      return false;
-    }
-    if (start != null ? !start.equals(that.start) : that.start != null) {
-      return false;
-    }
-    if (estimatedStop != null ? !estimatedStop.equals(that.estimatedStop)
-        : that.estimatedStop != null) {
-      return false;
-    }
-    return address != null ? address.equals(that.address) : that.address == null;
+  public int hashCode() {
+    return Objects.hash(id, start, estimatedStop, address, peopleReport);
   }
 
   @Override
-  public int hashCode() {
-    int result = (int) (id ^ (id >>> 32));
-    result = 31 * result + (start != null ? start.hashCode() : 0);
-    result = 31 * result + (estimatedStop != null ? estimatedStop.hashCode() : 0);
-    result = 31 * result + (address != null ? address.hashCode() : 0);
-    result = 31 * result + (peopleReport ? 1 : 0);
-    return result;
+  public boolean equals(Object obj) {
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+    ElectricityForecast forecast = (ElectricityForecast) obj;
+    return Objects.equals(id, forecast)
+        && Objects.equals(start, forecast.start)
+        && Objects.equals(estimatedStop, forecast.estimatedStop)
+        && Objects.equals(address, forecast.address)
+        && Objects.equals(peopleReport, forecast.peopleReport);
+  }
+
+  @Override
+  public String toString() {
+    return "ElectricityForecast{"
+        + "start=" + start
+        + ", estimatedStop=" + estimatedStop
+        + ", address=" + address
+        + '}';
   }
 }
