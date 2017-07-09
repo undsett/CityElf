@@ -1,5 +1,12 @@
 package com.cityelf.model;
 
-public class Forecast {
+import java.time.LocalDateTime;
 
+public abstract class Forecast {
+
+  public abstract LocalDateTime getEstimatedStop();
+
+  public abstract LocalDateTime getStart();
+
+  public abstract Address getAddress();
 }

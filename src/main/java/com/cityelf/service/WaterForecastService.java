@@ -148,7 +148,7 @@ public class WaterForecastService {
   /**
    * This will rewrite a List of WaterForecast objects which are current
    *
-   * @param Iterable collection of WaterForecast objects
+   * @param waterForecasts collection of WaterForecast objects
    * @return void
    */
   public void save(Iterable<WaterForecast> waterForecasts) {

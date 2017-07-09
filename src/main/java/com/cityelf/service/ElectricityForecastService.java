@@ -89,7 +89,7 @@ public class ElectricityForecastService {
   /**
    * This will rewrite a List of ElectricityForecast objects which are current
    *
-   * @param Iterable collection of ElectricityForecast objects
+   * @param electricityForecasts collection of ElectricityForecast objects
    * @return void
    */
   public void save(Iterable<ElectricityForecast> electricityForecasts) {
