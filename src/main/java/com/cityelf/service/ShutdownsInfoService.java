@@ -1,20 +1,19 @@
 package com.cityelf.service;
 
-
-import com.cityelf.exceptions.ForecastNotFoundException;
 import com.cityelf.model.ElectricityForecast;
 import com.cityelf.model.GasForecast;
 import com.cityelf.model.WaterForecast;
 import com.cityelf.repository.ElectricityForecastRepository;
 import com.cityelf.repository.GasForecastRepository;
 import com.cityelf.repository.WaterForecastRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class ShutdownsInfoService {
