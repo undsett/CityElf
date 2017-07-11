@@ -12,43 +12,43 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class StringSplitterTest {
+public class MaskCreatorTest {
 
   @Autowired
-  private StringSplitter stringSplitter;
+  private MaskCreator maskCreator;
 
   @Test
   public void getMaskWords1() throws Exception {
     String input = "космонавтов мал";
-    List<String> maskWords = stringSplitter.getMaskWords(input);
+    List<String> maskWords = maskCreator.getMaskWords(input);
     assertThat(maskWords).containsExactly("%космонавтов%");
   }
 
   @Test
   public void getMaskWords2() throws Exception {
     String input = "терешковой валентины-мал";
-    List<String> maskWords = stringSplitter.getMaskWords(input);
+    List<String> maskWords = maskCreator.getMaskWords(input);
     assertThat(maskWords).containsExactly("%терешковой%", "%валентины%");
   }
 
   @Test
   public void getMaskWords3() throws Exception {
     String input = "академика филатова  -малиновский";
-    List<String> maskWords = stringSplitter.getMaskWords(input);
+    List<String> maskWords = maskCreator.getMaskWords(input);
     assertThat(maskWords).containsExactly("%академика%", "%филатова%");
   }
 
   @Test
   public void getMaskWords4() throws Exception {
     String input = "25-й чапаевской дивизии - мал";
-    List<String> maskWords = stringSplitter.getMaskWords(input);
+    List<String> maskWords = maskCreator.getMaskWords(input);
     assertThat(maskWords).containsExactly("%чапаевской%", "%дивизии%");
   }
 
   @Test
   public void getMaskWords5() throws Exception {
     String input = "франко ул.";
-    List<String> maskWords = stringSplitter.getMaskWords(input);
+    List<String> maskWords = maskCreator.getMaskWords(input);
     assertThat(maskWords).containsExactly("%франко%");
   }
 }

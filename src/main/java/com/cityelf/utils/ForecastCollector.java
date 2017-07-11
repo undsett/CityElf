@@ -60,12 +60,14 @@ public class ForecastCollector {
           forecast.setStart(forcastData.getStartOff());
           forecast.setEstimatedStop(forcastData.getEndOff());
           forecast.setAddress(address);
-          logger.info(forecast.toString());
+          logger.trace(forecast.toString());
           forecasts.add(forecast);
         }
       }
     } catch (ParserUnavailableException ex) {
       logger.error("WaterParser unavailable", ex);
+    } catch (Exception ex) {
+      logger.error("WaterParser ERROR", ex);
     }
 
     try {
@@ -85,6 +87,8 @@ public class ForecastCollector {
       }
     } catch (ParserUnavailableException ex) {
       logger.error("ElectricityParser unavailable", ex);
+    } catch (Exception ex) {
+      logger.error("ElectricityParser ERROR", ex);
     }
 
     try {
@@ -104,6 +108,8 @@ public class ForecastCollector {
       }
     } catch (ParserUnavailableException ex) {
       logger.error("GasParser unavailable", ex);
+    } catch (Exception ex) {
+      logger.error("GasParser ERROR", ex);
     }
 
     sendToNotifier(forecasts);

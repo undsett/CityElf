@@ -8,10 +8,10 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Component
-public class StringSplitter {
+public class MaskCreator {
 
   private final Pattern typeStreetPattern = Pattern
-      .compile("пер\\.|переулок|ул\\.|улица|пр\\.|проспект|тупик|бульвар|\\d+|.{1}");
+      .compile("пер\\.|переулок|ул\\.|улица|пр\\.|проспект|тупик|бульвар|сп.|спуск|\\d+|.{1}");
   private final Pattern regionPattern = Pattern.compile("малиновский|мал|приморский");
 
   public List<String> getMaskWords(String streetName) {
