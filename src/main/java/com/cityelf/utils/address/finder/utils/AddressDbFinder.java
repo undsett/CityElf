@@ -18,19 +18,19 @@ public class AddressDbFinder {
   @Autowired
   private AddressFilter addressFilter;
   @Autowired
-  private StringSplitter stringSplitter;
+  private MaskCreator maskCreator;
   @Autowired
   private AddressesRepository addressesRepository;
 
   public List<Address> getAddresses(String streetName, Collection<String> buildingNumbers) {
     streetName = streetName.toLowerCase();
-    List<String> maskWords = stringSplitter.getMaskWords(streetName);
+    List<String> maskWords = maskCreator.getMaskWords(streetName);
     List<Address> preSelectionAddresses = addressesRepository
         .findAddressesByMask(maskWords.toArray(new String[0]));
     List<Address> addresses = addressFilter
         .filterAddresses(preSelectionAddresses, buildingNumbers, streetName);
 
-    logger.trace("StreetName:" + streetName + "\nBuildings: " + buildingNumbers);
+    logger.trace("***\nStreetName:" + streetName + " Buildings: " + buildingNumbers);
     logger.trace("Keywords for lookup from database:" + maskWords);
     logger.trace("Total count addresses found from DB by mask:" + preSelectionAddresses.size());
     logger
