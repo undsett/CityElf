@@ -17,6 +17,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .csrf().disable() //this line disables requests for CSRF tokens
         .authorizeRequests()
         .antMatchers("/", "/home").permitAll()
+        //.antMatchers("/advertisements/admin/**", "/polls/admin/**").hasAuthority("ADMIN_ROLE")
         //this line prevents access with out login
         //.anyRequest().authenticated()
         .and()
