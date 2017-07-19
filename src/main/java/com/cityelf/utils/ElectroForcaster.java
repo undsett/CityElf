@@ -87,6 +87,7 @@ public class ElectroForcaster {
 
   private class ColumnTuple {
 
+    private final String notOdessaPattern = "Усатово.+";
     private String startOff;
     private String endOff;
     private String addresses;
@@ -109,6 +110,7 @@ public class ElectroForcaster {
       String[] split = addresses.split("одесса[^,]*,");
       for (String item : split) {
         try {
+          item = item.replaceAll(notOdessaPattern, "");
           item = item.trim();
           if (item.isEmpty()) {
             continue;

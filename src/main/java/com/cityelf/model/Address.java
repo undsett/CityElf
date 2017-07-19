@@ -1,5 +1,7 @@
 package com.cityelf.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -34,6 +36,7 @@ public class Address {
       name = "user_addresses",
       joinColumns = @JoinColumn(name = "address_id"),
       inverseJoinColumns = @JoinColumn(name = "user_id"))
+  @JsonIgnore
   private List<User> users;
 
 
