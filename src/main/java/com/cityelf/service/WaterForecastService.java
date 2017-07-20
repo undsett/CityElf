@@ -144,4 +144,15 @@ public class WaterForecastService {
         .findWaterForecastsByStartLessThanEqualAndEstimatedStopGreaterThan(checkedTime,
             checkedTime);
   }
+
+  /**
+   * This will rewrite a List of WaterForecast objects which are current
+   *
+   * @param waterForecasts collection of WaterForecast objects
+   * @return void
+   */
+  public void save(Iterable<WaterForecast> waterForecasts) {
+    waterForecastRepository.deleteAll();
+    waterForecastRepository.save(waterForecasts);
+  }
 }

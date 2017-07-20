@@ -52,23 +52,11 @@ public class UserControllerTest {
         .andDo(print())
         .andExpect(content().string(objectToJson(Arrays.asList(user))));
   }
-//TODO
-//  @Test
-//  public void addNewUserShouldReturnHttpStatusOk200() throws Exception {
-//    doNothing().when(userService).addNewUser("email","pass", "adr1", "fireBaseID111");
-//
-//    mockMvc.perform(post("/users/addUser/")
-//        .contentType(MediaType.APPLICATION_JSON_UTF8)
-//        .content(objectToJson(user))
-//    )
-//        .andDo(print())
-//        .andExpect(status().isOk());
-//  }
 
   @Test
   public void updateUserShouldReturnHttpStatusNotFound404() throws Exception {
     doThrow(UserNotFoundException.class).when(userService).updateUser(any());
-
+    user.setEmail("login@domain.com");
     mockMvc.perform(
         put("/users/updateUser")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -81,7 +69,7 @@ public class UserControllerTest {
   @Test
   public void updateUserShouldReturnHttpStatusOk200() throws Exception {
     doNothing().when(userService).updateUser(any());
-
+    user.setEmail("login@domain.com");
     mockMvc.perform(
         put("/users/updateUser")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -89,6 +77,19 @@ public class UserControllerTest {
     )
         .andDo(print())
         .andExpect(status().isOk());
+  }
+
+  @Test
+  public void updateUserShouldReturnHttpStatusBadRequest400() throws Exception {
+    doNothing().when(userService).updateUser(any());
+    user.setEmail("invalid-login.domain.com");
+    mockMvc.perform(
+        put("/users/updateUser")
+            .contentType(MediaType.APPLICATION_JSON_UTF8)
+            .content(objectToJson(user))
+    )
+        .andDo(print())
+        .andExpect(status().isBadRequest());
   }
 
   @Test
