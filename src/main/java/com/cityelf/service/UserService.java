@@ -88,7 +88,7 @@ public class UserService {
 
     if (!fireBaseID.equals("WEB")) {
       User existUser = userRepository.findByFirebaseId(fireBaseID);
-      if (existUser != null) {
+      if (existUser != null&&userRepository.findByEmail(email) == null) {
         existUser.setEmail(email);
         existUser.setPassword(password);
         userRepository.save(existUser);
