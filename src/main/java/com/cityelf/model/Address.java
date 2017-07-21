@@ -39,7 +39,6 @@ public class Address {
   @JsonIgnore
   private List<User> users;
 
-
   public Address() {
     this.address = "None";
     this.addressUa = "None";
