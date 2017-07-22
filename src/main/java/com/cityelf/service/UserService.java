@@ -75,19 +75,7 @@ public class UserService {
   }
 
   public Status registration(String fireBaseID, String email, String password) {
-    User existUser = userRepository.findByFirebaseId(fireBaseID);
     User newUser = new User();
-    if (existUser != null && !fireBaseID.equals("WEB")) {
-
-      existUser.setEmail(email);
-      existUser.setPassword(password);
-      userRepository.save(existUser);
-      String msg = "http://localhost:8088/services/registration/confirm?id=" + existUser.getId()
-          + "&email=" + email;
-      mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
-
-      return Status.USER_REGISTRATION_OK;
-    }
     if (fireBaseID.equals("WEB") && userRepository.findByEmail(email) == null) {
       userRepository.save(new User(email, password, "WEB"));
       newUser = userRepository.findByEmail(email);
@@ -97,6 +85,20 @@ public class UserService {
       mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
       return Status.USER_REGISTRATION_OK;
     }
+
+    if (!fireBaseID.equals("WEB")) {
+      User existUser = userRepository.findByFirebaseId(fireBaseID);
+      if (existUser != null&&userRepository.findByEmail(email) == null) {
+        existUser.setEmail(email);
+        existUser.setPassword(password);
+        userRepository.save(existUser);
+        String msg = "http://localhost:8088/services/registration/confirm?id=" + existUser.getId()
+            + "&email=" + email;
+        mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
+        return Status.USER_REGISTRATION_OK;
+      }
+    }
+
     return Status.EMAIL_EXIST;
   }
 
