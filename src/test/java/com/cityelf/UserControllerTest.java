@@ -15,6 +15,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.cityelf.controller.UserController;
 import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.model.User;
+import com.cityelf.service.MailSenderService;
+import com.cityelf.service.StorageService;
 import com.cityelf.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -37,6 +39,10 @@ public class UserControllerTest {
   private MockMvc mockMvc;
   @MockBean
   private UserService userService;
+  @MockBean
+  private MailSenderService mailSenderService;
+  @MockBean
+  private StorageService storageService;
   private User user = new User();
 
   public String objectToJson(Object o) throws Exception {
