@@ -1,5 +1,6 @@
 # CityElf  
 
+Travis build: 
 [![Build Status](https://travis-ci.org/undsett/CityElf.svg?branch=master)](https://travis-ci.org/undsett/CityElf)  
 
 1. To build project in the console, you should:  
