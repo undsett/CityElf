@@ -41,12 +41,12 @@ public class ForgotPasswordService {
   }
 
   private void sendResetTokenEmail(String userEmail, String token) {
-    mailSender.sendMail(userEmail, "Reset password for CityElf",
-        "We heard that you lost your CityElf password..."
-            + "\n\nBut don’t worry! You can use the following link within the next day to reset your password:\n"
+    mailSender.sendMail(userEmail, "Сброс пароля CityElf",
+        "Мы узнали, что ваш пароль был утерян..."
+            + "\n\nНо не стоит беспокоиться! Вы можете использовать ссылку в течении 24 часов для его восстановления:\n"
             + "http://localhost:8088/services/forgot/resetPassword.html?token=" + token
-            + "\n\nIf you don’t use this link within 24 hours, it will expire."
-            + "\n\nThanks,\nYour friends at CityElf");
+            + "\n\nЕсли ссылка не будет использована, она будет аннулирована."
+            + "\n\nС уважением,\nкоманда проекта CityElf");
   }
 
   @Transactional
