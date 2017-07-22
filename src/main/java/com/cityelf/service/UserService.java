@@ -20,7 +20,9 @@ import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -75,19 +77,7 @@ public class UserService {
   }
 
   public Status registration(String fireBaseID, String email, String password) {
-    User existUser = userRepository.findByFirebaseId(fireBaseID);
     User newUser = new User();
-    if (existUser != null && !fireBaseID.equals("WEB")) {
-
-      existUser.setEmail(email);
-      existUser.setPassword(password);
-      userRepository.save(existUser);
-      String msg = "http://localhost:8088/services/registration/confirm?id=" + existUser.getId()
-          + "&email=" + email;
-      mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
-
-      return Status.USER_REGISTRATION_OK;
-    }
     if (fireBaseID.equals("WEB") && userRepository.findByEmail(email) == null) {
       userRepository.save(new User(email, password, "WEB"));
       newUser = userRepository.findByEmail(email);
@@ -97,6 +87,20 @@ public class UserService {
       mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
       return Status.USER_REGISTRATION_OK;
     }
+
+    if (!fireBaseID.equals("WEB")) {
+      User existUser = userRepository.findByFirebaseId(fireBaseID);
+      if (existUser != null && userRepository.findByEmail(email) == null) {
+        existUser.setEmail(email);
+        existUser.setPassword(password);
+        userRepository.save(existUser);
+        String msg = "http://localhost:8088/services/registration/confirm?id=" + existUser.getId()
+            + "&email=" + email;
+        mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
+        return Status.USER_REGISTRATION_OK;
+      }
+    }
+
     return Status.EMAIL_EXIST;
   }
 
@@ -119,13 +123,17 @@ public class UserService {
     return Status.EMAIL_NOT_CONFIRMED;
   }
 
-  public Status login(String email, String password) {
-    if (userRepository.findByEmail(email) == null) {
-      return Status.LOGIN_INCORRECT;
-    } else if (userRepository.findByEmail(email).getPassword().equals(password)) {
-      return Status.LOGIN_PASSWORD_OK;
+  public Map<String, Object> login(String email, String password) {
+    Map<String, Object> map = new HashMap<>();
+    User user = userRepository.findByEmail(email);
+    if (user == null || !user.getPassword().equals(password)) {
+      map.put("status", Status.LOGIN_INCORRECT);
+    } else {
+      map.put("status", Status.LOGIN_PASSWORD_OK);
+      map.put("user", user);
     }
-    return Status.PASSWORD_INCORRECT;
+
+    return map;
 
   }
 

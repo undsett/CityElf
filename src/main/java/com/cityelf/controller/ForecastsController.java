@@ -14,7 +14,7 @@ public class ForecastsController {
   @Autowired
   private ForecastCollector forecastCollector;
 
-  @RequestMapping(value = "/startCollector", method = RequestMethod.GET)
+  @RequestMapping(value = "/startcollector", method = RequestMethod.GET)
   public void getElectricityForecast() {
     forecastCollector.startForecastCollector();
   }
