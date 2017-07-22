@@ -20,7 +20,9 @@ import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -119,13 +121,17 @@ public class UserService {
     return Status.EMAIL_NOT_CONFIRMED;
   }
 
-  public Status login(String email, String password) {
-    if (userRepository.findByEmail(email) == null) {
-      return Status.LOGIN_INCORRECT;
-    } else if (userRepository.findByEmail(email).getPassword().equals(password)) {
-      return Status.LOGIN_PASSWORD_OK;
+  public Map<String, Object> login(String email, String password) {
+    Map<String, Object> map = new HashMap<>();
+    User user = userRepository.findByEmail(email);
+    if (user == null || !user.getPassword().equals(password)) {
+      map.put("status", Status.LOGIN_INCORRECT);
+    } else {
+      map.put("status", Status.LOGIN_PASSWORD_OK);
+      map.put("user", user);
     }
-    return Status.PASSWORD_INCORRECT;
+
+    return map;
 
   }
 
