@@ -35,6 +35,7 @@ public class ElectricityForecast extends Forecast {
   private boolean peopleReport;
 
   public ElectricityForecast() {
+
   }
 
   public ElectricityForecast(LocalDateTime start, LocalDateTime estimatedStop, Address address,
