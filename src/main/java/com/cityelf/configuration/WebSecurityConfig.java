@@ -13,29 +13,25 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+  @Autowired
+  private DataSource dataSource;
+
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http
-        .csrf().disable() //this line disables requests for CSRF tokens
         .authorizeRequests()
-        .antMatchers("/", "/home").permitAll()
-
-        //.antMatchers("/advertisements/admin/**", "/polls/admin/**").hasAuthority("ADMIN_ROLE")
-
-        //this line prevents access with out login
-        //.anyRequest().authenticated()
+        .antMatchers(
+            "/",
+            "/home"
+        ).permitAll()
+        .antMatchers("/forecasts/startcollector").hasAuthority("SYSTEM_ROLE")
+        .antMatchers("/advertisements/admin/**", "/polls/admin/**").hasAuthority("ADMIN_ROLE")
         .and()
-        .formLogin()
-        .loginPage("/login")
-        .permitAll()
+        .httpBasic()
         .and()
-        .logout()
-        .permitAll();
+        .csrf().disable();
+
   }
-
-
-  @Autowired
-  private DataSource dataSource;
 
   @Autowired
   public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
