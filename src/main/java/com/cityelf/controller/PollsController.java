@@ -13,12 +13,26 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/polls")
 public class PollsController {
 
   @Autowired
   private PollsService pollsService;
+
+  @RequestMapping(value = "/getAll", method = RequestMethod.GET)
+  public List<Poll> getPolls(@RequestParam(name = "addressid") long addressId)
+      throws AddressNotPresentException {
+    return pollsService.getPolls(addressId);
+  }
+
+  @RequestMapping(value = "/getPoll", method = RequestMethod.GET)
+  public Poll getPollById(@RequestParam("id") long id)
+      throws PollNotFoundException {
+    return pollsService.getPollById(id);
+  }
 
   @RequestMapping(value = "/admin/addPoll", method = RequestMethod.POST)
   public Poll addPoll(@RequestBody Poll poll)

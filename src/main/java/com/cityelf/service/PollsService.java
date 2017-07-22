@@ -12,6 +12,8 @@ import com.cityelf.repository.PollsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 @Service
@@ -25,6 +27,26 @@ public class PollsService {
 
   @Autowired
   private PollAnswersRepository pollAnswersRepository;
+
+  public List<Poll> getPolls(long addressId) throws AddressNotPresentException {
+    if (!addressesRepository.exists(addressId)) {
+      throw new AddressNotPresentException();
+    }
+    List<Poll> polls = pollsRepository.findByAddressId(addressId);
+    for (Poll poll : polls) {
+      poll.setPollsAnswers(pollAnswersRepository.findByPollId(poll.getId()));
+    }
+    return polls;
+  }
+
+  public Poll getPollById(long id) throws PollNotFoundException {
+    if (pollsRepository.findOne(id) == null) {
+      throw new PollNotFoundException();
+    }
+    Poll poll = pollsRepository.findOne(id);
+    poll.setPollsAnswers(pollAnswersRepository.findByPollId(poll.getId()));
+    return poll;
+  }
 
   @Transactional
   public Poll addPoll(Poll poll)

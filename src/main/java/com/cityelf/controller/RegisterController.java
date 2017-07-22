@@ -43,6 +43,4 @@ public class RegisterController {
       @RequestParam(name = "password") String password) {
     return userService.login(email, password);
   }
-
-
 }
