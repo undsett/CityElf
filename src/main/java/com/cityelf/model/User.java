@@ -37,6 +37,7 @@ public class User {
   private String email;
   @Column(name = "phone")
   private String phone;
+  @JsonIgnore
   @Column(name = "password")
   private String password;
   @Embedded

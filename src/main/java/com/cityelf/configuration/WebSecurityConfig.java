@@ -7,31 +7,37 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+import javax.sql.DataSource;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+  @Autowired
+  private DataSource dataSource;
+
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http
-        .csrf().disable() //this line disables requests for CSRF tokens
         .authorizeRequests()
-        .antMatchers("/", "/home").permitAll()
-        //this line prevents access with out login
-        //.anyRequest().authenticated()
+        .antMatchers(
+            "/",
+            "/home"
+        ).permitAll()
+        .antMatchers("/forecasts/startcollector").hasAuthority("SYSTEM_ROLE")
+        .antMatchers("/advertisements/admin/**", "/polls/admin/**").hasAuthority("ADMIN_ROLE")
         .and()
-        .formLogin()
-        .loginPage("/login")
-        .permitAll()
+        .httpBasic()
         .and()
-        .logout()
-        .permitAll();
+        .csrf().disable();
+
   }
 
   @Autowired
   public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
     auth
         .jdbcAuthentication()
+        .dataSource(dataSource)
         .usersByUsernameQuery(
             "select u.email as username, u.password, true as enabled from users u "
                 + "where u.email=?")

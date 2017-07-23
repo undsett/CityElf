@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/registration")
 public class RegisterController {
@@ -39,10 +41,8 @@ public class RegisterController {
   }
 
   @RequestMapping(value = "/login", method = RequestMethod.POST)
-  public Status login(@RequestParam(name = "email") String email,
+  public Map<String, Object> login(@RequestParam(name = "email") String email,
       @RequestParam(name = "password") String password) {
     return userService.login(email, password);
   }
-
-
 }

@@ -1,41 +1,51 @@
 package com.cityelf;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.cityelf.controller.AdvertisementController;
+import com.cityelf.exceptions.AdvertisementNotFoundException;
 import com.cityelf.model.Address;
 import com.cityelf.model.Advertisement;
 import com.cityelf.service.AdvertisementService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import java.util.ArrayList;
-import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = AdvertisementController.class, secure = false)
 public class AdvertisementControllerTest {
 
   List<Advertisement> advertisements;
+
   @Autowired
   private MockMvc mockMvc;
 
   @MockBean
   private AdvertisementService advertisementService;
-
+  private Advertisement advertisement = new Advertisement();
   private Address address = new Address();
 
   public String objectToJson(Object o) throws Exception {
@@ -55,7 +65,7 @@ public class AdvertisementControllerTest {
     when(advertisementService.getAdvertisements(anyLong()))
         .thenReturn(advertisements);
 
-    mockMvc.perform(get("/alladvertisements/get")
+    mockMvc.perform(get("/advertisements/getAll")
         .param("addressid", String.valueOf(address.getId())))
         .andDo(print())
         .andExpect(status().isOk());
@@ -68,9 +78,94 @@ public class AdvertisementControllerTest {
 
     List<Advertisement> expectedList = new ArrayList<>();
 
-    mockMvc.perform(get("/alladvertisements/get")
+    mockMvc.perform(get("/advertisements/getAll")
         .param("addressid", String.valueOf(address.getId())))
         .andDo(print())
         .andExpect(content().string(objectToJson(expectedList)));
+  }
+
+  @Test
+  public void getAdvertisementByIdShouldReturnHttpStatusOk200() throws Exception {
+    advertisement.setAddress(address);
+    when(advertisementService.getAdvertisementById(anyLong()))
+        .thenReturn(advertisement);
+
+    mockMvc.perform(get("/advertisements/getAdvertisement")
+        .param("id", String.valueOf(advertisement.getId())))
+
+        .andDo(print())
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  public void getAdvertisementByIdShouldReturnHttpStatusNotFound404() throws Exception {
+    when(advertisementService.getAdvertisementById(anyLong()))
+        .thenThrow(AdvertisementNotFoundException.class);
+
+    mockMvc.perform(get("/advertisements/getAdvertisement")
+        .param("id", String.valueOf(advertisement.getId())))
+        .andDo(print())
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  public void addAdvertisementShouldReturnHttpStatusOk200()
+      throws Exception {
+    mockMvc.perform(post("/advertisements/admin/addAdvertisement")
+        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .content(objectToJson(advertisement))
+    )
+        .andDo(print())
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  public void updateAdvertisementShouldReturnHttpStatusOk200() throws Exception {
+    advertisement.setDescription("new descpiption");
+    advertisement.setSubject("new subject");
+    mockMvc.perform(
+        put("/advertisements/admin/updateAdvertisement")
+            .contentType(MediaType.APPLICATION_JSON_UTF8)
+            .content(objectToJson(advertisement))
+    )
+        .andDo(print())
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  public void updateAdvertisementShouldReturnHttpStatusNotFound404() throws Exception {
+    doThrow(AdvertisementNotFoundException.class).when(advertisementService)
+        .updateAdvertisement(any());
+    advertisement.setSubject("new subject");
+    mockMvc.perform(
+        put("/advertisements/admin/updateAdvertisement")
+            .contentType(MediaType.APPLICATION_JSON_UTF8)
+            .content(objectToJson(advertisement))
+    )
+        .andDo(print())
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  public void deleteAdvertisementShouldReturnHttpStatusOk200()
+      throws Exception {
+    mockMvc.perform(
+        delete("/advertisements/admin/deleteAdvertisement")
+            .param("id", String.valueOf(advertisement.getId()))
+    )
+        .andDo(print())
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  public void deleteAdvertisementShouldReturnHttpStatusNotFound404() throws Exception {
+    doThrow(AdvertisementNotFoundException.class).when(advertisementService)
+        .deleteAdvertisements(anyLong());
+    mockMvc.perform(
+        delete("/advertisements/admin/deleteAdvertisement")
+            .param("id", String.valueOf(advertisement.getId()))
+    )
+        .andDo(print())
+        .andExpect(status().isNotFound());
   }
 }
