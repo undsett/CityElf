@@ -20,17 +20,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http
         .authorizeRequests()
-        .antMatchers(
-            "/",
-            "/home"
-        ).permitAll()
+        .antMatchers("/").permitAll()
         .antMatchers("/forecasts/startcollector").hasAuthority("SYSTEM_ROLE")
         .antMatchers("/advertisements/admin/**", "/polls/admin/**").hasAuthority("ADMIN_ROLE")
+        .antMatchers(
+            "/users/updateUser",
+            "/users/*",
+            "/advertisements/getAll",
+            "/advertisements/getAdvertisement",
+            "/polls/getAll",
+            "/polls/getPoll"
+        ).hasAuthority("AUTHORIZED_ROLE")
+        .antMatchers(
+            "/waterforecast/**",
+            "/electricityforecast/**",
+            "/gasforecast/**"
+        ).hasAuthority("UTILITYADMIN_ROLE")
         .and()
         .httpBasic()
         .and()
         .csrf().disable();
-
   }
 
   @Autowired

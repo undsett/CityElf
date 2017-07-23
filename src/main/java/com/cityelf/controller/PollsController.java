@@ -1,5 +1,6 @@
 package com.cityelf.controller;
 
+import com.cityelf.exceptions.AccessDeniedException;
 import com.cityelf.exceptions.AddressNotPresentException;
 import com.cityelf.exceptions.PollIncorrectException;
 import com.cityelf.exceptions.PollNotFoundException;
@@ -36,19 +37,19 @@ public class PollsController {
 
   @RequestMapping(value = "/admin/addPoll", method = RequestMethod.POST)
   public Poll addPoll(@RequestBody Poll poll)
-      throws PollIncorrectException, AddressNotPresentException {
+      throws PollIncorrectException, AddressNotPresentException, AccessDeniedException {
     return pollsService.addPoll(poll);
   }
 
   @RequestMapping(value = "/admin/updatePoll", method = RequestMethod.PUT)
   public void updatePoll(@RequestBody Poll poll)
-      throws PollNotFoundException, AddressNotPresentException {
+      throws PollNotFoundException, AddressNotPresentException, AccessDeniedException {
     pollsService.updatePoll(poll);
   }
 
   @RequestMapping(value = "/admin/deletePoll", method = RequestMethod.DELETE)
   public void deletePoll(@RequestParam("id") long id)
-      throws PollNotFoundException {
+      throws PollNotFoundException, AccessDeniedException {
     pollsService.deletePoll(id);
   }
 }

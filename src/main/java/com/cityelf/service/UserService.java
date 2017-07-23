@@ -132,9 +132,7 @@ public class UserService {
       map.put("status", Status.LOGIN_PASSWORD_OK);
       map.put("user", user);
     }
-
     return map;
-
   }
 
   public void updateUser(User user) throws UserException {
@@ -161,11 +159,11 @@ public class UserService {
   }
 
   public void deleteUser(long id) throws UserNotFoundException {
-    if (userRepository.findOne(id) == null) {
+    User user = userRepository.findOne(id);
+    if (user == null) {
       throw new UserNotFoundException();
     }
-    userRepository.delete(id);
+    user.setActivated(false);
+    userRepository.save(user);
   }
-
-
 }

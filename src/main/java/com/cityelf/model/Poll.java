@@ -45,12 +45,13 @@ public class Poll {
   @Transient
   private List<PollsAnswer> pollsAnswers;
 
-  public Poll(Address address, String subject, String description) {
+  public Poll(Address address, String subject, String description, List<PollsAnswer> pollsAnswers) {
     this.id = id;
     this.address = address;
     this.subject = subject;
     this.description = description;
     this.timeOfEntry = LocalDateTime.now();
+    this.pollsAnswers = pollsAnswers;
   }
 
   public Poll() {
@@ -67,6 +68,10 @@ public class Poll {
 
   public long getId() {
     return id;
+  }
+
+  public void setId(long id) {
+    this.id = id;
   }
 
   public Address getAddress() {

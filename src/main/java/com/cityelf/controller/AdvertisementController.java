@@ -1,5 +1,6 @@
 package com.cityelf.controller;
 
+import com.cityelf.exceptions.AccessDeniedException;
 import com.cityelf.exceptions.AddressNotPresentException;
 import com.cityelf.exceptions.AdvertisementIncorrectException;
 import com.cityelf.exceptions.AdvertisementNotFoundException;
@@ -36,19 +37,19 @@ public class AdvertisementController {
 
   @RequestMapping(value = "/admin/addAdvertisement", method = RequestMethod.POST)
   public Advertisement addAdvertisement(@RequestBody Advertisement advertisement)
-      throws AdvertisementIncorrectException, AddressNotPresentException {
+      throws AdvertisementIncorrectException, AddressNotPresentException, AccessDeniedException {
     return advertisementService.addAdvertisement(advertisement);
   }
 
   @RequestMapping(value = "/admin/updateAdvertisement", method = RequestMethod.PUT)
   public Advertisement updateAdvertisement(@RequestBody Advertisement advertisement)
-      throws AdvertisementNotFoundException, AddressNotPresentException {
+      throws AdvertisementNotFoundException, AddressNotPresentException, AccessDeniedException {
     return advertisementService.updateAdvertisement(advertisement);
   }
 
   @RequestMapping(value = "/admin/deleteAdvertisement", method = RequestMethod.DELETE)
   public void deleteAdvertisement(@RequestParam("id") long id)
-      throws AdvertisementNotFoundException {
-    advertisementService.deleteAdvertisements(id);
+      throws AdvertisementNotFoundException, AccessDeniedException {
+    advertisementService.deleteAdvertisement(id);
   }
 }
