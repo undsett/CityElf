@@ -1,4 +1,4 @@
-package com.cityelf.utils;
+package com.cityelf.service;
 
 import com.cityelf.model.Forecast;
 import com.cityelf.model.GasForecast;
@@ -6,7 +6,6 @@ import com.cityelf.model.NotificationToken;
 import com.cityelf.model.User;
 import com.cityelf.model.WaterForecast;
 import com.cityelf.repository.FirebaseNotificationRepository;
-import com.cityelf.service.AppServerFirebase;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Service
-public class FirebaseNotifier {
+public class FirebaseNotificationService {
 
   @Autowired
   FirebaseNotificationRepository firebaseNotificationRepository;
