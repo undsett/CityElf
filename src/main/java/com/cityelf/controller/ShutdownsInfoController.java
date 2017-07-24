@@ -1,5 +1,6 @@
 package com.cityelf.controller;
 
+import com.cityelf.exceptions.AddressException;
 import com.cityelf.service.ShutdownsInfoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,8 @@ public class ShutdownsInfoController {
   private ShutdownsInfoService shutdownsInfoService;
 
   @RequestMapping(value = "/get", method = RequestMethod.GET)
-  public Map<String, Object> getAllForecasts(@RequestParam(name = "start") String startTime,
-      @RequestParam(name = "address") String address) {
-    return shutdownsInfoService.getAllForecasts(LocalDateTime.parse(startTime), address);
+  public Map<String, Object> getAllForecasts(@RequestParam(name = "address") String address)
+      throws AddressException {
+    return shutdownsInfoService.getAllForecasts(address);
   }
 }

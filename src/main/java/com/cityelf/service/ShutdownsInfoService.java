@@ -1,5 +1,8 @@
 package com.cityelf.service;
 
+import com.cityelf.exceptions.AddressException;
+import com.cityelf.exceptions.AddressNotPresentException;
+import com.cityelf.model.Address;
 import com.cityelf.model.ElectricityForecast;
 import com.cityelf.model.GasForecast;
 import com.cityelf.model.WaterForecast;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -27,18 +31,30 @@ public class ShutdownsInfoService {
   @Autowired
   private ElectricityForecastRepository electricityForecastRepository;
 
-  public Map<String, Object> getAllForecasts(LocalDateTime startTime, String address) {
-    Optional<WaterForecast> forecastWater = waterForecastRepository.findByStartAndAddress_Address(
-        startTime, address);
-    Optional<ElectricityForecast> forecastElectricity = electricityForecastRepository
-        .findByStartAndAddress_Address(startTime, address);
-    Optional<GasForecast> forecastGas = gasForecastRepository
-        .findByStartAndAddress_Address(startTime, address);
+  @Autowired
+  private AddressService addressService;
+
+  public Map<String, Object> getAllForecasts(String address) throws AddressException {
+    Address addressFound = addressService.getAddress(address)
+        .orElseThrow(() -> new AddressNotPresentException());
+    List<WaterForecast> forecastWater = waterForecastRepository.findByAddress(addressFound);
+    List<ElectricityForecast> forecastElectricity = electricityForecastRepository
+        .findByAddress(addressFound);
+    List<GasForecast> forecastGas = gasForecastRepository
+        .findByAddress(addressFound);
     Map<String, Object> forecastMap = new HashMap<>();
 
-    forecastWater.ifPresent(f -> forecastMap.put("Water", f));
-    forecastElectricity.ifPresent(f -> forecastMap.put("Electricity", f));
-    forecastGas.ifPresent(f -> forecastMap.put("Gas", f));
+    for (Object f : forecastWater) {
+      forecastMap.put("Water", f);
+    }
+
+    for (Object f : forecastElectricity) {
+      forecastMap.put("Electricity", f);
+    }
+
+    for (Object f : forecastGas) {
+      forecastMap.put("Gas", f);
+    }
     return forecastMap;
   }
 

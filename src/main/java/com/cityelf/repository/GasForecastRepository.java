@@ -2,6 +2,7 @@ package com.cityelf.repository;
 
 import com.cityelf.model.Address;
 import com.cityelf.model.GasForecast;
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +18,9 @@ public interface GasForecastRepository extends CrudRepository<GasForecast, Long>
   Optional<GasForecast> findByStartAndAddress(LocalDateTime startTime, Address address);
 
   Optional<GasForecast> findByStartAndAddress_Address(LocalDateTime startTime, String address);
+
+  List<GasForecast> findByAddress(Address address);
+
 
   void deleteGasForecastsByStart(LocalDateTime startTime);
 
