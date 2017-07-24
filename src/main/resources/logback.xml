@@ -51,12 +51,12 @@
   </appender>
 
 
-  <logger name="com.cityelf.utils.ForecastCollector" level="trace"
+  <logger name="com.cityelf.service.DataCollectorService" level="trace"
     additivity="false">
     <!--<appender-ref ref="STDOUT"/>-->
     <appender-ref ref="FILE-TRACE-COLLECTOR"/>
   </logger>
-  <logger name="com.cityelf.utils.address.finder.utils.AddressDbFinder" level="trace"
+  <logger name="com.cityelf.service.AddressService" level="trace"
     additivity="false">
     <!--<appender-ref ref="STDOUT"/>-->
     <appender-ref ref="FILE-TRACE-FINDER"/>

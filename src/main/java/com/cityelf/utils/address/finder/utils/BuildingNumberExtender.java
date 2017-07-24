@@ -32,6 +32,10 @@ public class BuildingNumberExtender {
     return numbers;
   }
 
+  public Optional<String> getNumber(String buildingNumber) {
+    return getCleanNumber(buildingNumber);
+  }
+
   private List<String> rangeToSingle(String range) {
     List<String> numbers = new ArrayList<>();
     try {

@@ -1,15 +1,22 @@
 package com.cityelf.utils;
 
+import com.cityelf.utils.address.finder.utils.BuildingNumberExtender;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
-class NumberExtractor {
+public class NumberExtractor {
 
+  @Autowired
+  private BuildingNumberExtender buildingNumberExtender;
+  private Pattern removeMinus = Pattern.compile("\\d+-");
   private final String streetReplacePattern = ".+?,";
   private final String stringRangePattern = "\\d+([\\s\\D]*)?-(\\s)?\\d+((\\/)?[^\\s,+]+)?";
   private Pattern rangeNumbersPattern = Pattern.compile(stringRangePattern);
@@ -25,8 +32,18 @@ class NumberExtractor {
     rawBuildingNumberString = getRange(rawBuildingNumberString, buildingNumberSet);
     getSingle(rawBuildingNumberString, buildingNumberSet);
 
-    return buildingNumberSet;
+    return buildingNumberExtender.getNumbers(buildingNumberSet);
   }
+
+  public Optional<String> getNumber(String rawAddress) {
+    rawAddress = removeMinus.matcher(rawAddress).replaceAll("");
+    Matcher matcher = standaloneNumbersPattern.matcher(rawAddress);
+    if (matcher.find()) {
+      return buildingNumberExtender.getNumber(matcher.group());
+    }
+    return Optional.empty();
+  }
+
 
   private String getRange(String str, Set<String> set) {
     Matcher matcher = rangeNumbersPattern.matcher(str);

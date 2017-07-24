@@ -6,8 +6,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.when;
 
-import com.cityelf.exceptions.UserAlreadyExistsException;
-import com.cityelf.exceptions.UserNoFirebaseIdException;
 import com.cityelf.exceptions.UserNotAuthorizedException;
 import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.model.Address;
@@ -111,30 +109,26 @@ public class UserServiceTest {
   }
 
   /** todo fix the tests
-  @Test
-  public void addUserShouldThrowUserAlreadyExistsException() {
-    when(userRepository.findByFirebaseId(any(String.class))).thenReturn(oldUser);
+   @Test public void addUserShouldThrowUserAlreadyExistsException() {
+   when(userRepository.findByFirebaseId(any(String.class))).thenReturn(oldUser);
 
-    assertThatThrownBy(() -> userService.addNewUser(oldUser))
-        .has(new Condition<Throwable>() {
-          @Override
-          public boolean matches(Throwable value) {
-            return value.getClass() == UserAlreadyExistsException.class;
-          }
-        });
-  }
+   assertThatThrownBy(() -> userService.addNewUser(oldUser))
+   .has(new Condition<Throwable>() {
+   @Override public boolean matches(Throwable value) {
+   return value.getClass() == UserAlreadyExistsException.class;
+   }
+   });
+   }
 
-  @Test
-  public void addUserShouldThrowUserNoFirebaseIdException() {
-    when(userRepository.findByFirebaseId(any(String.class))).thenReturn(oldUser);
+   @Test public void addUserShouldThrowUserNoFirebaseIdException() {
+   when(userRepository.findByFirebaseId(any(String.class))).thenReturn(oldUser);
 
-    assertThatThrownBy(() -> userService.addNewUser(newUser))
-        .has(new Condition<Throwable>() {
-          @Override
-          public boolean matches(Throwable value) {
-            return value.getClass() == UserNoFirebaseIdException.class;
-          }
-        });
-  }
-  **/
+   assertThatThrownBy(() -> userService.addNewUser(newUser))
+   .has(new Condition<Throwable>() {
+   @Override public boolean matches(Throwable value) {
+   return value.getClass() == UserNoFirebaseIdException.class;
+   }
+   });
+   }
+   **/
 }

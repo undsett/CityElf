@@ -151,7 +151,7 @@ public class WaterForecastService {
    * @param waterForecasts collection of WaterForecast objects
    * @return void
    */
-  public void save(Iterable<WaterForecast> waterForecasts) {
+  public void rewriteAll(Iterable<WaterForecast> waterForecasts) {
     waterForecastRepository.deleteAll();
     waterForecastRepository.save(waterForecasts);
   }
