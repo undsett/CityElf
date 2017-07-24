@@ -67,8 +67,8 @@ public class ForcastData {
   /**
    * Return building numbers on the current street for water/electricity/gas shut-off
    *
-   * @return set of some building numbers(or range of numbers) for water/electricity/gas shut-off or
-   * empty set if every buildings on the street is under shut-off
+   * @return set of some building numbers for water/electricity/gas shut-off or empty set if every
+   * buildings on the street is under shut-off
    */
   public Set<String> getBuildingNumberList() {
     return buildingNumberList;

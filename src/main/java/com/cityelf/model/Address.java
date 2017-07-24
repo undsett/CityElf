@@ -31,7 +31,7 @@ public class Address {
   @Column(name = "street_ua")
   private String addressUa;
 
-  @OneToMany(fetch = FetchType.LAZY)
+  @OneToMany(fetch = FetchType.EAGER)
   @JoinTable(
       name = "user_addresses",
       joinColumns = @JoinColumn(name = "address_id"),

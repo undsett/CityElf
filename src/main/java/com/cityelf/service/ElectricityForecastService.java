@@ -92,7 +92,7 @@ public class ElectricityForecastService {
    * @param electricityForecasts collection of ElectricityForecast objects
    * @return void
    */
-  public void save(Iterable<ElectricityForecast> electricityForecasts) {
+  public void rewriteAll(Iterable<ElectricityForecast> electricityForecasts) {
     electricityForecastRepository.deleteAll();
     electricityForecastRepository.save(electricityForecasts);
   }

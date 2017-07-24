@@ -66,6 +66,6 @@ public class ParserWaterTest {
     assertThat(forcastDataList.get(0).getStartOff().toString())
         .isEqualTo("2017-06-13T10:30");
     assertThat(forcastDataList.get(0).getBuildingNumberList().toString())
-        .isEqualTo("[10, 4, 4/а]");
+        .isEqualTo("[4, 10]");
   }
 }

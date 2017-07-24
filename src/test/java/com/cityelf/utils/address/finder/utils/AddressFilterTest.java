@@ -50,17 +50,9 @@ public class AddressFilterTest {
   public void filterAddresses4() throws Exception {
     Address address = new Address("Лазурный 1-й переулок, 7/б");
     List<Address> addresses = addressFilter
-        .filterAddresses(Arrays.asList(address), Arrays.asList("1-8а", "17"), "Лазурный 1-й пер.");
+        .filterAddresses(Arrays.asList(address), Arrays.asList("1", "7", "17"),
+            "Лазурный 1-й пер.");
     assertThat(addresses.size()).isEqualTo(1);
     assertThat(addresses.get(0).getAddress()).isEqualTo(address.getAddress());
   }
-
-  @Test
-  public void filterAddresses5() throws Exception {
-    Address address = new Address("Лазурный 1-й переулок, 7/б");
-    List<Address> addresses = addressFilter
-        .filterAddresses(Arrays.asList(address), Arrays.asList("1-6а", "17"), "Лазурный 1-й пер.");
-    assertThat(addresses.size()).isEqualTo(0);
-  }
-
 }
