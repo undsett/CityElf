@@ -62,7 +62,7 @@ public class ShutdownInfoControllerTest {
 
   @Test
   public void getAllForecastsByTimeAndAddressShouldReturnHttpStatusOk200() throws Exception {
-    when(shutdownsInfoService.getAllForecasts(any(LocalDateTime.class), any(String.class)))
+    when(shutdownsInfoService.getAllForecasts(any(String.class)))
         .thenReturn(map);
 
     mockMvc.perform(get("/allforecasts/get")
@@ -74,7 +74,7 @@ public class ShutdownInfoControllerTest {
 
   @Test
   public void getAllForecastsByTimeAndAddressShouldReturnJson() throws Exception {
-    when(shutdownsInfoService.getAllForecasts(any(LocalDateTime.class), any(String.class)))
+    when(shutdownsInfoService.getAllForecasts(any(String.class)))
         .thenReturn(map);
 
     Map<String, Object> expectedMap = new HashMap<>();
