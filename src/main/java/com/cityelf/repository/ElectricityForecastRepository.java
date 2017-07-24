@@ -18,6 +18,9 @@ public interface ElectricityForecastRepository extends CrudRepository<Electricit
   Optional<ElectricityForecast> findByStartAndAddress_Address(LocalDateTime startTime,
       String address);
 
+  List<ElectricityForecast> findByAddress(Address address);
+
+
   void deleteElectricityForecastByStart(LocalDateTime startTime);
 
   List<ElectricityForecast> findElectricityForecastsByStartLessThanEqualAndEstimatedStopGreaterThan(

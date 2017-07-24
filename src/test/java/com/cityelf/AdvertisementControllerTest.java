@@ -160,7 +160,7 @@ public class AdvertisementControllerTest {
   @Test
   public void deleteAdvertisementShouldReturnHttpStatusNotFound404() throws Exception {
     doThrow(AdvertisementNotFoundException.class).when(advertisementService)
-        .deleteAdvertisements(anyLong());
+        .deleteAdvertisement(anyLong());
     mockMvc.perform(
         delete("/advertisements/admin/deleteAdvertisement")
             .param("id", String.valueOf(advertisement.getId()))
