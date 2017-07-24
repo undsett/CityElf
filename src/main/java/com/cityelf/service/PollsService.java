@@ -1,15 +1,21 @@
 package com.cityelf.service;
 
+import com.cityelf.exceptions.AccessDeniedException;
 import com.cityelf.exceptions.AddressNotPresentException;
 import com.cityelf.exceptions.PollIncorrectException;
 import com.cityelf.exceptions.PollNotFoundException;
+import com.cityelf.model.OsmdAdminAddresses;
 import com.cityelf.model.Poll;
 import com.cityelf.model.PollsAnswer;
+import com.cityelf.model.User;
 import com.cityelf.repository.AddressesRepository;
+import com.cityelf.repository.OsmdAdminAddressesRepository;
 import com.cityelf.repository.PollAnswersRepository;
 import com.cityelf.repository.PollsRepository;
+import com.cityelf.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +33,12 @@ public class PollsService {
 
   @Autowired
   private PollAnswersRepository pollAnswersRepository;
+
+  @Autowired
+  private OsmdAdminAddressesRepository osmdAdminAddressesRepository;
+
+  @Autowired
+  private UserRepository userRepository;
 
   public List<Poll> getPolls(long addressId) throws AddressNotPresentException {
     if (!addressesRepository.exists(addressId)) {
@@ -50,7 +62,7 @@ public class PollsService {
 
   @Transactional
   public Poll addPoll(Poll poll)
-      throws PollIncorrectException, AddressNotPresentException {
+      throws PollIncorrectException, AddressNotPresentException, AccessDeniedException {
     if (!addressesRepository.exists(poll.getAddress().getId())) {
       throw new AddressNotPresentException();
     }
@@ -58,7 +70,12 @@ public class PollsService {
         || poll.getDescription() == null) {
       throw new PollIncorrectException();
     }
-
+    if (!accessCheck(poll)) {
+      throw new AccessDeniedException();
+    }
+    if (pollsRepository.exists(poll.getId())) {
+      poll.setId(0);
+    }
     Poll pollFromDb = pollsRepository.save(poll);
     for (PollsAnswer pollAnswer : poll.getPollsAnswers()) {
       pollAnswer.setPoll(pollFromDb);
@@ -69,13 +86,17 @@ public class PollsService {
 
   @Transactional
   public void updatePoll(Poll poll)
-      throws PollNotFoundException, AddressNotPresentException {
+      throws PollNotFoundException, AddressNotPresentException, AccessDeniedException {
     if (!pollsRepository.exists(poll.getId())) {
       throw new PollNotFoundException();
     }
     if (!addressesRepository.exists(poll.getAddress().getId())) {
       throw new AddressNotPresentException();
     }
+    if (!accessCheck(poll)) {
+      throw new AccessDeniedException();
+    }
+
     pollAnswersRepository.deleteByPollId(poll.getId());
     for (PollsAnswer pollAnswer : poll.getPollsAnswers()) {
       pollAnswer.setPoll(poll);
@@ -84,11 +105,25 @@ public class PollsService {
     pollsRepository.save(poll);
   }
 
-  public void deletePoll(long id) throws PollNotFoundException {
+  public void deletePoll(long id) throws PollNotFoundException, AccessDeniedException {
     if (pollsRepository.exists(id)) {
-      pollsRepository.delete(id);
+      if (accessCheck(pollsRepository.findOne(id))) {
+        pollsRepository.delete(id);
+      } else {
+        throw new AccessDeniedException();
+      }
     } else {
       throw new PollNotFoundException();
     }
+  }
+
+  private boolean accessCheck(Poll poll) {
+    User user = userRepository
+        .findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+    OsmdAdminAddresses osmdAdminAddresses = osmdAdminAddressesRepository
+        .findByUserAdminId(user.getId());
+
+    return (osmdAdminAddresses.getAddressId() == poll.getAddress().getId()
+        && user.getId() == osmdAdminAddresses.getUserAdminId());
   }
 }
