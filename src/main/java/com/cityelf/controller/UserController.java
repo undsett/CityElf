@@ -45,17 +45,16 @@ public class UserController {
 
   @RequestMapping(value = "/upload", method = RequestMethod.POST)
   public void upload(@RequestParam("file") MultipartFile file,
-      @RequestParam("mailTo") String mailFrom,
+      @RequestParam("mailFrom") String mailFrom,
       @RequestParam("address") String address,
-      @RequestParam("firstName") String firstName,
-      @RequestParam("lastName") String lastName) throws IOException {
+      @RequestParam("name") String name) throws IOException {
     if (!file.isEmpty()) {
       storageService.saveUploaded(file.getInputStream(), file.getOriginalFilename());
       mailSenderService.send(
           applicationEmail,
           mailFrom,
           requestSubject,
-          MessageFormat.format(requestTemplate, lastName, firstName, mailFrom, address),
+          MessageFormat.format(requestTemplate, name, mailFrom, address),
           file.getOriginalFilename(),
           () -> file.getInputStream());
     }
