@@ -43,6 +43,10 @@ public class Advertisement {
     this.timeOfEntry = LocalDateTime.now();
   }
 
+  public void setId(long id) {
+    this.id = id;
+  }
+
   public long getId() {
     return id;
   }

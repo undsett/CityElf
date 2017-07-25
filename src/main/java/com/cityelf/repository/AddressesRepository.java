@@ -9,39 +9,30 @@ import java.util.List;
 
 public interface AddressesRepository extends CrudRepository<Address, Long> {
 
-
   Address findByAddress(String address);
 
-  Address findByaddressUa(String addressUa);
+  Address findByAddressUa(String addressUa);
 
   Address findById(long id);
 
   Address save(Address address);
 
-  List<Address> findAllByAddressLike(String part);
+  @Query(value = "select * "
+      + "from addresses "
+      + "where match(street, street_ua) against(?1) and "
+      + "match(street, street_ua) against(?1)=( "
+      + "select max(match(street, street_ua) against(?1)) from addresses "
+      + ")",
+      nativeQuery = true)
+  List<Address> findSimilarAddresses(String address);
 
-  List<Address> findAllByAddressLikeAndAddressLike(String part1, String part2);
+  @Query(value = "select * "
+      + "from addresses "
+      + "where match(street, street_ua) against(?1) and "
+      + "match(street, street_ua) against(?1)=( "
+      + "select max(match(street, street_ua) against(?1)) from addresses "
+      + ")and street  rlike ?2",
+      nativeQuery = true)
+  List<Address> findSimilarAddress(String address, String number);
 
-  List<Address> findAllByAddressLikeAndAddressLikeAndAddressLike(String part1, String part2,
-      String part3);
-
-  List<Address> findAllByAddressLikeAndAddressLikeAndAddressLikeAndAddressLike(String part1,
-      String part2, String part3, String part4);
-
-  default List<Address> findAddressesByMask(String... parts) {
-    int countParams = parts.length;
-    switch (countParams) {
-      case 1:
-        return findAllByAddressLike(parts[0]);
-      case 2:
-        return findAllByAddressLikeAndAddressLike(parts[0], parts[1]);
-      case 3:
-        return findAllByAddressLikeAndAddressLikeAndAddressLike(parts[0], parts[1], parts[2]);
-      default:
-        return findAllByAddressLikeAndAddressLikeAndAddressLikeAndAddressLike(parts[0], parts[1],
-            parts[2], parts[3]);
-    }
-  }
-
-  Address findByAddressUa(String address);
 }

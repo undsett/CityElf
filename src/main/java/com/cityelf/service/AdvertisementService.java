@@ -1,13 +1,19 @@
 package com.cityelf.service;
 
+import com.cityelf.exceptions.AccessDeniedException;
 import com.cityelf.exceptions.AddressNotPresentException;
 import com.cityelf.exceptions.AdvertisementIncorrectException;
 import com.cityelf.exceptions.AdvertisementNotFoundException;
 import com.cityelf.model.Advertisement;
+import com.cityelf.model.OsmdAdminAddresses;
+import com.cityelf.model.User;
 import com.cityelf.repository.AddressesRepository;
 import com.cityelf.repository.AdvertisementRepository;
+import com.cityelf.repository.OsmdAdminAddressesRepository;
+import com.cityelf.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -24,6 +30,12 @@ public class AdvertisementService {
   @Autowired
   private AddressesRepository addressesRepository;
 
+  @Autowired
+  UserRepository userRepository;
+
+  @Autowired
+  OsmdAdminAddressesRepository osmdAdminAddressesRepository;
+
   public List<Advertisement> getAdvertisements(long addressId) throws AddressNotPresentException {
     if (!addressesRepository.exists(addressId)) {
       throw new AddressNotPresentException();
@@ -39,22 +51,31 @@ public class AdvertisementService {
   }
 
   public Advertisement addAdvertisement(Advertisement advertisement)
-      throws AdvertisementIncorrectException, AddressNotPresentException {
+      throws AdvertisementIncorrectException, AddressNotPresentException, AccessDeniedException {
     if (!addressesRepository.exists(advertisement.getAddress().getId())) {
       throw new AddressNotPresentException();
     }
     if (advertisement.getSubject() == null || advertisement.getDescription() == null) {
       throw new AdvertisementIncorrectException();
-    } else {
-      return advertisementRepository.save(advertisement);
     }
+    if (!accessCheck(advertisement)) {
+      throw new AccessDeniedException();
+    }
+    if (advertisementRepository.exists(advertisement.getId())) {
+      advertisement.setId(0);
+    }
+    return advertisementRepository.save(advertisement);
   }
 
   public Advertisement updateAdvertisement(Advertisement advertisement)
-      throws AdvertisementNotFoundException, AddressNotPresentException {
+      throws AdvertisementNotFoundException, AddressNotPresentException, AccessDeniedException {
     if (!addressesRepository.exists(advertisement.getAddress().getId())) {
       throw new AddressNotPresentException();
     }
+    if (!accessCheck(advertisement)) {
+      throw new AccessDeniedException();
+    }
+
     Advertisement advertisementFromDb = advertisementRepository.findOne(advertisement.getId());
     if (advertisementFromDb != null) {
       Field[] fields = advertisement.getClass().getDeclaredFields();
@@ -71,12 +92,26 @@ public class AdvertisementService {
     }
   }
 
-  public void deleteAdvertisements(long id) throws AdvertisementNotFoundException {
-    Advertisement advertisementFromDb = advertisementRepository.findOne(id);
-    if (advertisementFromDb != null) {
-      advertisementRepository.delete(id);
+  public void deleteAdvertisement(long id)
+      throws AdvertisementNotFoundException, AccessDeniedException {
+    if (addressesRepository.exists(id)) {
+      if (accessCheck(advertisementRepository.findOne(id))) {
+        advertisementRepository.delete(id);
+      } else {
+        throw new AccessDeniedException();
+      }
     } else {
       throw new AdvertisementNotFoundException();
     }
+  }
+
+  private boolean accessCheck(Advertisement advertisement) {
+    User user = userRepository
+        .findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+    OsmdAdminAddresses osmdAdminAddresses = osmdAdminAddressesRepository
+        .findByUserAdminId(user.getId());
+
+    return (osmdAdminAddresses.getAddressId() == advertisement.getAddress().getId()
+        && user.getId() == osmdAdminAddresses.getUserAdminId());
   }
 }
