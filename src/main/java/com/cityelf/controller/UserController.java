@@ -88,4 +88,11 @@ public class UserController {
   public void deleteUser(@PathVariable("userId") long id) throws UserNotFoundException {
     userService.deleteUser(id);
   }
+
+  @RequestMapping(value = "/unionrecords", method = RequestMethod.POST)
+  public void unionRecords(@RequestParam(name = "firebaseid") String fireBaseID) {
+    userService.unionRecords(fireBaseID);
+  }
+
+
 }

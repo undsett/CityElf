@@ -15,6 +15,8 @@ import com.cityelf.repository.UserRepository;
 import com.cityelf.repository.UserRoleRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -165,5 +167,20 @@ public class UserService {
     }
     user.setActivated(false);
     userRepository.save(user);
+  }
+
+  public void unionRecords(String fireBaseID) {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String name = auth.getName(); //get logged in username
+    User userWeb = userRepository.findByEmail(name);
+    if (!fireBaseID.equals("WEB") && userWeb.getFirebaseId().equals("WEB")) {
+      User userAndroid = userRepository.findByFirebaseId(fireBaseID);
+      userAndroid.setEmail(userWeb.getEmail());
+      userAndroid.setPassword(userWeb.getPassword());
+      userRepository.save(userAndroid);
+      userWeb.setEmail(null);
+      userWeb.setPassword(null);
+      userRepository.save(userWeb);
+    }
   }
 }
