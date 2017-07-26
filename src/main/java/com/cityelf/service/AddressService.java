@@ -32,13 +32,16 @@ public class AddressService {
   private NumberExtractor numberExtractor;
 
   public List<Address> getAddresses(String streetName, Collection<String> numbers) {
-    logger.trace("***\nStreetName: " + streetName + "Buildings: " + numbers);
+    logger.trace("***\nStreetName: " + streetName + " Buildings: " + numbers);
 
     List<Address> preSelectionAddresses = addressesRepository.findSimilarAddresses(streetName);
     logger.trace("Count of addresses found while DB preselection: " + preSelectionAddresses.size());
 
     List<Address> addresses = addressFilter
         .filterAddresses(preSelectionAddresses, numbers, streetName);
+    if (addresses.isEmpty()) {
+      logger.error("Address not found in DB: " + streetName);
+    }
     logger.trace("Total count addresses filtered from preselection: " + addresses.size());
     return addresses;
   }
@@ -52,10 +55,17 @@ public class AddressService {
         .orElseThrow(() -> new NotFoundNumberException());
     logger.debug("Building number extracted: " + number.toString());
 
-    List<Address> preSelectionAddresses = addressesRepository.findSimilarAddress(address, number);
+    List<Address> preSelectionAddresses = addressesRepository
+        .findSimilarAddress(address, number.split("-")[0]);
     List<Address> addresses = addressFilter
         .filterAddresses(preSelectionAddresses, Arrays.asList(number), address);
-    logger.debug("Address found: " + addresses);
-    return addresses.size() == 0 ? Optional.empty() : Optional.of(addresses.get(0));
+    if (addresses.isEmpty()) {
+      logger.error("Address not found in DB: " + address);
+      return Optional.empty();
+    } else {
+      logger.debug("Address found: " + addresses);
+      return Optional.of(addresses.get(0));
+    }
   }
+
 }
