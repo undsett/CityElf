@@ -19,39 +19,48 @@ public class BuildingNumberExtender {
   private Logger logger = LogManager.getLogger(getClass());
   private final Pattern buildingSingleNumberPattern = Pattern.compile("^\\d+");
 
-  public Set<String> getNumbers(Collection<String> buildingNumbers) {
-    Set<String> numbers = new HashSet<>();
-    for (String buildingNumber : buildingNumbers) {
-      if (buildingNumber.contains("-")) {
-        numbers.addAll(rangeToSingle(buildingNumber));
+  public Set<String> getNumbers(Collection<String> rawNumbers) {
+    Set<String> exactNumbers = new HashSet<>();
+    for (String rawNumber : rawNumbers) {
+      if (rawNumber.contains("-")) {
+        exactNumbers.addAll(getRangeNumbers(rawNumber));
       } else {
-        getCleanNumber(buildingNumber)
-            .ifPresent(number -> numbers.add(number));
+        getNumber(rawNumber).ifPresent(exactNumber -> exactNumbers.add(exactNumber));
       }
     }
-    return numbers;
+    return exactNumbers;
   }
 
-  public Optional<String> getNumber(String buildingNumber) {
-    return getCleanNumber(buildingNumber);
+  public Optional<String> getNumber(String rawNumber) {
+    if (rawNumber.contains("/")) {
+      return Optional.of(rawNumber.replace("/", "-"));
+    }
+    Optional<String> cleanNumber = getCleanNumber(rawNumber);
+    if (cleanNumber.isPresent()) {
+      String number = cleanNumber.get();
+      if (number.length() == rawNumber.length()) {
+        return Optional.of(number);
+      }
+      return Optional.of(rawNumber.replaceFirst(number, number + "-"));
+    }
+    return cleanNumber;
   }
 
-  private List<String> rangeToSingle(String range) {
-    List<String> numbers = new ArrayList<>();
+  private List<String> getRangeNumbers(String rawNumber) {
+    List<String> exactNumbers = new ArrayList<>();
     try {
-      String[] split = range.split("-");
-      String startRange = getCleanNumber(split[0]).orElseThrow(() -> new RuntimeException());
-      String endRange = getCleanNumber(split[1]).orElseThrow(() -> new RuntimeException());
-      int start = Integer.parseInt(startRange);
-      int end = Integer.parseInt(endRange);
-      for (int i = start; i <= end; i++) {
-        numbers.add(String.valueOf(i));
+      String[] split = rawNumber.split("-");
+      int end = Integer
+          .parseInt(getCleanNumber(split[1]).orElseThrow(() -> new RuntimeException()));
+      int start = Integer.parseInt(split[0]);
+      for (; start < end; start++) {
+        exactNumbers.add(start + "+");
       }
+      exactNumbers.add(getNumber(split[1]).orElseThrow(() -> new RuntimeException()));
     } catch (RuntimeException ex) {
-      logger.error("Error while range of building numbers creating.input:{" + range + "}");
-      ex.printStackTrace();
+      logger.error("Error while range of building numbers creating.input:{" + rawNumber + "}", ex);
     }
-    return numbers;
+    return exactNumbers;
   }
 
   private Optional<String> getCleanNumber(String number) {
