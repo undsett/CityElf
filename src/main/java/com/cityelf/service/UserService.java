@@ -57,6 +57,13 @@ public class UserService {
     return user;
   }
 
+  public User getUser(String email) throws UserNotFoundException {
+    User user = userRepository.findByEmail(email);
+    if (user == null) {
+      throw new UserNotFoundException();
+    }
+    return user;
+  }
 
   public Status addNewUser(String firebaseId, String address)
       throws UserAlreadyExistsException {
