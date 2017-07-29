@@ -39,15 +39,14 @@ public class VotingController {
 
   @RequestMapping(value = "/{pollId}", method = RequestMethod.GET)
   public Poll getPoll(@PathVariable("pollId") long pollId)
-      throws VotingUnavailableException, PollNotFoundException, IOException {
+      throws VotingUnavailableException, PollNotFoundException {
     votingService.isVoted(pollId);
     return pollsService.getPollById(pollId);
   }
 
   @RequestMapping(value = "/voice", method = RequestMethod.POST)
   public boolean vote(@RequestBody VoteParam voteParam)
-      throws VotingUnavailableException, PollAnswerNotFoundException,
-      PollNotFoundException, IOException {
+      throws VotingUnavailableException, PollAnswerNotFoundException, PollNotFoundException {
     if (votingService.isVoted(voteParam.getPollId())) {
       throw new VotedException("Already voted");
     }
@@ -56,8 +55,7 @@ public class VotingController {
 
   @RequestMapping(value = "/{pollId}/results", method = RequestMethod.GET)
   public List<VoteResult> viewResults(@PathVariable("pollId") long pollId)
-      throws VotingUnavailableException, PollAnswerNotFoundException,
-      PollNotFoundException, IOException {
+      throws VotingUnavailableException, PollAnswerNotFoundException, PollNotFoundException {
     if (!votingService.isVoted(pollId)) {
       throw new VotedException("Need voice before watching results");
     }
