@@ -24,10 +24,12 @@ public class AddressFilter {
         : preSelectionAddresses
             .stream()
             .filter(address -> {
-              Optional<String> number = numberExtractor.getNumber(address.getAddress());
+              String streetNameDb = address.getAddress();
+              Optional<String> number = numberExtractor.getNumber(streetNameDb);
               if (number.isPresent()) {
-                return buildingNumbers.contains(number.get()) || buildingNumbers
-                    .contains(number.get().split("-")[0] + "+");
+                return (buildingNumbers.contains(number.get()) || buildingNumbers
+                    .contains(number.get().split("-")[0] + "+"))
+                    && RoadType.getRoadType(streetNameDb) == RoadType.getRoadType(streetName);
               }
               return false;
             })
