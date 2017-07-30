@@ -10,7 +10,9 @@ import com.cityelf.exceptions.UserNotAuthorizedException;
 import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.model.Address;
 import com.cityelf.model.User;
+import com.cityelf.model.UserRole;
 import com.cityelf.repository.UserRepository;
+import com.cityelf.repository.UserRoleRepository;
 
 import org.assertj.core.api.Condition;
 import org.junit.Before;
@@ -31,10 +33,16 @@ import java.util.List;
 public class UserServiceTest {
 
   private User oldUser, newUser;
+  private UserRole userRole = new UserRole(1, 1);
+  private List<UserRole> userRoles = new ArrayList<>();
   @Autowired
   private UserService userService;
   @MockBean
+  private SecurityService securityService;
+  @MockBean
   private UserRepository userRepository;
+  @MockBean
+  private UserRoleRepository userRoleRepository;
 
   @Before
   public void setUp() {
@@ -45,6 +53,7 @@ public class UserServiceTest {
     oldUser.setPassword("oldPassword");
     oldUser.setPhone("oldPhone");
     oldUser.setAuthorized("not_authorized");
+    oldUser.setActivated(true);
     List<Address> addresses = new ArrayList<>();
     Address address1 = new Address();
     address1.setId(4);
@@ -53,6 +62,8 @@ public class UserServiceTest {
     address2.setId(3);
     addresses.add(address2);
     oldUser.setAddresses(addresses);
+
+    userRoles.add(userRole);
 
     newUser = new User();
     newUser.setId(1);
@@ -63,6 +74,7 @@ public class UserServiceTest {
   @Test
   public void updateUserShouldUpdateChangedFields() throws Exception {
     when(userRepository.findOne(anyLong())).thenReturn(oldUser);
+    when(securityService.getUserFromSession()).thenReturn(oldUser);
     when(userRepository.save(any(User.class))).thenAnswer(new Answer<User>() {
       @Override
       public User answer(InvocationOnMock invocation) throws Throwable {
@@ -78,14 +90,13 @@ public class UserServiceTest {
         return user;
       }
     });
-
     userService.updateUser(newUser);
   }
 
   @Test
   public void updateUserShouldThrowUserNotFoundException() throws Exception {
     when(userRepository.findOne(anyLong())).thenReturn(null);
-
+    when(securityService.getUserFromSession()).thenReturn(oldUser);
     assertThatThrownBy(() -> userService.updateUser(newUser))
         .has(new Condition<Throwable>() {
           @Override
@@ -97,7 +108,9 @@ public class UserServiceTest {
 
   @Test
   public void updateUserShouldThrowUserNotAuthorizedException() {
+    when(securityService.getUserFromSession()).thenReturn(oldUser);
     when(userRepository.findOne(anyLong())).thenReturn(oldUser);
+    when(userRoleRepository.findByUserId(anyLong())).thenReturn(userRoles);
 
     assertThatThrownBy(() -> userService.updateUser(oldUser))
         .has(new Condition<Throwable>() {
