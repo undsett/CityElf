@@ -1,5 +1,6 @@
 package com.cityelf.controller;
 
+import com.cityelf.exceptions.AccessDeniedException;
 import com.cityelf.exceptions.UserException;
 import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.exceptions.UserValidationException;
@@ -72,7 +73,7 @@ public class UserController {
 
   @RequestMapping(value = "/updateUser", method = RequestMethod.PUT)
   public void updateUser(@RequestBody @Valid User user, BindingResult bindingResult)
-      throws UserException {
+      throws UserException, AccessDeniedException {
     if (bindingResult.hasErrors()) {
       String errorMessage = bindingResult.getFieldErrors()
           .stream()
@@ -85,7 +86,8 @@ public class UserController {
 
 
   @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
-  public void deleteUser(@PathVariable("userId") long id) throws UserNotFoundException {
+  public void deleteUser(@PathVariable("userId") long id)
+      throws UserNotFoundException, AccessDeniedException {
     userService.deleteUser(id);
   }
 }
