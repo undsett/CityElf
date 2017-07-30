@@ -1,9 +1,9 @@
 package com.cityelf.service;
 
+import com.cityelf.exceptions.AccessDeniedException;
 import com.cityelf.exceptions.Status;
 import com.cityelf.exceptions.UserAlreadyExistsException;
 import com.cityelf.exceptions.UserException;
-import com.cityelf.exceptions.UserNotAuthorizedException;
 import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.model.Address;
 import com.cityelf.model.User;
@@ -15,6 +15,7 @@ import com.cityelf.repository.UserRepository;
 import com.cityelf.repository.UserRoleRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -77,14 +78,14 @@ public class UserService {
   }
 
   public Status registration(String fireBaseID, String email, String password) {
-    User newUser = new User();
+    //User newUser;
     if (fireBaseID.equals("WEB") && userRepository.findByEmail(email) == null) {
       userRepository.save(new User(email, password, "WEB"));
-      newUser = userRepository.findByEmail(email);
+      /*newUser = userRepository.findByEmail(email);
       String msg =
           "http://localhost:8088/services/registration/confirm?id=" + newUser.getId()
               + "&email=" + email;
-      mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
+      mailSenderService.sendMail(email, "Confirm registration CityELF", msg);*/
       return Status.USER_REGISTRATION_OK;
     }
 
@@ -94,9 +95,9 @@ public class UserService {
         existUser.setEmail(email);
         existUser.setPassword(password);
         userRepository.save(existUser);
-        String msg = "http://localhost:8088/services/registration/confirm?id=" + existUser.getId()
+        /*String msg = "http://localhost:8088/services/registration/confirm?id=" + existUser.getId()
             + "&email=" + email;
-        mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
+        mailSenderService.sendMail(email, "Confirm registration CityELF", msg);*/
         return Status.USER_REGISTRATION_OK;
       }
     }
@@ -135,7 +136,11 @@ public class UserService {
     return map;
   }
 
-  public void updateUser(User user) throws UserException {
+  public void updateUser(User user) throws UserException, AccessDeniedException {
+    if (!accessCheck(user.getId())) {
+      throw new AccessDeniedException();
+    }
+
     User userFromDb = userRepository.findOne(user.getId());
     if (userFromDb != null) {
       Field[] fields = user.getClass().getDeclaredFields();
@@ -149,21 +154,27 @@ public class UserService {
       if (user.getAddresses().size() == 0) {
         user.setAddresses(userFromDb.getAddresses());
       }
-      if ("not_authorized".equals(user.getAuthorized()) && user.getAddresses().size() > 1) {
-        throw new UserNotAuthorizedException();
-      }
       userRepository.save(user);
     } else {
       throw new UserNotFoundException();
     }
   }
 
-  public void deleteUser(long id) throws UserNotFoundException {
+  public void deleteUser(long id) throws UserNotFoundException, AccessDeniedException {
+    if (!accessCheck(id)) {
+      throw new AccessDeniedException();
+    }
     User user = userRepository.findOne(id);
     if (user == null) {
       throw new UserNotFoundException();
     }
     user.setActivated(false);
     userRepository.save(user);
+  }
+
+  private boolean accessCheck(long userId) {
+    return userRepository
+        .findByEmail(SecurityContextHolder.getContext().getAuthentication().getName())
+        .getId() == userId;
   }
 }
