@@ -1,7 +1,9 @@
 package com.cityelf.controller;
 
+import com.cityelf.exceptions.AddressException;
 import com.cityelf.exceptions.Status;
 import com.cityelf.exceptions.UserAlreadyExistsException;
+import com.cityelf.exceptions.UserException;
 import com.cityelf.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +22,9 @@ public class RegisterController {
   private UserService userService;
 
   @RequestMapping(value = "/adduser", method = RequestMethod.POST)
-  public Status addNewUser(@RequestParam(name = "firebaseid") String fireBaseID,
+  public long addNewUser(@RequestParam(name = "firebaseid") String fireBaseID,
       @RequestParam(name = "address") String address)
-      throws UserAlreadyExistsException {
+      throws UserException, AddressException {
     return userService.addNewUser(fireBaseID, address);
   }
 
@@ -35,7 +37,7 @@ public class RegisterController {
   }
 
   @RequestMapping(value = "/confirm", method = RequestMethod.GET)
-  public Status confirmregistration(@RequestParam(name = "id") String id,
+  public Status confirmregistration(@RequestParam(name = "id") long id,
       @RequestParam(name = "email") String email) {
     return userService.confirmRegistration(id, email);
   }

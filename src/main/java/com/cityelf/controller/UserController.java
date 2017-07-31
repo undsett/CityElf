@@ -2,7 +2,6 @@ package com.cityelf.controller;
 
 import com.cityelf.exceptions.AccessDeniedException;
 import com.cityelf.exceptions.UserException;
-import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.exceptions.UserValidationException;
 import com.cityelf.model.User;
 import com.cityelf.service.MailSenderService;
@@ -67,8 +66,14 @@ public class UserController {
   }
 
   @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-  public User getUser(@PathVariable("userId") long id) throws UserNotFoundException {
+  public User getUser(@PathVariable("userId") long id) throws UserException {
     return userService.getUser(id);
+  }
+
+  @RequestMapping(value = "/updateAnonim", method = RequestMethod.PUT)
+  public void updateAnonim(@RequestBody User user)
+      throws UserException {
+    userService.updateAnonime(user);
   }
 
   @RequestMapping(value = "/updateUser", method = RequestMethod.PUT)
@@ -84,10 +89,9 @@ public class UserController {
     userService.updateUser(user);
   }
 
-
   @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
   public void deleteUser(@PathVariable("userId") long id)
-      throws UserNotFoundException, AccessDeniedException {
+      throws UserException, AccessDeniedException {
     userService.deleteUser(id);
   }
 }
