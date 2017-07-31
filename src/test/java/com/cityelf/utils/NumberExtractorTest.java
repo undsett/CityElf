@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Optional;
 import java.util.Set;
 
 @RunWith(SpringRunner.class)
@@ -161,4 +162,35 @@ public class NumberExtractorTest {
     numbers = numberExtractor.getNumbers("АВДЕЕВА-ЧЕРНОМОРСКОГО УЛ., 1-2/а/б/в все дома");
     assertThat(numbers).contains("1+", "2-а-б-в");
   }
+
+  @Test
+  public void getNumbers19() throws Exception {
+    Optional<String> number = numberExtractor.getNumber("Ивана Франко, 19 к2");
+    assertThat(number.orElse("")).isEqualTo("19");
+  }
+
+  @Test
+  public void getNumbers20() throws Exception {
+    Optional<String> number = numberExtractor.getNumber("Ивана Франко, 19");
+    assertThat(number.orElse("")).isEqualTo("19");
+  }
+
+  @Test
+  public void getNumbers21() throws Exception {
+    Optional<String> number = numberExtractor.getNumber("Ивана Франко, 19/к2");
+    assertThat(number.orElse("")).isEqualTo("19-к2");
+  }
+
+  @Test
+  public void getNumbers22() throws Exception {
+    Optional<String> number = numberExtractor.getNumber("Ивана Франко, 19к2");
+    assertThat(number.orElse("")).isEqualTo("19-к2");
+  }
+
+  @Test
+  public void getNumbers23() throws Exception {
+    Optional<String> number = numberExtractor.getNumber("1-линия Ивана Франко, 19к2");
+    assertThat(number.orElse("")).isEqualTo("19-к2");
+  }
+
 }

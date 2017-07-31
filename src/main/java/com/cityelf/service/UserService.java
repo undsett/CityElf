@@ -1,5 +1,6 @@
 package com.cityelf.service;
 
+import com.cityelf.exceptions.AccessDeniedException;
 import com.cityelf.exceptions.Status;
 import com.cityelf.exceptions.UserAlreadyExistsException;
 import com.cityelf.exceptions.UserException;
@@ -44,6 +45,9 @@ public class UserService {
   @Autowired
   private MailSenderService mailSenderService;
 
+  @Autowired
+  private SecurityService securityService;
+
   public UserService() {
   }
 
@@ -74,19 +78,18 @@ public class UserService {
       userRoleRepository.save(new UserRole(newUser.getId(), 1));
       return Status.USER_ADD_IN_DB_OK;
     } else {
-      return Status.USER_EXIIST;
+      return Status.USER_EXIST;
     }
   }
 
   public Status registration(String fireBaseID, String email, String password) {
-    User newUser = new User();
     if (fireBaseID.equals("WEB") && userRepository.findByEmail(email) == null) {
-      userRepository.save(new User(email, password, "WEB"));
-      newUser = userRepository.findByEmail(email);
+      User newUser = userRepository.save(new User(email, password, "WEB"));
       String msg =
           "http://localhost:8088/services/registration/confirm?id=" + newUser.getId()
               + "&email=" + email;
-      mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
+      //mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
+      confirmRegistration(String.valueOf(newUser.getId()), email);
       return Status.USER_REGISTRATION_OK;
     }
 
@@ -98,7 +101,8 @@ public class UserService {
         userRepository.save(existUser);
         String msg = "http://localhost:8088/services/registration/confirm?id=" + existUser.getId()
             + "&email=" + email;
-        mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
+        //mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
+        confirmRegistration(String.valueOf(existUser.getId()), email);
         return Status.USER_REGISTRATION_OK;
       }
     }
@@ -112,24 +116,26 @@ public class UserService {
     if (user.getId() == idUser) {
       user.setActivated(true);
       userRepository.save(user);
-      UserRole userRole = userRoleRepository.findByUserId(user.getId());
-      if (userRole == null) {
-        userRoleRepository.save(new UserRole(user.getId(), 3));
-      } else {
-        userRole.setRoleId(3);
-        userRoleRepository.save(userRole);
+      List<UserRole> userRoles = userRoleRepository.findByUserId(user.getId());
+      for (UserRole userRole : userRoles) {
+        if (userRole == null) {
+          userRoleRepository.save(new UserRole(user.getId(), 3));
+        } else {
+          userRole.setRoleId(3);
+          userRoleRepository.save(userRole);
+        }
       }
-
       return Status.EMAIL_CONFIRMED;
     }
     return Status.EMAIL_NOT_CONFIRMED;
   }
 
+
   public Map<String, Object> login(String email, String password) {
     Map<String, Object> map = new HashMap<>();
     User user = userRepository.findByEmail(email);
     if (user == null || !user.getPassword().equals(password)) {
-      map.put("status", Status.LOGIN_INCORRECT);
+      map.put("status", Status.LOGIN_OR_PASSWORD_INCORRECT);
     } else {
       map.put("status", Status.LOGIN_PASSWORD_OK);
       map.put("user", user);
@@ -137,7 +143,11 @@ public class UserService {
     return map;
   }
 
-  public void updateUser(User user) throws UserException {
+  public void updateUser(User user) throws UserException, AccessDeniedException {
+    if (securityService.getUserFromSession().getId() != user.getId()) {
+      throw new AccessDeniedException();
+    }
+
     User userFromDb = userRepository.findOne(user.getId());
     if (userFromDb != null) {
       Field[] fields = user.getClass().getDeclaredFields();
@@ -151,8 +161,12 @@ public class UserService {
       if (user.getAddresses().size() == 0) {
         user.setAddresses(userFromDb.getAddresses());
       }
-      if ("not_authorized".equals(user.getAuthorized()) && user.getAddresses().size() > 1) {
-        throw new UserNotAuthorizedException();
+
+      List<UserRole> userRoles = userRoleRepository.findByUserId(user.getId());
+      for (UserRole userRole : userRoles) {
+        if (userRole.getRoleId() == 1 && user.getAddresses().size() > 1) {
+          throw new UserNotAuthorizedException();
+        }
       }
       userRepository.save(user);
     } else {
@@ -160,7 +174,10 @@ public class UserService {
     }
   }
 
-  public void deleteUser(long id) throws UserNotFoundException {
+  public void deleteUser(long id) throws UserNotFoundException, AccessDeniedException {
+    if (securityService.getUserFromSession().getId() != id) {
+      throw new AccessDeniedException();
+    }
     User user = userRepository.findOne(id);
     if (user == null) {
       throw new UserNotFoundException();
