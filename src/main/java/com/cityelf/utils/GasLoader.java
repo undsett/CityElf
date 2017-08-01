@@ -16,7 +16,7 @@ class GasLoader {
   @Value("${odgaz.url}")
   private String webPage;
 
-  Elements getNeededNews(String dateToCheck, String newsTheme)
+  Elements getNeededNews(String dateToCheckRegex, String newsTheme)
       throws ParserUnavailableException {
     Elements neededNews = new Elements();
     Element newsHeader;
@@ -27,8 +27,8 @@ class GasLoader {
         throw new GasPageStructureChangedException("No news-text-preview block");
       }
       newsHeaderText = newsHeader.text();
-      if ((newsHeaderText.contains(dateToCheck))
-          && (newsHeaderText.toLowerCase().contains(newsTheme))) {
+      if ((newsHeaderText.matches("(.*)" + dateToCheckRegex + "(.*)"))
+          && (newsHeaderText.toLowerCase().matches("(.*)" + newsTheme + "(.*)"))) {
         neededNews.add(newsPiece);
       }
     }

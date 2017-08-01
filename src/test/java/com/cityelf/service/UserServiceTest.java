@@ -6,8 +6,9 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.when;
 
-import com.cityelf.exceptions.UserNotAuthorizedException;
+import com.cityelf.exceptions.AccessDeniedException;
 import com.cityelf.exceptions.UserNotFoundException;
+import com.cityelf.exceptions.UserValidationException;
 import com.cityelf.model.Address;
 import com.cityelf.model.User;
 import com.cityelf.model.UserRole;
@@ -27,12 +28,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class UserServiceTest {
 
-  private User oldUser, newUser;
+  private User oldUser, newUser, deniedUser;
   private UserRole userRole = new UserRole(1, 1);
   private List<UserRole> userRoles = new ArrayList<>();
   @Autowired
@@ -69,11 +71,13 @@ public class UserServiceTest {
     newUser.setId(1);
     newUser.setAuthorized("authorized");
     newUser.setPassword("newPassword");
+    deniedUser = new User();
+    deniedUser.setId(2);
   }
 
   @Test
   public void updateUserShouldUpdateChangedFields() throws Exception {
-    when(userRepository.findOne(anyLong())).thenReturn(oldUser);
+    when(userRepository.findById(anyLong())).thenReturn(Optional.of(oldUser));
     when(securityService.getUserFromSession()).thenReturn(oldUser);
     when(userRepository.save(any(User.class))).thenAnswer(new Answer<User>() {
       @Override
@@ -94,8 +98,22 @@ public class UserServiceTest {
   }
 
   @Test
+  public void updateUserShouldThrowAccessDeniedException() {
+    when(securityService.getUserFromSession()).thenReturn(newUser);
+    when(userRepository.findById(anyLong())).thenReturn(Optional.of(deniedUser));
+
+    assertThatThrownBy(() -> userService.updateUser(deniedUser))
+        .has(new Condition<Throwable>() {
+          @Override
+          public boolean matches(Throwable value) {
+            return value.getClass() == AccessDeniedException.class;
+          }
+        });
+  }
+
+  @Test
   public void updateUserShouldThrowUserNotFoundException() throws Exception {
-    when(userRepository.findOne(anyLong())).thenReturn(null);
+    when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
     when(securityService.getUserFromSession()).thenReturn(oldUser);
     assertThatThrownBy(() -> userService.updateUser(newUser))
         .has(new Condition<Throwable>() {
@@ -107,16 +125,38 @@ public class UserServiceTest {
   }
 
   @Test
-  public void updateUserShouldThrowUserNotAuthorizedException() {
-    when(securityService.getUserFromSession()).thenReturn(oldUser);
-    when(userRepository.findOne(anyLong())).thenReturn(oldUser);
-    when(userRoleRepository.findByUserId(anyLong())).thenReturn(userRoles);
+  public void updateAnonimShouldThrowUserValidationException() {
+    when(userRepository.findByFirebaseId(any())).thenReturn(Optional.of(oldUser));
 
-    assertThatThrownBy(() -> userService.updateUser(oldUser))
+    assertThatThrownBy(() -> userService.updateAnonime(oldUser))
         .has(new Condition<Throwable>() {
           @Override
           public boolean matches(Throwable value) {
-            return value.getClass() == UserNotAuthorizedException.class;
+            return value.getClass() == UserValidationException.class;
+          }
+        });
+  }
+
+  @Test
+  public void updateAnonimShouldThrowUserNotFoundException1() throws Exception {
+    when(userRepository.findByFirebaseId(any())).thenReturn(Optional.empty());
+    assertThatThrownBy(() -> userService.updateAnonime(oldUser))
+        .has(new Condition<Throwable>() {
+          @Override
+          public boolean matches(Throwable value) {
+            return value.getClass() == UserNotFoundException.class;
+          }
+        });
+  }
+
+  @Test
+  public void updateAnonimShouldThrowUserValidationException2() throws Exception {
+    when(userRepository.findByFirebaseId(any())).thenReturn(Optional.empty());
+    assertThatThrownBy(() -> userService.updateAnonime(deniedUser))
+        .has(new Condition<Throwable>() {
+          @Override
+          public boolean matches(Throwable value) {
+            return value.getClass() == UserValidationException.class;
           }
         });
   }
