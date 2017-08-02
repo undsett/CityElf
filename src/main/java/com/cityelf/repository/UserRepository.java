@@ -10,6 +10,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
   User findByToken(String token);
 
+  User findById(long Id);
 
   User save(User user);
 
