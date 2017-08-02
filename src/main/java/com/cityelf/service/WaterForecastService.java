@@ -152,7 +152,7 @@ public class WaterForecastService {
    * @return void
    */
   public void rewriteAll(Iterable<WaterForecast> waterForecasts) {
-    waterForecastRepository.deleteAll();
+    waterForecastRepository.deleteAllByPeopleReport(false);
     waterForecastRepository.save(waterForecasts);
   }
 }

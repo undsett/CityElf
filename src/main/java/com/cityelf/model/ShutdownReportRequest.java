@@ -1,8 +1,5 @@
 package com.cityelf.model;
 
-import javax.persistence.Entity;
-
-//@Entity
 public class ShutdownReportRequest {
 
   private ShutdownReport shutdownReport;

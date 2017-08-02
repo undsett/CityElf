@@ -4,7 +4,6 @@ import com.cityelf.exceptions.AddressNotPresentException;
 import com.cityelf.exceptions.ForecastAlreadyExistsException;
 import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.exceptions.WrongForecastTypeException;
-import com.cityelf.model.ShutdownReport;
 import com.cityelf.model.ShutdownReportRequest;
 import com.cityelf.service.ShutdownReportService;
 
@@ -20,9 +19,6 @@ public class ShutdownReportController {
 
   @Autowired
   private ShutdownReportService shutdownReportService;
-
-//  @Autowired
-//  private ShutdownReportRequest shutdownReportRequest;
 
   @RequestMapping(value = "/add", method = RequestMethod.POST)
   public void addNewReport(@RequestBody ShutdownReportRequest shutdownReportRequest)

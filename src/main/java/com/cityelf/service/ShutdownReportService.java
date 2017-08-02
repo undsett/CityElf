@@ -8,7 +8,6 @@ import com.cityelf.model.ElectricityForecast;
 import com.cityelf.model.GasForecast;
 import com.cityelf.model.ShutdownReport;
 import com.cityelf.model.ShutdownReportRequest;
-import com.cityelf.model.User;
 import com.cityelf.model.UserReports;
 import com.cityelf.model.WaterForecast;
 import com.cityelf.repository.AddressesRepository;
@@ -70,7 +69,7 @@ public class ShutdownReportService {
       List<UserReports> usersFromShutdownReport = userReportsRepository
           .findByShutdownReport(shutdownReportFromDb);
       if (Collections.frequency(usersFromShutdownReport.stream().map(UserReports::getUser).collect(
-          Collectors.toList()), userRepository.findById(userId)) != 0) {
+          Collectors.toList()), userRepository.findById(userId).get()) != 0) {
         return;
       }
       if (shutdownReportFromDb.getCount() < 3) {
@@ -146,7 +145,8 @@ public class ShutdownReportService {
   }
 
   private void addUserToReport(ShutdownReport shutdownReport, long userId) {
-    UserReports userReports = new UserReports(shutdownReport, userRepository.findById(userId));
+    UserReports userReports = new UserReports(shutdownReport,
+        userRepository.findById(userId).get());
     userReportsRepository.save(userReports);
   }
 }
