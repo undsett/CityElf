@@ -29,6 +29,8 @@ public class NumberExtractor {
 
   private final String cleanRangePattern = "(?<=\\d{1,3})([^\\d]*)?(?=-\\d+(\\/.*)?)";
 
+  private final String kostil = "\\d{4,}";
+
   public Set<String> getNumbers(String rawAddress) {
     Set<String> buildingNumberSet = new TreeSet<>();
     String rawBuildingNumberString = rawAddress.replaceFirst(streetReplacePattern, "");
@@ -43,7 +45,10 @@ public class NumberExtractor {
     List<Optional<String>> numbers = new ArrayList<>();
     Matcher matcher = numberPattern.matcher(rawAddress);
     while (matcher.find()) {
-      numbers.add(buildingNumberExtender.getNumber(matcher.group()));
+      String group = matcher.group();
+      if (!group.matches(kostil)) {
+        numbers.add(buildingNumberExtender.getNumber(group));
+      }
     }
     int size = numbers.size();
     return size == 0 ? Optional.empty() : numbers.get(size - 1);
