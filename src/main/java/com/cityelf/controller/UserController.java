@@ -1,6 +1,7 @@
 package com.cityelf.controller;
 
 import com.cityelf.exceptions.AccessDeniedException;
+import com.cityelf.exceptions.AddressException;
 import com.cityelf.exceptions.UserException;
 import com.cityelf.exceptions.UserValidationException;
 import com.cityelf.model.User;
@@ -72,13 +73,13 @@ public class UserController {
 
   @RequestMapping(value = "/updateAnonim", method = RequestMethod.PUT)
   public void updateAnonim(@RequestBody User user)
-      throws UserException {
+      throws UserException, AddressException {
     userService.updateAnonime(user);
   }
 
   @RequestMapping(value = "/updateUser", method = RequestMethod.PUT)
   public void updateUser(@RequestBody @Valid User user, BindingResult bindingResult)
-      throws UserException, AccessDeniedException {
+      throws UserException, AddressException, AccessDeniedException {
     if (bindingResult.hasErrors()) {
       String errorMessage = bindingResult.getFieldErrors()
           .stream()

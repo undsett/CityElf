@@ -1,6 +1,8 @@
 package com.cityelf.service;
 
 import com.cityelf.exceptions.AddressException;
+import com.cityelf.exceptions.AddressNotPresentException;
+import com.cityelf.exceptions.NoAddressInputException;
 import com.cityelf.exceptions.NotFoundNumberException;
 import com.cityelf.model.Address;
 import com.cityelf.repository.AddressesRepository;
@@ -12,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -68,4 +71,23 @@ public class AddressService {
     }
   }
 
+  public List<Address> resolveAddresses(List<Address> addresses) throws AddressException {
+    List<Address> resolvedAddresses = new ArrayList<>();
+    for (Address address : addresses) {
+      if (address.getId() > 0) {
+        resolvedAddresses.add(address);
+      } else {
+        String incomeAddress = address.getAddressUa().isEmpty()
+            ? address.getAddress()
+            : address.getAddressUa();
+        if (incomeAddress.isEmpty()) {
+          throw new NoAddressInputException();
+        }
+        Address resolvedAddress = getAddress(incomeAddress)
+            .orElseThrow(() -> new AddressNotPresentException());
+        resolvedAddresses.add(resolvedAddress);
+      }
+    }
+    return resolvedAddresses;
+  }
 }
