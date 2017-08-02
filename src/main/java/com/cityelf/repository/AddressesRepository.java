@@ -35,4 +35,5 @@ public interface AddressesRepository extends CrudRepository<Address, Long> {
       nativeQuery = true)
   List<Address> findSimilarAddress(String address, String number);
 
+  List<Address> findByAddressInOrAddressUaIn(List<String> addresses, List<String> addressesUa);
 }
