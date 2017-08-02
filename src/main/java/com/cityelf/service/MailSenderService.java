@@ -11,6 +11,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
@@ -20,6 +23,7 @@ public class MailSenderService {
   private Logger logger = LogManager.getLogger(getClass());
   @Autowired
   private JavaMailSender mailSender;
+  private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
   public void sendMail(String sendTo, String mailSubject, String mailContent) {
     try {
@@ -56,5 +60,14 @@ public class MailSenderService {
       logger.error(ex.getMessage(), ex);
       throw new MailSendException("Error while sending mail", ex);
     }
+  }
+
+  public void sendMeAsync(String to, String subject, String message) {
+    executorService.submit(new Runnable() {
+      @Override
+      public void run() {
+        sendMail(to, subject, message);
+      }
+    });
   }
 }
