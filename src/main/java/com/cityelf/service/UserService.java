@@ -163,20 +163,20 @@ public class UserService {
 
     User userFromDb = userRepository.findById(user.getId())
         .orElseThrow(() -> new UserNotFoundException());
+
+    List<Address> addresses = addressService.resolveAddresses(user.getAddresses());
+    user.setAddresses(addresses);
     Field[] fields = user.getClass().getDeclaredFields();
+
     AccessibleObject.setAccessible(fields, true);
     for (Field field : fields) {
-      if (ReflectionUtils.getField(field, user) == null) {
+      Object remoteUserValue = ReflectionUtils.getField(field, user);
+      if (remoteUserValue != null) {
         Object valueFromDb = ReflectionUtils.getField(field, userFromDb);
-        ReflectionUtils.setField(field, user, valueFromDb);
+        ReflectionUtils.setField(field, userFromDb, remoteUserValue);
       }
     }
-    List<Address> addresses = addressService.resolveAddresses(user.getAddresses());
-    if (addresses.isEmpty()) {
-      user.setAddresses(userFromDb.getAddresses());
-    }
-    userRepository.save(user);
-
+    userRepository.save(userFromDb);
   }
 
   public void deleteUser(long id) throws UserNotFoundException, AccessDeniedException {
