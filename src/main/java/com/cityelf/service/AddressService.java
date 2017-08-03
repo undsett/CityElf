@@ -75,7 +75,7 @@ public class AddressService {
     List<Address> resolvedAddresses = new ArrayList<>();
     for (Address address : addresses) {
       if (address.getId() > 0) {
-        resolvedAddresses.add(address);
+        resolvedAddresses.add(addressesRepository.findById(address.getId()));
       } else {
         String incomeAddress = address.getAddressUa().isEmpty()
             ? address.getAddress()
