@@ -15,6 +15,8 @@ import com.cityelf.repository.ShutdownReportRepository;
 import com.cityelf.repository.UserReportsRepository;
 import com.cityelf.repository.UserRepository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,8 @@ import javax.transaction.Transactional;
 
 @Service
 public class ShutdownReportService {
+
+  private final Logger logger = LoggerFactory.getLogger(getClass());
 
   @Autowired
   private ShutdownReportRepository shutdownReportRepository;
@@ -90,8 +94,8 @@ public class ShutdownReportService {
       case "Water":
         try {
           waterForecastService.addNewWaterForecast(createWaterForecast(shutdownReportFromDb));
-        } catch (ForecastAlreadyExistsException e) {
-
+        } catch (ForecastAlreadyExistsException ex) {
+          logger.error("Forecast already added",ex);
         }
         userReportsRepository.deleteAllByShutdownReport(shutdownReportFromDb);
         shutdownReportRepository.delete(shutdownReportFromDb);
@@ -99,8 +103,8 @@ public class ShutdownReportService {
       case "Gas":
         try {
           gasForecastService.addNewGasForecast(createGasForecast(shutdownReportFromDb));
-        } catch (ForecastAlreadyExistsException e) {
-
+        } catch (ForecastAlreadyExistsException ex) {
+          logger.error("Forecast already added",ex);
         }
         userReportsRepository.deleteAllByShutdownReport(shutdownReportFromDb);
         shutdownReportRepository.delete(shutdownReportFromDb);
@@ -109,8 +113,8 @@ public class ShutdownReportService {
         try {
           electricityForecastService
               .addNewElectricityForecast(createElectricityForecast(shutdownReportFromDb));
-        } catch (ForecastAlreadyExistsException e) {
-
+        } catch (ForecastAlreadyExistsException ex) {
+          logger.error("Forecast already added",ex);
         }
         userReportsRepository.deleteAllByShutdownReport(shutdownReportFromDb);
         shutdownReportRepository.delete(shutdownReportFromDb);

@@ -22,6 +22,9 @@ public class UserAddresses {
     this.addressId = addressId;
   }
 
+  public UserAddresses() {
+  }
+
   public long getId() {
     return id;
   }

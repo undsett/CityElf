@@ -14,4 +14,6 @@ public interface UserAddressesRepository extends CrudRepository<UserAddresses, L
 
   UserAddresses save(UserAddresses userAddresses);
 
+  void deleteUserAddressesByUserId(Long userId);
+
 }

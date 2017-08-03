@@ -55,17 +55,17 @@ public class UserReports {
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
+  public boolean equals(Object obj) {
+    if (this == obj) {
       return true;
     }
-    if (!(o instanceof UserReports)) {
+    if (!(obj instanceof UserReports)) {
       return false;
     }
-    UserReports that = (UserReports) o;
-    return getId() == that.getId() &&
-        Objects.equals(getShutdownReport(), that.getShutdownReport()) &&
-        Objects.equals(getUser(), that.getUser());
+    UserReports that = (UserReports) obj;
+    return getId() == that.getId()
+        && Objects.equals(getShutdownReport(), that.getShutdownReport())
+        && Objects.equals(getUser(), that.getUser());
   }
 
   @Override
@@ -75,10 +75,9 @@ public class UserReports {
 
   @Override
   public String toString() {
-    return "UserReports{" +
-        "id=" + id +
-        ", shutdownReport=" + shutdownReport +
-        ", user=" + user +
-        '}';
+    return "UserReports{"
+        + "id=" + id
+        + ", shutdownReport=" + shutdownReport
+        + ", user=" + user + '}';
   }
 }

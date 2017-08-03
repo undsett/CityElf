@@ -81,20 +81,20 @@ public class ShutdownReport {
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
+  public boolean equals(Object obj) {
+    if (this == obj) {
       return true;
     }
-    if (!(o instanceof ShutdownReport)) {
+    if (!(obj instanceof ShutdownReport)) {
       return false;
     }
-    ShutdownReport that = (ShutdownReport) o;
-    return getId() == that.getId() &&
-        getCount() == that.getCount() &&
-        isAddedToForecasts() == that.isAddedToForecasts() &&
-        Objects.equals(getForecastType(), that.getForecastType()) &&
-        Objects.equals(getStart(), that.getStart()) &&
-        Objects.equals(getAddress(), that.getAddress());
+    ShutdownReport that = (ShutdownReport) obj;
+    return getId() == that.getId()
+        && getCount() == that.getCount()
+        && isAddedToForecasts() == that.isAddedToForecasts()
+        && Objects.equals(getForecastType(), that.getForecastType())
+        && Objects.equals(getStart(), that.getStart())
+        && Objects.equals(getAddress(), that.getAddress());
   }
 
   @Override
@@ -106,13 +106,12 @@ public class ShutdownReport {
 
   @Override
   public String toString() {
-    return "ShutdownReport{" +
-        "id=" + id +
-        ", forecastType='" + forecastType + '\'' +
-        ", start=" + start +
-        ", address=" + address +
-        ", count=" + count +
-        ", addedToForecasts=" + addedToForecasts +
-        '}';
+    return "ShutdownReport{"
+        + "id=" + id
+        + ", forecastType='" + forecastType + '\''
+        + ", start=" + start
+        + ", address=" + address
+        + ", count=" + count
+        + ", addedToForecasts=" + addedToForecasts + '}';
   }
 }
