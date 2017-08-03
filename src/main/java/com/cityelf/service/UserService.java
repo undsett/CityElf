@@ -17,6 +17,8 @@ import com.cityelf.model.User;
 import com.cityelf.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -78,7 +80,8 @@ public class UserService {
     return user.getId();
   }
 
-  public Status registration(String fireBaseID, String email, String password) {
+  public Map<String, Object> registration(String fireBaseID, String email, String password) {
+    Map<String, Object> map = new HashMap<>();
     if (fireBaseID.equals("WEB") && userRepository.findByEmail(email) == null) {
       User newUser = userRepository.save(new User(email, password, "WEB"));
       String msg =
@@ -86,7 +89,9 @@ public class UserService {
               + "&email=" + email;
       //mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
       confirmRegistration(newUser.getId(), email);
-      return Status.USER_REGISTRATION_OK;
+      map.put("status", Status.USER_REGISTRATION_OK);
+      map.put("user", newUser);
+      return map;
     }
 
     if (!fireBaseID.equals("WEB")) {
@@ -99,11 +104,14 @@ public class UserService {
             + "&email=" + email;
         //mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
         confirmRegistration(existUser.getId(), email);
-        return Status.USER_REGISTRATION_OK;
+        map.put("status", Status.USER_REGISTRATION_OK);
+        map.put("user", existUser);
+        return map;
+
       }
     }
-
-    return Status.EMAIL_EXIST;
+    map.put("status", Status.EMAIL_EXIST);
+    return map;
   }
 
   public Status confirmRegistration(long id, String email) {
@@ -118,6 +126,7 @@ public class UserService {
     }
     return Status.EMAIL_NOT_CONFIRMED;
   }
+
 
   public Map<String, Object> login(String email, String password) {
     Map<String, Object> map = new HashMap<>();
@@ -180,5 +189,20 @@ public class UserService {
     }
     user.setActivated(false);
     userRepository.save(user);
+  }
+
+  public void unionRecords(String fireBaseID) throws UserNotFoundException {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String name = auth.getName(); //get logged in username
+    User userWeb = userRepository.findByEmail(name);
+    if (!fireBaseID.equals("WEB") && userWeb.getFirebaseId().equals("WEB")) {
+      User userAndroid = userRepository.findByFirebaseId(fireBaseID).orElseThrow(() -> new UserNotFoundException());
+      userAndroid.setEmail(userWeb.getEmail());
+      userAndroid.setPassword(userWeb.getPassword());
+      userRepository.save(userAndroid);
+      userWeb.setEmail(null);
+      userWeb.setPassword(null);
+      userRepository.save(userWeb);
+    }
   }
 }

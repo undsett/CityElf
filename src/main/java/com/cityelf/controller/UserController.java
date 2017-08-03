@@ -4,6 +4,7 @@ import com.cityelf.exceptions.AccessDeniedException;
 import com.cityelf.exceptions.AddressException;
 import com.cityelf.exceptions.AddressNotPresentException;
 import com.cityelf.exceptions.UserException;
+import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.exceptions.UserValidationException;
 import com.cityelf.model.User;
 import com.cityelf.service.MailSenderService;
@@ -108,4 +109,12 @@ public class UserController {
       throws UserException, AccessDeniedException {
     userService.deleteUser(id);
   }
+
+  @RequestMapping(value = "/unionrecords", method = RequestMethod.POST)
+  public void unionRecords(@RequestParam(name = "firebaseid") String fireBaseID)
+      throws UserNotFoundException {
+    userService.unionRecords(fireBaseID);
+  }
+
+
 }

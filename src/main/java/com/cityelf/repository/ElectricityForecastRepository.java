@@ -20,8 +20,9 @@ public interface ElectricityForecastRepository extends CrudRepository<Electricit
 
   List<ElectricityForecast> findByAddress(Address address);
 
-
   void deleteElectricityForecastByStart(LocalDateTime startTime);
+
+  void deleteAllByPeopleReport(boolean peopleReport);
 
   List<ElectricityForecast> findElectricityForecastsByStartLessThanEqualAndEstimatedStopGreaterThan(
       LocalDateTime checkStart, LocalDateTime checkEnd);

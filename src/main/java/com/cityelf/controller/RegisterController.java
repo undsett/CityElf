@@ -34,7 +34,7 @@ public class RegisterController {
 
 
   @RequestMapping(value = "/register", method = RequestMethod.POST)
-  public Status registration(@RequestParam(name = "firebaseid") String fireBaseID,
+  public Map<String, Object> registration(@RequestParam(name = "firebaseid") String fireBaseID,
       @RequestParam(name = "email") String email, @RequestParam(name = "password") String password)
       throws UserAlreadyExistsException {
     return userService.registration(fireBaseID, email, password);

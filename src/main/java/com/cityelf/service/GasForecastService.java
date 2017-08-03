@@ -152,7 +152,7 @@ public class GasForecastService {
    * @return void
    */
   public void rewriteAll(Iterable<GasForecast> gasForecasts) {
-    gasForecastRepository.deleteAll();
+    gasForecastRepository.deleteAllByPeopleReport(false);
     gasForecastRepository.save(gasForecasts);
   }
 
