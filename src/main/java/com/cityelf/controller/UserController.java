@@ -1,6 +1,8 @@
 package com.cityelf.controller;
 
 import com.cityelf.exceptions.AccessDeniedException;
+import com.cityelf.exceptions.AddressException;
+import com.cityelf.exceptions.AddressNotPresentException;
 import com.cityelf.exceptions.UserException;
 import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.exceptions.UserValidationException;
@@ -43,6 +45,10 @@ public class UserController {
   private String requestSubject;
   @Value("${mail.admin.request.template}")
   private String requestTemplate;
+  @Value("${mail.user.address.nonexistent.subject}")
+  private String nonexistentAddressSubject;
+  @Value("${mail.user.address.nonexistent.content.template}")
+  private String nonexistentAddressContentTemplate;
 
   @RequestMapping(value = "/upload", method = RequestMethod.POST)
   public void upload(@RequestParam("file") MultipartFile file,
@@ -73,13 +79,13 @@ public class UserController {
 
   @RequestMapping(value = "/updateAnonim", method = RequestMethod.PUT)
   public void updateAnonim(@RequestBody User user)
-      throws UserException {
+      throws UserException, AddressException {
     userService.updateAnonime(user);
   }
 
   @RequestMapping(value = "/updateUser", method = RequestMethod.PUT)
   public void updateUser(@RequestBody @Valid User user, BindingResult bindingResult)
-      throws UserException, AccessDeniedException {
+      throws UserException, AddressException, AccessDeniedException {
     if (bindingResult.hasErrors()) {
       String errorMessage = bindingResult.getFieldErrors()
           .stream()
@@ -87,7 +93,15 @@ public class UserController {
           .collect(Collectors.joining(", "));
       throw new UserValidationException(errorMessage);
     }
-    userService.updateUser(user);
+    try {
+      userService.updateUser(user);
+    } catch (AddressNotPresentException ex) {
+      mailSenderService.sendMeAsync(
+          applicationEmail,
+          nonexistentAddressSubject,
+          MessageFormat.format(nonexistentAddressContentTemplate, user.getId(), user.getEmail()));
+      throw ex;
+    }
   }
 
   @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)

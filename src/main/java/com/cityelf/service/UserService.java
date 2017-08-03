@@ -140,7 +140,7 @@ public class UserService {
     return map;
   }
 
-  public void updateAnonime(User user) throws UserException {
+  public void updateAnonime(User user) throws UserException, AddressException {
     String firebaseId = user.getFirebaseId();
     if (firebaseId == null) {
       throw new UserValidationException("FirebaseId is required");
@@ -151,12 +151,12 @@ public class UserService {
     if (addresses.size() > 1) {
       throw new UserValidationException("Non-authorized user can add one address only");
     }
-    userFromDb.setAddresses(addresses);
+    userFromDb.setAddresses(addressService.resolveAddresses(addresses));
     userFromDb.setNotification(user.getNotification());
     userRepository.save(userFromDb);
   }
 
-  public void updateUser(User user) throws UserException, AccessDeniedException {
+  public void updateUser(User user) throws UserException, AddressException, AccessDeniedException {
     if (securityService.getUserFromSession().getId() != user.getId()) {
       throw new AccessDeniedException();
     }
@@ -171,7 +171,8 @@ public class UserService {
         ReflectionUtils.setField(field, user, valueFromDb);
       }
     }
-    if (user.getAddresses().isEmpty()) {
+    List<Address> addresses = addressService.resolveAddresses(user.getAddresses());
+    if (addresses.isEmpty()) {
       user.setAddresses(userFromDb.getAddresses());
     }
     userRepository.save(user);
