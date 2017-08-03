@@ -1,28 +1,34 @@
 package com.cityelf.service;
 
+import static com.cityelf.model.Role.ANONIMUS_ROLE;
+import static com.cityelf.model.Role.AUTHORIZED_ROLE;
+
+import com.cityelf.exceptions.AccessDeniedException;
+import com.cityelf.exceptions.AddressException;
+import com.cityelf.exceptions.AddressNotPresentException;
 import com.cityelf.exceptions.Status;
 import com.cityelf.exceptions.UserAlreadyExistsException;
 import com.cityelf.exceptions.UserException;
-import com.cityelf.exceptions.UserNotAuthorizedException;
 import com.cityelf.exceptions.UserNotFoundException;
+import com.cityelf.exceptions.UserValidationException;
 import com.cityelf.model.Address;
+import com.cityelf.model.Role;
 import com.cityelf.model.User;
-import com.cityelf.model.UserAddresses;
-import com.cityelf.model.UserRole;
-import com.cityelf.repository.AddressesRepository;
-import com.cityelf.repository.UserAddressesRepository;
 import com.cityelf.repository.UserRepository;
-import com.cityelf.repository.UserRoleRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -31,16 +37,14 @@ public class UserService {
   private UserRepository userRepository;
 
   @Autowired
-  private UserAddressesRepository userAddressesRepository;
-
-  @Autowired
-  private AddressesRepository addressesRepository;
-
-  @Autowired
-  private UserRoleRepository userRoleRepository;
-
-  @Autowired
   private MailSenderService mailSenderService;
+
+  @Autowired
+  private SecurityService securityService;
+  @Autowired
+  private RoleService roleService;
+  @Autowired
+  private AddressService addressService;
 
   public UserService() {
   }
@@ -50,7 +54,11 @@ public class UserService {
   }
 
   public User getUser(long id) throws UserNotFoundException {
-    User user = userRepository.findOne(id);
+    return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
+  }
+
+  public User getUser(String email) throws UserNotFoundException {
+    User user = userRepository.findByEmail(email);
     if (user == null) {
       throw new UserNotFoundException();
     }
@@ -65,76 +73,74 @@ public class UserService {
     return user;
   }
 
-  public Status addNewUser(String firebaseId, String address)
-      throws UserAlreadyExistsException {
-    User newUser;
+  public long addNewUser(String firebaseId, String addressString)
+      throws UserAlreadyExistsException, AddressException {
 
-    if (userRepository.findByFirebaseId(firebaseId) == null) {
-      userRepository.save(new User(firebaseId));
-      newUser = userRepository.findByFirebaseId(firebaseId);
-      Address address1 = addressesRepository.findByAddress(address);
-      long idAddress = address1.getId();
-      userAddressesRepository
-          .save(new UserAddresses(newUser.getId(), idAddress));
-      userRoleRepository.save(new UserRole(newUser.getId(), 1));
-      return Status.USER_ADD_IN_DB_OK;
-    } else {
-      return Status.USER_EXIIST;
+    if (userRepository.findByFirebaseId(firebaseId).isPresent()) {
+      throw new UserAlreadyExistsException();
     }
+    Address address = addressService.getAddress(addressString)
+        .orElseThrow(() -> new AddressNotPresentException());
+    User user = new User(firebaseId);
+    user.setAddresses(Arrays.asList(address));
+    user = userRepository.save(user);
+    roleService.saveRole(user.getId(), ANONIMUS_ROLE);
+    return user.getId();
   }
 
-  public Status registration(String fireBaseID, String email, String password) {
-    User newUser = new User();
+  public Map<String, Object> registration(String fireBaseID, String email, String password) {
+    Map<String, Object> map = new HashMap<>();
     if (fireBaseID.equals("WEB") && userRepository.findByEmail(email) == null) {
-      userRepository.save(new User(email, password, "WEB"));
-      newUser = userRepository.findByEmail(email);
+      User newUser = userRepository.save(new User(email, password, "WEB"));
       String msg =
           "http://localhost:8088/services/registration/confirm?id=" + newUser.getId()
               + "&email=" + email;
-      mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
-      return Status.USER_REGISTRATION_OK;
+      //mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
+      confirmRegistration(newUser.getId(), email);
+      map.put("status", Status.USER_REGISTRATION_OK);
+      map.put("user", newUser);
+      return map;
     }
 
     if (!fireBaseID.equals("WEB")) {
-      User existUser = userRepository.findByFirebaseId(fireBaseID);
+      User existUser = userRepository.findByFirebaseId(fireBaseID).orElse(null);
       if (existUser != null && userRepository.findByEmail(email) == null) {
         existUser.setEmail(email);
         existUser.setPassword(password);
         userRepository.save(existUser);
         String msg = "http://localhost:8088/services/registration/confirm?id=" + existUser.getId()
             + "&email=" + email;
-        mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
-        return Status.USER_REGISTRATION_OK;
+        //mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
+        confirmRegistration(existUser.getId(), email);
+        map.put("status", Status.USER_REGISTRATION_OK);
+        map.put("user", existUser);
+        return map;
+
       }
     }
-
-    return Status.EMAIL_EXIST;
+    map.put("status", Status.EMAIL_EXIST);
+    return map;
   }
 
-  public Status confirmRegistration(String id, String email) {
-    long idUser = Long.parseLong(id);
+  public Status confirmRegistration(long id, String email) {
     User user = userRepository.findByEmail(email);
-    if (user.getId() == idUser) {
+    if (user.getId() == id) {
       user.setActivated(true);
       userRepository.save(user);
-      UserRole userRole = userRoleRepository.findByUserId(user.getId());
-      if (userRole == null) {
-        userRoleRepository.save(new UserRole(user.getId(), 3));
-      } else {
-        userRole.setRoleId(3);
-        userRoleRepository.save(userRole);
-      }
-
+      Set<Role> roles = roleService.getRolesByUserId(user.getId());
+      roles.add(AUTHORIZED_ROLE);
+      roleService.saveRole(id, roles);
       return Status.EMAIL_CONFIRMED;
     }
     return Status.EMAIL_NOT_CONFIRMED;
   }
 
+
   public Map<String, Object> login(String email, String password) {
     Map<String, Object> map = new HashMap<>();
     User user = userRepository.findByEmail(email);
     if (user == null || !user.getPassword().equals(password)) {
-      map.put("status", Status.LOGIN_INCORRECT);
+      map.put("status", Status.LOGIN_OR_PASSWORD_INCORRECT);
     } else {
       map.put("status", Status.LOGIN_PASSWORD_OK);
       map.put("user", user);
@@ -142,35 +148,69 @@ public class UserService {
     return map;
   }
 
-  public void updateUser(User user) throws UserException {
-    User userFromDb = userRepository.findOne(user.getId());
-    if (userFromDb != null) {
-      Field[] fields = user.getClass().getDeclaredFields();
-      AccessibleObject.setAccessible(fields, true);
-      for (Field field : fields) {
-        if (ReflectionUtils.getField(field, user) == null) {
-          Object valueFromDb = ReflectionUtils.getField(field, userFromDb);
-          ReflectionUtils.setField(field, user, valueFromDb);
-        }
-      }
-      if (user.getAddresses().size() == 0) {
-        user.setAddresses(userFromDb.getAddresses());
-      }
-      if ("not_authorized".equals(user.getAuthorized()) && user.getAddresses().size() > 1) {
-        throw new UserNotAuthorizedException();
-      }
-      userRepository.save(user);
-    } else {
-      throw new UserNotFoundException();
+  public void updateAnonime(User user) throws UserException, AddressException {
+    String firebaseId = user.getFirebaseId();
+    if (firebaseId == null) {
+      throw new UserValidationException("FirebaseId is required");
     }
+    User userFromDb = userRepository.findByFirebaseId(firebaseId)
+        .orElseThrow(() -> new UserNotFoundException());
+    List<Address> addresses = user.getAddresses();
+    if (addresses.size() > 1) {
+      throw new UserValidationException("Non-authorized user can add one address only");
+    }
+    userFromDb.setAddresses(addressService.resolveAddresses(addresses));
+    userFromDb.setNotification(user.getNotification());
+    userRepository.save(userFromDb);
   }
 
-  public void deleteUser(long id) throws UserNotFoundException {
+  public void updateUser(User user) throws UserException, AddressException, AccessDeniedException {
+    if (securityService.getUserFromSession().getId() != user.getId()) {
+      throw new AccessDeniedException();
+    }
+
+    User userFromDb = userRepository.findById(user.getId())
+        .orElseThrow(() -> new UserNotFoundException());
+
+    List<Address> addresses = addressService.resolveAddresses(user.getAddresses());
+    user.setAddresses(addresses);
+    Field[] fields = user.getClass().getDeclaredFields();
+
+    AccessibleObject.setAccessible(fields, true);
+    for (Field field : fields) {
+      Object remoteUserValue = ReflectionUtils.getField(field, user);
+      if (remoteUserValue != null) {
+        Object valueFromDb = ReflectionUtils.getField(field, userFromDb);
+        ReflectionUtils.setField(field, userFromDb, remoteUserValue);
+      }
+    }
+    userRepository.save(userFromDb);
+  }
+
+  public void deleteUser(long id) throws UserNotFoundException, AccessDeniedException {
+    if (securityService.getUserFromSession().getId() != id) {
+      throw new AccessDeniedException();
+    }
     User user = userRepository.findOne(id);
     if (user == null) {
       throw new UserNotFoundException();
     }
     user.setActivated(false);
     userRepository.save(user);
+  }
+
+  public void unionRecords(String fireBaseID) throws UserNotFoundException {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String name = auth.getName(); //get logged in username
+    User userWeb = userRepository.findByEmail(name);
+    if (!fireBaseID.equals("WEB") && userWeb.getFirebaseId().equals("WEB")) {
+      User userAndroid = userRepository.findByFirebaseId(fireBaseID).orElseThrow(() -> new UserNotFoundException());
+      userAndroid.setEmail(userWeb.getEmail());
+      userAndroid.setPassword(userWeb.getPassword());
+      userRepository.save(userAndroid);
+      userWeb.setEmail(null);
+      userWeb.setPassword(null);
+      userRepository.save(userWeb);
+    }
   }
 }

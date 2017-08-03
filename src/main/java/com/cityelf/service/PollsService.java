@@ -15,7 +15,6 @@ import com.cityelf.repository.PollsRepository;
 import com.cityelf.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,6 +38,9 @@ public class PollsService {
 
   @Autowired
   private UserRepository userRepository;
+
+  @Autowired
+  private SecurityService securityService;
 
   public List<Poll> getPolls(long addressId) throws AddressNotPresentException {
     if (!addressesRepository.exists(addressId)) {
@@ -118,8 +120,7 @@ public class PollsService {
   }
 
   private boolean accessCheck(Poll poll) {
-    User user = userRepository
-        .findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+    User user = securityService.getUserFromSession();
     OsmdAdminAddresses osmdAdminAddresses = osmdAdminAddressesRepository
         .findByUserAdminId(user.getId());
 

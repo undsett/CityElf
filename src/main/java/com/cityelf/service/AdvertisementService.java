@@ -10,10 +10,8 @@ import com.cityelf.model.User;
 import com.cityelf.repository.AddressesRepository;
 import com.cityelf.repository.AdvertisementRepository;
 import com.cityelf.repository.OsmdAdminAddressesRepository;
-import com.cityelf.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -31,10 +29,10 @@ public class AdvertisementService {
   private AddressesRepository addressesRepository;
 
   @Autowired
-  UserRepository userRepository;
+  private OsmdAdminAddressesRepository osmdAdminAddressesRepository;
 
   @Autowired
-  OsmdAdminAddressesRepository osmdAdminAddressesRepository;
+  private SecurityService securityService;
 
   public List<Advertisement> getAdvertisements(long addressId) throws AddressNotPresentException {
     if (!addressesRepository.exists(addressId)) {
@@ -106,8 +104,7 @@ public class AdvertisementService {
   }
 
   private boolean accessCheck(Advertisement advertisement) {
-    User user = userRepository
-        .findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+    User user = securityService.getUserFromSession();
     OsmdAdminAddresses osmdAdminAddresses = osmdAdminAddressesRepository
         .findByUserAdminId(user.getId());
 
