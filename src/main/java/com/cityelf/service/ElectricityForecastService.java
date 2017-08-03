@@ -93,7 +93,7 @@ public class ElectricityForecastService {
    * @return void
    */
   public void rewriteAll(Iterable<ElectricityForecast> electricityForecasts) {
-    electricityForecastRepository.deleteAll();
+    electricityForecastRepository.deleteAllByPeopleReport(false);
     electricityForecastRepository.save(electricityForecasts);
   }
 }

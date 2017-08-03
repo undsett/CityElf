@@ -21,8 +21,9 @@ public interface GasForecastRepository extends CrudRepository<GasForecast, Long>
 
   List<GasForecast> findByAddress(Address address);
 
-
   void deleteGasForecastsByStart(LocalDateTime startTime);
+
+  void deleteAllByPeopleReport(boolean peopleReport);
 
   List<GasForecast> findGasForecastsByStartLessThanEqualAndEstimatedStopGreaterThan(
       LocalDateTime checkStart, LocalDateTime checkEnd);
