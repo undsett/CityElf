@@ -58,6 +58,9 @@ public class ShutdownReportService {
       ForecastAlreadyExistsException, WrongForecastTypeException {
     ShutdownReport shutdownReport = shutdownReportRequest.getShutdownReport();
     long userId = shutdownReportRequest.getUserId();
+    if (!"Water, Gas, Electricity".contains(shutdownReport.getForecastType())) {
+      throw new WrongForecastTypeException();
+    }
     if (!addressesRepository.exists(shutdownReport.getAddress().getId())) {
       throw new AddressNotPresentException();
     }
