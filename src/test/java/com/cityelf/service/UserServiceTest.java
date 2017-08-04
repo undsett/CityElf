@@ -89,7 +89,7 @@ public class UserServiceTest {
         assertThat(user.getFirebaseId()).isEqualTo("oldFb");
         assertThat(user.getEmail()).isEqualTo("oldEmail");
         assertThat(user.getPassword()).isEqualTo("newPassword");
-        assertThat(user.getAddresses().size()).isEqualTo(2);
+        assertThat(user.getAddresses().size()).isEqualTo(0);
         assertThat(user.getPhone()).isEqualTo("oldPhone");
         return user;
       }

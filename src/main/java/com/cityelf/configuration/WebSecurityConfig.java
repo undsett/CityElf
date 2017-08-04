@@ -21,7 +21,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     http
         .authorizeRequests()
         .antMatchers("/").permitAll()
-        .antMatchers("/forecasts/startcollector").hasAuthority("SYSTEM_ROLE")
+        .antMatchers("/forecasts/startcollector", "/feedback/get/**").hasAuthority("SYSTEM_ROLE")
         .antMatchers("/advertisements/admin/**", "/polls/admin/**").hasAuthority("ADMIN_ROLE")
         .antMatchers(
             "/users/updateUser",
@@ -29,7 +29,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/advertisements/getAll",
             "/advertisements/getAdvertisement",
             "/polls/getAll",
-            "/polls/getPoll"
+            "/polls/getPoll",
+            "/peoplereport/add",
+            "/voting/*",
+            "/voting/**"
         ).hasAuthority("AUTHORIZED_ROLE")
         .antMatchers(
             "/waterforecast/**",
