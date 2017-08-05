@@ -65,14 +65,6 @@ public class UserService {
     return user;
   }
 
-  public User getUser(String email) throws UserNotFoundException {
-    User user = userRepository.findByEmail(email);
-    if (user == null) {
-      throw new UserNotFoundException();
-    }
-    return user;
-  }
-
   public long addNewUser(String firebaseId, String addressString)
       throws UserAlreadyExistsException, AddressException {
 
@@ -129,6 +121,7 @@ public class UserService {
       userRepository.save(user);
       Set<Role> roles = roleService.getRolesByUserId(user.getId());
       roles.add(AUTHORIZED_ROLE);
+      roles.remove(ANONIMUS_ROLE);
       roleService.saveRole(id, roles);
       return Status.EMAIL_CONFIRMED;
     }
