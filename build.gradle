@@ -19,7 +19,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'checkstyle'
 apply plugin: 'docker'
 
-version = '0.0.1-SNAPSHOT'
+version = '0.1.1'
 sourceCompatibility = 1.8
 
 task buildDocker(type: Docker, dependsOn: build) {
