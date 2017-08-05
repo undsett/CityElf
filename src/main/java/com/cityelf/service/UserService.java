@@ -121,6 +121,7 @@ public class UserService {
       userRepository.save(user);
       Set<Role> roles = roleService.getRolesByUserId(user.getId());
       roles.add(AUTHORIZED_ROLE);
+      roles.remove(ANONIMUS_ROLE);
       roleService.saveRole(id, roles);
       return Status.EMAIL_CONFIRMED;
     }
