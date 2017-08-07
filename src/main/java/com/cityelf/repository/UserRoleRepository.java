@@ -5,11 +5,9 @@ import com.cityelf.model.UserRole;
 
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.List;
+import java.util.Set;
 
 public interface UserRoleRepository extends CrudRepository<UserRole, Long> {
 
-  List<UserRole> findByUserId(Long userId);
-
-  UserRole save(UserRole userRole);
+  Set<UserRole> findByUserId(Long userId);
 }

@@ -12,8 +12,8 @@ import com.cityelf.exceptions.UserException;
 import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.exceptions.UserValidationException;
 import com.cityelf.model.Address;
-import com.cityelf.model.Role;
 import com.cityelf.model.User;
+import com.cityelf.model.UserRole;
 import com.cityelf.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,8 +76,11 @@ public class UserService {
     User user = new User(firebaseId);
     user.setAddresses(Arrays.asList(address));
     user = userRepository.save(user);
-    roleService.saveRole(user.getId(), ANONIMUS_ROLE);
-    return user.getId();
+    long id = user.getId();
+    Set<UserRole> userRoles = roleService.getUserRoles(id);
+    userRoles.add(new UserRole(id, ANONIMUS_ROLE));
+    roleService.save(userRoles);
+    return id;
   }
 
   public Map<String, Object> registration(String fireBaseID, String email, String password) {
@@ -119,10 +122,10 @@ public class UserService {
     if (user.getId() == id) {
       user.setActivated(true);
       userRepository.save(user);
-      Set<Role> roles = roleService.getRolesByUserId(user.getId());
-      roles.add(AUTHORIZED_ROLE);
-      roles.remove(ANONIMUS_ROLE);
-      roleService.saveRole(id, roles);
+      Set<UserRole> userRoles = roleService.getUserRoles(id);
+      userRoles.add(new UserRole(id, AUTHORIZED_ROLE));
+      roleService.save(userRoles);
+
       return Status.EMAIL_CONFIRMED;
     }
     return Status.EMAIL_NOT_CONFIRMED;
@@ -173,7 +176,6 @@ public class UserService {
     for (Field field : fields) {
       Object remoteUserValue = ReflectionUtils.getField(field, user);
       if (remoteUserValue != null) {
-        Object valueFromDb = ReflectionUtils.getField(field, userFromDb);
         ReflectionUtils.setField(field, userFromDb, remoteUserValue);
       }
     }
@@ -197,7 +199,8 @@ public class UserService {
     String name = auth.getName(); //get logged in username
     User userWeb = userRepository.findByEmail(name);
     if (!fireBaseID.equals("WEB") && userWeb.getFirebaseId().equals("WEB")) {
-      User userAndroid = userRepository.findByFirebaseId(fireBaseID).orElseThrow(() -> new UserNotFoundException());
+      User userAndroid = userRepository.findByFirebaseId(fireBaseID)
+          .orElseThrow(() -> new UserNotFoundException());
       userAndroid.setEmail(userWeb.getEmail());
       userAndroid.setPassword(userWeb.getPassword());
       userRepository.save(userAndroid);
