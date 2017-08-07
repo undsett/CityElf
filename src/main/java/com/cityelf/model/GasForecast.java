@@ -58,7 +58,7 @@ public class GasForecast extends Forecast {
     this.estimatedStop = estimatedStop;
   }
 
-  public boolean isPeopleReport() {
+  public boolean getPeopleReport() {
     return peopleReport;
   }
 
