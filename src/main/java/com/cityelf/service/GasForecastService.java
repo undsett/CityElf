@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 @Service
 public class GasForecastService {
 
@@ -151,6 +153,7 @@ public class GasForecastService {
    * @param gasForecasts collection of GasForecast objects
    * @return void
    */
+  @Transactional
   public void rewriteAll(Iterable<GasForecast> gasForecasts) {
     gasForecastRepository.deleteAllByPeopleReport(false);
     gasForecastRepository.save(gasForecasts);

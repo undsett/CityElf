@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 @Service
 public class ElectricityForecastService {
 
@@ -92,6 +94,7 @@ public class ElectricityForecastService {
    * @param electricityForecasts collection of ElectricityForecast objects
    * @return void
    */
+  @Transactional
   public void rewriteAll(Iterable<ElectricityForecast> electricityForecasts) {
     electricityForecastRepository.deleteAllByPeopleReport(false);
     electricityForecastRepository.save(electricityForecasts);
