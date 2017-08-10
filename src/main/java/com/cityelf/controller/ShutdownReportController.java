@@ -2,8 +2,10 @@ package com.cityelf.controller;
 
 import com.cityelf.exceptions.AddressNotPresentException;
 import com.cityelf.exceptions.ForecastAlreadyExistsException;
+import com.cityelf.exceptions.Status;
 import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.exceptions.WrongForecastTypeException;
+import com.cityelf.model.ShutdownReport;
 import com.cityelf.model.ShutdownReportRequest;
 import com.cityelf.service.ShutdownReportService;
 
@@ -21,9 +23,14 @@ public class ShutdownReportController {
   private ShutdownReportService shutdownReportService;
 
   @RequestMapping(value = "/add", method = RequestMethod.POST)
-  public void addNewReport(@RequestBody ShutdownReportRequest shutdownReportRequest)
+  public Status addNewReport(@RequestBody ShutdownReportRequest shutdownReportRequest)
       throws AddressNotPresentException, ForecastAlreadyExistsException,
       WrongForecastTypeException, UserNotFoundException {
-    shutdownReportService.addNewReport(shutdownReportRequest);
+    return shutdownReportService.addNewReport(shutdownReportRequest);
+  }
+
+  @RequestMapping(value = "/getall", method = RequestMethod.GET)
+  public Iterable<ShutdownReport> getAll() {
+    return shutdownReportService.getAll();
   }
 }
