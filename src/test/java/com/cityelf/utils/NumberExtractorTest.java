@@ -193,4 +193,9 @@ public class NumberExtractorTest {
     assertThat(number.orElse("")).isEqualTo("19-к2");
   }
 
+  @Test
+  public void getNumbers24() throws Exception {
+    Set<String> numbers = numberExtractor.getNumbers("Жилые дома №: 35, 7, 7а, 5/24");
+    assertThat(numbers).contains("35", "7", "7-а", "5-24");
+  }
 }
