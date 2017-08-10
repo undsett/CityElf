@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+  <property name="DEV_HOME" value="logs"/>
+
+  <appender name="FILE-TRACE-FINDER"
+    class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${DEV_HOME}/trace-address-db-finder.log</file>
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <Pattern>
+        %d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n
+      </Pattern>
+    </encoder>
+
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- rollover daily -->
+      <fileNamePattern>${DEV_HOME}/archived/trace-address-db-finder.log.%d{yyyy-MM-dd}.%i.log
+      </fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy
+        class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <maxFileSize>10MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+    </rollingPolicy>
+  </appender>
+  <appender name="FILE-TRACE-COLLECTOR"
+    class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${DEV_HOME}/trace-forecast-collector.log</file>
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <Pattern>
+        %d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n
+      </Pattern>
+    </encoder>
+
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- rollover daily -->
+      <fileNamePattern>${DEV_HOME}/archived/trace-forecast-collector.%d{yyyy-MM-dd}.%i.log
+      </fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy
+        class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <maxFileSize>10MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+    </rollingPolicy>
+  </appender>
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <Pattern>
+        %d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n
+      </Pattern>
+    </layout>
+  </appender>
+
+
+  <logger name="com.cityelf.service.DataCollectorService" level="trace"
+    additivity="false">
+    <!--<appender-ref ref="STDOUT"/>-->
+    <appender-ref ref="FILE-TRACE-COLLECTOR"/>
+  </logger>
+  <logger name="com.cityelf.service.AddressService" level="trace"
+    additivity="false">
+    <!--<appender-ref ref="STDOUT"/>-->
+    <appender-ref ref="FILE-TRACE-FINDER"/>
+  </logger>
+
+  <root level="debug">
+    <appender-ref ref="STDOUT"/>
+  </root>
+
+</configuration>
