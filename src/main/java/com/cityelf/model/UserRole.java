@@ -1,5 +1,7 @@
 package com.cityelf.model;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -51,5 +53,24 @@ public class UserRole {
 
   public void setRole(Role role) {
     this.roleId = role.getId();
+  }
+
+  public Role getRole() {
+    return Role.createRole(roleId);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(userId, roleId);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null || obj.getClass() != getClass()) {
+      return false;
+    }
+    UserRole anotherUserRole = (UserRole) obj;
+    return Objects.equals(userId, anotherUserRole.getUserId())
+        && Objects.equals(roleId, anotherUserRole.getRoleId());
   }
 }

@@ -12,7 +12,9 @@ public enum Status {
   EMAIL_CONFIRMED(21, "Email confirmed"),
   EMAIL_NOT_CONFIRMED(22, "Email didn't confirm"),
   LOGIN_OR_PASSWORD_INCORRECT(31, "Your Login or Password is incorrect"),
-  LOGIN_PASSWORD_OK(33, "Your login and password is correct");
+  LOGIN_PASSWORD_OK(33, "Your login and password is correct"),
+  REPORT_WAS_ADDED(41, "Your report was added to DB"),
+  USER_ALREADY_REPORTED(42, "This user already send this report");
 
   Status(int code, String message) {
     this.code = code;

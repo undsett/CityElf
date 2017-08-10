@@ -2,6 +2,7 @@ package com.cityelf.service;
 
 import com.cityelf.exceptions.AddressNotPresentException;
 import com.cityelf.exceptions.ForecastAlreadyExistsException;
+import com.cityelf.exceptions.Status;
 import com.cityelf.exceptions.UserNotFoundException;
 import com.cityelf.exceptions.WrongForecastTypeException;
 import com.cityelf.model.ElectricityForecast;
@@ -53,7 +54,7 @@ public class ShutdownReportService {
   private ElectricityForecastService electricityForecastService;
 
   @Transactional
-  public void addNewReport(ShutdownReportRequest shutdownReportRequest)
+  public Status addNewReport(ShutdownReportRequest shutdownReportRequest)
       throws AddressNotPresentException, UserNotFoundException,
       ForecastAlreadyExistsException, WrongForecastTypeException {
     ShutdownReport shutdownReport = shutdownReportRequest.getShutdownReport();
@@ -70,6 +71,7 @@ public class ShutdownReportService {
     if (!shutdownReportRepository.findByAddress(shutdownReport.getAddress()).isPresent()) {
       shutdownReportRepository.save(shutdownReport);
       addUserToReport(shutdownReport, userId);
+      return Status.REPORT_WAS_ADDED;
     } else {
       ShutdownReport shutdownReportFromDb = shutdownReportRepository
           .findByAddress(shutdownReport.getAddress()).get();
@@ -77,14 +79,16 @@ public class ShutdownReportService {
           .findByShutdownReport(shutdownReportFromDb);
       if (Collections.frequency(usersFromShutdownReport.stream().map(UserReports::getUser).collect(
           Collectors.toList()), userRepository.findById(userId).get()) != 0) {
-        return;
+        return Status.USER_ALREADY_REPORTED;
       }
       if (shutdownReportFromDb.getCount() < 3) {
         shutdownReportFromDb.setCount(shutdownReportFromDb.getCount() + 1);
         shutdownReportRepository.save(shutdownReportFromDb);
         addUserToReport(shutdownReportFromDb, userId);
+        return Status.REPORT_WAS_ADDED;
       } else {
         moveReportToForecastTable(shutdownReportFromDb);
+        return Status.REPORT_WAS_ADDED;
       }
     }
 
@@ -98,7 +102,7 @@ public class ShutdownReportService {
         try {
           waterForecastService.addNewWaterForecast(createWaterForecast(shutdownReportFromDb));
         } catch (ForecastAlreadyExistsException ex) {
-          logger.error("Forecast already added",ex);
+          logger.error("Forecast already added", ex);
         }
         userReportsRepository.deleteAllByShutdownReport(shutdownReportFromDb);
         shutdownReportRepository.delete(shutdownReportFromDb);
@@ -107,7 +111,7 @@ public class ShutdownReportService {
         try {
           gasForecastService.addNewGasForecast(createGasForecast(shutdownReportFromDb));
         } catch (ForecastAlreadyExistsException ex) {
-          logger.error("Forecast already added",ex);
+          logger.error("Forecast already added", ex);
         }
         userReportsRepository.deleteAllByShutdownReport(shutdownReportFromDb);
         shutdownReportRepository.delete(shutdownReportFromDb);
@@ -117,7 +121,7 @@ public class ShutdownReportService {
           electricityForecastService
               .addNewElectricityForecast(createElectricityForecast(shutdownReportFromDb));
         } catch (ForecastAlreadyExistsException ex) {
-          logger.error("Forecast already added",ex);
+          logger.error("Forecast already added", ex);
         }
         userReportsRepository.deleteAllByShutdownReport(shutdownReportFromDb);
         shutdownReportRepository.delete(shutdownReportFromDb);
@@ -155,5 +159,9 @@ public class ShutdownReportService {
     UserReports userReports = new UserReports(shutdownReport,
         userRepository.findById(userId).get());
     userReportsRepository.save(userReports);
+  }
+
+  public Iterable<ShutdownReport> getAll() {
+    return shutdownReportRepository.findAll();
   }
 }
