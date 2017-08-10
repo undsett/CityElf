@@ -34,6 +34,9 @@ public class AdvertisementService {
   @Autowired
   private SecurityService securityService;
 
+  @Autowired
+  private AppServerFirebase appServerFirebase;
+
   public List<Advertisement> getAdvertisements(long addressId) throws AddressNotPresentException {
     if (!addressesRepository.exists(addressId)) {
       throw new AddressNotPresentException();
@@ -61,6 +64,19 @@ public class AdvertisementService {
     }
     if (advertisementRepository.exists(advertisement.getId())) {
       advertisement.setId(0);
+    }
+    List<User> usersFromAddress = (addressesRepository.findById(advertisement.getAddress().getId()))
+        .getUsers();
+    if (usersFromAddress != null) {
+      try {
+        for (User user : usersFromAddress) {
+          appServerFirebase.pushFCMNotification(user.getFirebaseId(), "New advertisement",
+              "По адресу " + advertisement.getAddress().getAddress()
+                  + " появилось новое объявление!");
+        }
+      } catch (Exception exception) {
+        exception.printStackTrace();
+      }
     }
     return advertisementRepository.save(advertisement);
   }

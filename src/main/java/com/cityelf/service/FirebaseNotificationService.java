@@ -44,7 +44,7 @@ public class FirebaseNotificationService {
           if (firebaseNotificationRepository.findByTextHash(notificationToken.getTextHash())
               == null) {
             try {
-              appServerFirebase.pushFCMNotification(user.getFirebaseId(), "Отключение!",
+              appServerFirebase.pushFCMNotification(user.getFirebaseId(), "New shutdown",
                   createMessageToFirebase(forecast));
               firebaseNotificationRepository.save(notificationToken);
             } catch (Exception exception) {
