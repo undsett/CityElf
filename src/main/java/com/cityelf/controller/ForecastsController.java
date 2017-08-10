@@ -15,7 +15,7 @@ public class ForecastsController {
   private DataCollectorService dataCollectorService;
 
   @RequestMapping(value = "/startcollector", method = RequestMethod.GET)
-  public void getElectricityForecast() {
+  public void startcollector() {
     dataCollectorService.startCollector();
   }
 }
