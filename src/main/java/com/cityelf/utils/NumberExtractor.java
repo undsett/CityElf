@@ -2,6 +2,8 @@ package com.cityelf.utils;
 
 import com.cityelf.utils.address.finder.utils.BuildingNumberExtender;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +18,7 @@ import java.util.regex.Pattern;
 @Component
 public class NumberExtractor {
 
+  private Logger logger = LogManager.getLogger(getClass());
   @Autowired
   private BuildingNumberExtender buildingNumberExtender;
   private Pattern removeMinus = Pattern.compile("\\d+-");
@@ -23,7 +26,7 @@ public class NumberExtractor {
   private final String stringRangePattern = "\\d+([\\s\\D]*)?-(\\s)?\\d+((\\/)?[^\\s,+]+)?";
   private Pattern rangeNumbersPattern = Pattern.compile(stringRangePattern);
   private Pattern standaloneNumbersPattern = Pattern
-      .compile("\\d{1,3}([^,\\w\\/\\s]{1}|\\/[\\d\\S,]+?){0,4}");
+      .compile("\\d{1,3}([^,\\w\\/\\s]{1}|\\/[\\d\\S,]+){0,4}");
   private Pattern numberPattern = Pattern
       .compile("(?<=\\s)\\d{1,3}([^\\/\\s,]{1}|\\/[^\\s,]+){0,4}");
 
@@ -31,11 +34,28 @@ public class NumberExtractor {
 
   private final String kostil = "\\d{4,}";
 
+  private final Pattern kostil2 = Pattern.compile(streetReplacePattern, Pattern.CASE_INSENSITIVE);
+
   public Set<String> getNumbers(String rawAddress) {
+    logger.debug("Input: " + rawAddress);
     Set<String> buildingNumberSet = new TreeSet<>();
+
+    Matcher matcher = kostil2.matcher(rawAddress);
+    if (matcher.find()) {
+      String street = matcher.group();
+      Optional<String> number = getNumber(street);
+      if (number.isPresent()) {
+        buildingNumberSet.add(number.get());
+      }
+    }
+
     String rawBuildingNumberString = rawAddress.replaceFirst(streetReplacePattern, "");
+    logger.debug("After street replacing: " + rawBuildingNumberString);
     rawBuildingNumberString = getRange(rawBuildingNumberString, buildingNumberSet);
+    logger.debug("After range removed:" + rawBuildingNumberString);
+    logger.debug(buildingNumberSet);
     getSingle(rawBuildingNumberString, buildingNumberSet);
+    logger.debug(buildingNumberSet);
 
     return buildingNumberExtender.getNumbers(buildingNumberSet);
   }
