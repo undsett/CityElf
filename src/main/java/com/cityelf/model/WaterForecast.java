@@ -62,7 +62,7 @@ public class WaterForecast extends Forecast {
     this.address = address;
   }
 
-  public boolean isPeopleReport() {
+  public boolean getPeoplereport() {
     return peopleReport;
   }
 

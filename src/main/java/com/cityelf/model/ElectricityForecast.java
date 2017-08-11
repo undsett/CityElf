@@ -74,7 +74,7 @@ public class ElectricityForecast extends Forecast {
     this.address = address;
   }
 
-  public boolean isPeopleReport() {
+  public boolean getPeopleReport() {
     return peopleReport;
   }
 
