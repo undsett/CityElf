@@ -6,6 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.cityelf.domain.ForcastData;
+import com.cityelf.utils.parser.gas.utils.GasLoader;
 
 import org.jsoup.Jsoup;
 import org.junit.Before;
