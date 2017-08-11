@@ -42,6 +42,9 @@ public class PollsService {
   @Autowired
   private SecurityService securityService;
 
+  @Autowired
+  private AppServerFirebase appServerFirebase;
+
   public List<Poll> getPolls(long addressId) throws AddressNotPresentException {
     if (!addressesRepository.exists(addressId)) {
       throw new AddressNotPresentException();
@@ -81,6 +84,19 @@ public class PollsService {
     Poll pollFromDb = pollsRepository.save(poll);
     for (PollsAnswer pollAnswer : poll.getPollsAnswers()) {
       pollAnswer.setPoll(pollFromDb);
+    }
+    List<User> usersFromAddress = (addressesRepository.findById(poll.getAddress().getId()))
+        .getUsers();
+    if (usersFromAddress != null) {
+      try {
+        for (User user : usersFromAddress) {
+          appServerFirebase.pushFCMNotification(user.getFirebaseId(), "New poll",
+              "По адресу " + poll.getAddress().getAddress()
+                  + " появился новый опрос!");
+        }
+      } catch (Exception exception) {
+        exception.printStackTrace();
+      }
     }
     pollAnswersRepository.save(poll.getPollsAnswers());
     return pollFromDb;
