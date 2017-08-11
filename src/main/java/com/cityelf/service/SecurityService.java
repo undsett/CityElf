@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Set;
 
 @Service
 public class SecurityService {
@@ -25,7 +25,7 @@ public class SecurityService {
         .findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
   }
 
-  public List<UserRole> getRoleOfUserFromSession() {
+  public Set<UserRole> getRoleOfUserFromSession() {
     return userRoleRepository.findByUserId(getUserFromSession().getId());
   }
 }

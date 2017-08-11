@@ -83,4 +83,9 @@ public class RoadTypeTest {
     assertThat(RoadType.getRoadType("8 Марта 5-я линия, 3")).isEqualTo(LINE);
   }
 
+  @Test
+  public void getRoadType14() throws Exception {
+    assertThat(RoadType.getRoadType("добровольского проспект")).isEqualTo(AVENUE);
+  }
+
 }

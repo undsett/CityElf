@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 @Service
 public class WaterForecastService {
 
@@ -151,6 +153,7 @@ public class WaterForecastService {
    * @param waterForecasts collection of WaterForecast objects
    * @return void
    */
+  @Transactional
   public void rewriteAll(Iterable<WaterForecast> waterForecasts) {
     waterForecastRepository.deleteAllByPeopleReport(false);
     waterForecastRepository.save(waterForecasts);
