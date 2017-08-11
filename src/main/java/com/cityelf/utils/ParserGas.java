@@ -3,6 +3,9 @@ package com.cityelf.utils;
 import com.cityelf.domain.ForcastData;
 import com.cityelf.exceptions.GasPageStructureChangedException;
 import com.cityelf.exceptions.ParserUnavailableException;
+import com.cityelf.utils.parser.gas.utils.GasForecaster;
+import com.cityelf.utils.parser.gas.utils.GasLoader;
+import com.cityelf.utils.parser.utils.ParserUtils;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -12,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,11 +27,12 @@ public class ParserGas {
   @Autowired
   private GasForecaster gasForecaster;
 
-  private static final Logger logger = LoggerFactory.getLogger(AddressesFiller.class);
+  @Autowired
+  private ParserUtils parserUtils;
 
-  private String newsTheme;
+  private static final Logger logger = LoggerFactory.getLogger(ParserGas.class);
 
-  private LocalDate dateToCheck;
+  private String newsTheme = "[(связи с производством)|(зв.язку з [(вико)|(рем)|(роб)])]";
 
   public void setLoader(GasLoader loader) {
     this.loader = loader;
@@ -40,15 +42,15 @@ public class ParserGas {
     this.gasForecaster = gasForecaster;
   }
 
-  public ParserGas() {
-    this.dateToCheck = LocalDate.now();
-    this.newsTheme = "[(связи с производством)|(зв.язку з [(вико)|(рем)|(роб)])]";
+  public List<ForcastData> getForcastDataList() throws ParserUnavailableException {
+    return getForcastDataList(LocalDate.now());
   }
 
-  public List<ForcastData> getForcastDataList() throws ParserUnavailableException {
+  public List<ForcastData> getForcastDataList(LocalDate dateToCheck)
+      throws ParserUnavailableException {
     List<ForcastData> result = new ArrayList<>();
     String dateToCheckRegex = String.format("((%s)|(%te %<tB %<tY))",
-        ParserGas.transformDate(dateToCheck), dateToCheck);
+        parserUtils.transformDate(dateToCheck), dateToCheck);
     Elements neededNews = loader.getNeededNews(dateToCheckRegex, newsTheme);
     boolean wasExceptions = false;
     for (Element pieceOfNews : neededNews) {
@@ -64,23 +66,5 @@ public class ParserGas {
           "There was an exceptions while gas page was parsing. Check log file");
     }
     return result;
-  }
-
-  static String transformDate(LocalDate toTransform) {
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    return toTransform.format(formatter);
-  }
-
-  static LocalDate transformDate(String toTransform) {
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    return LocalDate.parse(toTransform, formatter);
-  }
-
-  static LocalTime transformTime(String time) {
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-    if (time.length() == 4) {
-      time = "0" + time;
-    }
-    return LocalTime.parse(time, formatter);
   }
 }
