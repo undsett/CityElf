@@ -5,6 +5,7 @@ import com.cityelf.exceptions.ForecastNotFoundException;
 import com.cityelf.model.Address;
 import com.cityelf.model.WaterForecast;
 import com.cityelf.service.WaterForecastService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -78,5 +79,4 @@ public class WaterForecastController {
   public List<WaterForecast> getCurrentWaterForecasts() {
     return waterForecastService.getCurrentWaterForecasts(LocalDateTime.now());
   }
-
 }

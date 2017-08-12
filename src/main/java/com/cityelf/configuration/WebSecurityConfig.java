@@ -26,10 +26,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers(
             "/users/updateUser",
             "/users/*",
-            "/advertisements/getAll",
-            "/advertisements/getAdvertisement",
-            "/polls/getAll",
-            "/polls/getPoll",
+            "/advertisements/getall",
+            "/advertisements/getadvertisement",
+            "/polls/getall",
+            "/polls/getpoll",
             "/peoplereport/add",
             "/voting/*",
             "/voting/**"

@@ -64,7 +64,7 @@ public class UserControllerTest {
     doThrow(UserNotFoundException.class).when(userService).updateUser(any());
     user.setEmail("login@domain.com");
     mockMvc.perform(
-        put("/users/updateUser")
+        put("/users/updateuser")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(user))
     )
@@ -77,7 +77,7 @@ public class UserControllerTest {
     doNothing().when(userService).updateUser(any());
     user.setEmail("login@domain.com");
     mockMvc.perform(
-        put("/users/updateUser")
+        put("/users/updateuser")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(user))
     )
@@ -90,7 +90,7 @@ public class UserControllerTest {
     doNothing().when(userService).updateUser(any());
     user.setEmail("invalid-login.domain.com");
     mockMvc.perform(
-        put("/users/updateUser")
+        put("/users/updateuser")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(user))
     )

@@ -23,32 +23,32 @@ public class PollsController {
   @Autowired
   private PollsService pollsService;
 
-  @RequestMapping(value = "/getAll", method = RequestMethod.GET)
+  @RequestMapping(value = "/getall", method = RequestMethod.GET)
   public List<Poll> getPolls(@RequestParam(name = "addressid") long addressId)
       throws AddressNotPresentException {
     return pollsService.getPolls(addressId);
   }
 
-  @RequestMapping(value = "/getPoll", method = RequestMethod.GET)
-  public Poll getPollById(@RequestParam("id") long id)
+  @RequestMapping(value = "/getpoll", method = RequestMethod.GET)
+  public Poll getPollById(@RequestParam(name = "id") long id)
       throws PollNotFoundException {
     return pollsService.getPollById(id);
   }
 
-  @RequestMapping(value = "/admin/addPoll", method = RequestMethod.POST)
+  @RequestMapping(value = "/admin/addpoll", method = RequestMethod.POST)
   public Poll addPoll(@RequestBody Poll poll)
       throws PollIncorrectException, AddressNotPresentException, AccessDeniedException {
     return pollsService.addPoll(poll);
   }
 
-  @RequestMapping(value = "/admin/updatePoll", method = RequestMethod.PUT)
+  @RequestMapping(value = "/admin/updatepoll", method = RequestMethod.PUT)
   public void updatePoll(@RequestBody Poll poll)
       throws PollNotFoundException, AddressNotPresentException, AccessDeniedException {
     pollsService.updatePoll(poll);
   }
 
-  @RequestMapping(value = "/admin/deletePoll", method = RequestMethod.DELETE)
-  public void deletePoll(@RequestParam("id") long id)
+  @RequestMapping(value = "/admin/deletepoll", method = RequestMethod.DELETE)
+  public void deletePoll(@RequestParam(name = "id") long id)
       throws PollNotFoundException, AccessDeniedException {
     pollsService.deletePoll(id);
   }
