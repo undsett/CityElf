@@ -14,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ShutdownsInfoService {
@@ -34,7 +31,7 @@ public class ShutdownsInfoService {
   @Autowired
   private AddressService addressService;
 
-  public Map<String, Object> getAllForecasts(String address) throws AddressException {
+  public List<Map<String, Object>> getAllForecasts(String address) throws AddressException {
     Address addressFound = addressService.getAddress(address)
         .orElseThrow(() -> new AddressNotPresentException());
     List<WaterForecast> forecastWater = waterForecastRepository.findByAddress(addressFound);
@@ -42,20 +39,28 @@ public class ShutdownsInfoService {
         .findByAddress(addressFound);
     List<GasForecast> forecastGas = gasForecastRepository
         .findByAddress(addressFound);
-    Map<String, Object> forecastMap = new HashMap<>();
+
+    List<Map<String, Object>> forecasts = new ArrayList<>();
 
     for (Object f : forecastWater) {
+      Map<String, Object> forecastMap = new HashMap<>();
       forecastMap.put("Water", f);
+      forecasts.add(forecastMap);
     }
 
     for (Object f : forecastElectricity) {
+      Map<String, Object> forecastMap = new HashMap<>();
       forecastMap.put("Electricity", f);
+      forecasts.add(forecastMap);
     }
 
     for (Object f : forecastGas) {
+      Map<String, Object> forecastMap = new HashMap<>();
       forecastMap.put("Gas", f);
+      forecasts.add(forecastMap);
     }
-    return forecastMap;
+
+    return forecasts;
   }
 
 }
