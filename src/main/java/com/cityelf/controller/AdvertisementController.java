@@ -23,32 +23,32 @@ public class AdvertisementController {
   @Autowired
   private AdvertisementService advertisementService;
 
-  @RequestMapping(value = "/getAll", method = RequestMethod.GET)
-  public List<Advertisement> getAdvertisements(@RequestParam(name = "addressid") long addressId)
+  @RequestMapping(value = "/getall", method = RequestMethod.GET)
+  public List<Advertisement> getAdvertisements(@RequestParam(name = "addressid") long addressid)
       throws AddressNotPresentException {
-    return advertisementService.getAdvertisements(addressId);
+    return advertisementService.getAdvertisements(addressid);
   }
 
-  @RequestMapping(value = "/getAdvertisement", method = RequestMethod.GET)
-  public Advertisement getAdvertisementById(@RequestParam("id") long id)
+  @RequestMapping(value = "/getadvertisement", method = RequestMethod.GET)
+  public Advertisement getAdvertisementById(@RequestParam(name = "id") long id)
       throws AdvertisementNotFoundException {
     return advertisementService.getAdvertisementById(id);
   }
 
-  @RequestMapping(value = "/admin/addAdvertisement", method = RequestMethod.POST)
+  @RequestMapping(value = "/admin/addadvertisement", method = RequestMethod.POST)
   public Advertisement addAdvertisement(@RequestBody Advertisement advertisement)
       throws AdvertisementIncorrectException, AddressNotPresentException, AccessDeniedException {
     return advertisementService.addAdvertisement(advertisement);
   }
 
-  @RequestMapping(value = "/admin/updateAdvertisement", method = RequestMethod.PUT)
+  @RequestMapping(value = "/admin/updateadvertisement", method = RequestMethod.PUT)
   public Advertisement updateAdvertisement(@RequestBody Advertisement advertisement)
       throws AdvertisementNotFoundException, AddressNotPresentException, AccessDeniedException {
     return advertisementService.updateAdvertisement(advertisement);
   }
 
-  @RequestMapping(value = "/admin/deleteAdvertisement", method = RequestMethod.DELETE)
-  public void deleteAdvertisement(@RequestParam("id") long id)
+  @RequestMapping(value = "/admin/deleteadvertisement", method = RequestMethod.DELETE)
+  public void deleteAdvertisement(@RequestParam(name = "id") long id)
       throws AdvertisementNotFoundException, AccessDeniedException {
     advertisementService.deleteAdvertisement(id);
   }

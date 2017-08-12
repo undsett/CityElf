@@ -24,12 +24,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/forecasts/startcollector", "/feedback/get/**").hasAuthority("SYSTEM_ROLE")
         .antMatchers("/advertisements/admin/**", "/polls/admin/**").hasAuthority("ADMIN_ROLE")
         .antMatchers(
-            "/users/updateUser",
+            "/users/updateuser",
             "/users/*",
-            "/advertisements/getAll",
-            "/advertisements/getAdvertisement",
-            "/polls/getAll",
-            "/polls/getPoll",
+            "/advertisements/getall",
+            "/advertisements/getadvertisement",
+            "/polls/getall",
+            "/polls/getpoll",
             "/peoplereport/add",
             "/voting/*",
             "/voting/**"

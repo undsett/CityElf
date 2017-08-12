@@ -72,19 +72,20 @@ public class UserController {
     return userService.getAll();
   }
 
-  @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-  public User getUser(@PathVariable("userId") long id) throws UserException {
+  @RequestMapping(value = "/{userid}", method = RequestMethod.GET)
+  public User getUser(@PathVariable(name = "userid") long id) throws UserException {
     return userService.getUser(id);
   }
 
-  @RequestMapping(value = "/updateAnonim", method = RequestMethod.PUT)
+  @RequestMapping(value = "/updateanonim", method = RequestMethod.PUT)
   public void updateAnonim(@RequestBody User user)
       throws UserException, AddressException {
     userService.updateAnonime(user);
   }
 
-  @RequestMapping(value = "/updateUser", method = RequestMethod.PUT)
-  public User updateUser(@RequestBody @Valid User user, BindingResult bindingResult)
+
+  @RequestMapping(value = "/updateuser", method = RequestMethod.PUT)
+  public void updateUser(@RequestBody @Valid User user, BindingResult bindingResult)
       throws UserException, AddressException, AccessDeniedException {
     if (bindingResult.hasErrors()) {
       String errorMessage = bindingResult.getFieldErrors()
@@ -104,8 +105,8 @@ public class UserController {
     }
   }
 
-  @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
-  public void deleteUser(@PathVariable("userId") long id)
+  @RequestMapping(value = "/{userid}", method = RequestMethod.DELETE)
+  public void deleteUser(@PathVariable(name = "userid") long id)
       throws UserException, AccessDeniedException {
     userService.deleteUser(id);
   }
@@ -115,6 +116,4 @@ public class UserController {
       throws UserNotFoundException {
     userService.unionRecords(fireBaseID);
   }
-
-
 }
