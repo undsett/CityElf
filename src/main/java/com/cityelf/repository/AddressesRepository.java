@@ -36,4 +36,15 @@ public interface AddressesRepository extends CrudRepository<Address, Long> {
   List<Address> findSimilarAddress(String address, String number);
 
   List<Address> findByAddressInOrAddressUaIn(List<String> addresses, List<String> addressesUa);
+
+  @Query(value = "select distinct SUBSTRING_INDEX(tmp,' [',1) as unique_names "
+      + "from ("
+      + "select SUBSTRING_INDEX(SUBSTRING_INDEX(street,',',1),' (', 1) as tmp "
+      + "from addresses "
+      + "union "
+      + "select SUBSTRING_INDEX(SUBSTRING_INDEX(street_ua,',',1),' (', 1) as tmp "
+      + "from addresses) p "
+      + "WHERE tmp IS NOT NULL",
+      nativeQuery = true)
+  List<String> getUniqueStreetsNames();
 }
