@@ -160,7 +160,7 @@ public class UserService {
     userRepository.save(userFromDb);
   }
 
-  public void updateUser(User user) throws UserException, AddressException, AccessDeniedException {
+  public User updateUser(User user) throws UserException, AddressException, AccessDeniedException {
     if (securityService.getUserFromSession().getId() != user.getId()) {
       throw new AccessDeniedException();
     }
@@ -179,7 +179,7 @@ public class UserService {
         ReflectionUtils.setField(field, userFromDb, remoteUserValue);
       }
     }
-    userRepository.save(userFromDb);
+    return userRepository.save(userFromDb);
   }
 
   public void deleteUser(long id) throws UserNotFoundException, AccessDeniedException {
