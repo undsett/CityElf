@@ -83,6 +83,7 @@ public class UserController {
     userService.updateAnonime(user);
   }
 
+
   @RequestMapping(value = "/updateuser", method = RequestMethod.PUT)
   public void updateUser(@RequestBody @Valid User user, BindingResult bindingResult)
       throws UserException, AddressException, AccessDeniedException {
@@ -94,7 +95,7 @@ public class UserController {
       throw new UserValidationException(errorMessage);
     }
     try {
-      userService.updateUser(user);
+      return userService.updateUser(user);
     } catch (AddressNotPresentException ex) {
       mailSenderService.sendMeAsync(
           applicationEmail,

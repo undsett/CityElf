@@ -74,7 +74,7 @@ public class UserControllerTest {
 
   @Test
   public void updateUserShouldReturnHttpStatusOk200() throws Exception {
-    doNothing().when(userService).updateUser(any());
+    when(userService.updateUser(any())).thenReturn(user);
     user.setEmail("login@domain.com");
     mockMvc.perform(
         put("/users/updateuser")
@@ -87,7 +87,7 @@ public class UserControllerTest {
 
   @Test
   public void updateUserShouldReturnHttpStatusBadRequest400() throws Exception {
-    doNothing().when(userService).updateUser(any());
+    when(userService.updateUser(any())).thenReturn(user);
     user.setEmail("invalid-login.domain.com");
     mockMvc.perform(
         put("/users/updateuser")

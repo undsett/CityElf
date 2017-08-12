@@ -90,4 +90,8 @@ public class AddressService {
     }
     return resolvedAddresses;
   }
+
+  public List<String> getUniqueStreetsNames() {
+    return addressesRepository.getUniqueStreetsNames();
+  }
 }
