@@ -81,13 +81,15 @@ public class ShutdownInfoControllerTest {
     when(shutdownsInfoService.getAllForecasts(any(String.class)))
         .thenReturn(list);
 
+    List<Map<String, Object>> forecasts = new ArrayList<>();
     Map<String, Object> expectedMap = new HashMap<>();
     expectedMap.put("Water", waterForecast);
+    forecasts.add(expectedMap);
 
     mockMvc.perform(get("/allforecasts/get")
         .param("start", waterForecast.getStart().toString())
         .param("address", waterForecast.getAddress().getAddress()))
         .andDo(print())
-        .andExpect(content().string(objectToJson(expectedMap)));
+        .andExpect(content().string(objectToJson(forecasts)));
   }
 }
