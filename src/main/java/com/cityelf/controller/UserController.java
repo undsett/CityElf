@@ -85,7 +85,7 @@ public class UserController {
 
 
   @RequestMapping(value = "/updateuser", method = RequestMethod.PUT)
-  public void updateUser(@RequestBody @Valid User user, BindingResult bindingResult)
+  public User updateUser(@RequestBody @Valid User user, BindingResult bindingResult)
       throws UserException, AddressException, AccessDeniedException {
     if (bindingResult.hasErrors()) {
       String errorMessage = bindingResult.getFieldErrors()
