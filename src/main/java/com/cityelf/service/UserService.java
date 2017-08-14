@@ -71,10 +71,7 @@ public class UserService {
     if (userRepository.findByFirebaseId(firebaseId).isPresent()) {
       throw new UserAlreadyExistsException();
     }
-    Address address = addressService.getAddress(addressString)
-        .orElseThrow(() -> new AddressNotPresentException());
-    User user = new User(firebaseId);
-    user.setAddresses(Arrays.asList(address));
+    User user = createUser(firebaseId, addressString);
     user = userRepository.save(user);
     long id = user.getId();
     Set<UserRole> userRoles = roleService.getUserRoles(id);
@@ -83,39 +80,60 @@ public class UserService {
     return id;
   }
 
-  public Map<String, Object> registration(String fireBaseID, String email, String password) {
+  private User createUser(String firebaseId, String addressString) throws AddressException {
+    Address address = addressService.getAddress(addressString)
+        .orElseThrow(() -> new AddressNotPresentException());
+    User user = new User(firebaseId);
+    user.setAddresses(Arrays.asList(address));
+    return user;
+  }
+
+  public Map<String, Object> registration(String fireBaseID, String email, String password,
+      String address)
+      throws AddressException {
     Map<String, Object> map = new HashMap<>();
-    if (fireBaseID.equals("WEB") && userRepository.findByEmail(email) == null) {
-      User newUser = userRepository.save(new User(email, password, "WEB"));
-      String msg =
-          "http://localhost:8088/services/registration/confirm?id=" + newUser.getId()
-              + "&email=" + email;
-      //mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
-      confirmRegistration(newUser.getId(), email);
-      map.put("status", Status.USER_REGISTRATION_OK);
-      map.put("user", newUser);
-      return map;
-    }
-
-    if (!fireBaseID.equals("WEB")) {
-      User existUser = userRepository.findByFirebaseId(fireBaseID).orElse(null);
-      if (existUser != null && userRepository.findByEmail(email) == null) {
-        existUser.setEmail(email);
-        existUser.setPassword(password);
-        userRepository.save(existUser);
-        String msg = "http://localhost:8088/services/registration/confirm?id=" + existUser.getId()
-            + "&email=" + email;
+    if (userRepository.findByEmail(email) == null) {
+      if (fireBaseID.equals("WEB")) {
+        User newUser = userRepository.save(new User(email, password, "WEB"));
+        String msg =
+            "http://localhost:8088/services/registration/confirm?id=" + newUser.getId()
+                + "&email=" + email;
         //mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
-        confirmRegistration(existUser.getId(), email);
+        confirmRegistration(newUser.getId(), email);
         map.put("status", Status.USER_REGISTRATION_OK);
-        map.put("user", existUser);
+        map.put("user", newUser);
         return map;
+      }
 
+      if (!fireBaseID.equals("WEB")) {
+        User existUser = userRepository.findByFirebaseId(fireBaseID).orElse(null);
+        if (existUser != null) {
+          return setUserParams(email, password, map, existUser);
+
+        } else {
+          User user = createUser(fireBaseID, address);
+          return setUserParams(email, password, map, user);
+        }
       }
     }
     map.put("status", Status.EMAIL_EXIST);
     return map;
   }
+
+  private Map<String, Object> setUserParams(String email, String password, Map<String, Object> map,
+      User existUser) {
+    existUser.setEmail(email);
+    existUser.setPassword(password);
+    userRepository.save(existUser);
+    String msg = "http://localhost:8088/services/registration/confirm?id=" + existUser.getId()
+        + "&email=" + email;
+    //mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
+    confirmRegistration(existUser.getId(), email);
+    map.put("status", Status.USER_REGISTRATION_OK);
+    map.put("user", existUser);
+    return map;
+  }
+
 
   public Status confirmRegistration(long id, String email) {
     User user = userRepository.findByEmail(email);
