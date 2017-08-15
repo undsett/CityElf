@@ -25,14 +25,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = ShutdownsInfoController.class, secure = false)
 public class ShutdownInfoControllerTest {
 
-  Map<String, Object> map;
+  List<Map<String, Object>> list;
 
   @Autowired
   private MockMvc mockMvc;
@@ -53,17 +55,19 @@ public class ShutdownInfoControllerTest {
 
   @Before
   public void SetUp() {
-    map = new HashMap<>();
+    list = new ArrayList<>();
+    Map<String, Object> map = new HashMap<>();
     waterForecast = new WaterForecast();
     waterForecast.setAddress(address);
     waterForecast.setStart(LocalDateTime.now());
     map.put("Water", waterForecast);
+    list.add(map);
   }
 
   @Test
   public void getAllForecastsByTimeAndAddressShouldReturnHttpStatusOk200() throws Exception {
     when(shutdownsInfoService.getAllForecasts(any(String.class)))
-        .thenReturn(map);
+        .thenReturn(list);
 
     mockMvc.perform(get("/allforecasts/get")
         .param("start", waterForecast.getStart().toString())
@@ -75,15 +79,17 @@ public class ShutdownInfoControllerTest {
   @Test
   public void getAllForecastsByTimeAndAddressShouldReturnJson() throws Exception {
     when(shutdownsInfoService.getAllForecasts(any(String.class)))
-        .thenReturn(map);
+        .thenReturn(list);
 
+    List<Map<String, Object>> forecasts = new ArrayList<>();
     Map<String, Object> expectedMap = new HashMap<>();
     expectedMap.put("Water", waterForecast);
+    forecasts.add(expectedMap);
 
     mockMvc.perform(get("/allforecasts/get")
         .param("start", waterForecast.getStart().toString())
         .param("address", waterForecast.getAddress().getAddress()))
         .andDo(print())
-        .andExpect(content().string(objectToJson(expectedMap)));
+        .andExpect(content().string(objectToJson(forecasts)));
   }
 }

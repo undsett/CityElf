@@ -65,7 +65,7 @@ public class AdvertisementControllerTest {
     when(advertisementService.getAdvertisements(anyLong()))
         .thenReturn(advertisements);
 
-    mockMvc.perform(get("/advertisements/getAll")
+    mockMvc.perform(get("/advertisements/getall")
         .param("addressid", String.valueOf(address.getId())))
         .andDo(print())
         .andExpect(status().isOk());
@@ -78,7 +78,7 @@ public class AdvertisementControllerTest {
 
     List<Advertisement> expectedList = new ArrayList<>();
 
-    mockMvc.perform(get("/advertisements/getAll")
+    mockMvc.perform(get("/advertisements/getall")
         .param("addressid", String.valueOf(address.getId())))
         .andDo(print())
         .andExpect(content().string(objectToJson(expectedList)));
@@ -90,7 +90,7 @@ public class AdvertisementControllerTest {
     when(advertisementService.getAdvertisementById(anyLong()))
         .thenReturn(advertisement);
 
-    mockMvc.perform(get("/advertisements/getAdvertisement")
+    mockMvc.perform(get("/advertisements/getadvertisement")
         .param("id", String.valueOf(advertisement.getId())))
 
         .andDo(print())
@@ -102,7 +102,7 @@ public class AdvertisementControllerTest {
     when(advertisementService.getAdvertisementById(anyLong()))
         .thenThrow(AdvertisementNotFoundException.class);
 
-    mockMvc.perform(get("/advertisements/getAdvertisement")
+    mockMvc.perform(get("/advertisements/getadvertisement")
         .param("id", String.valueOf(advertisement.getId())))
         .andDo(print())
         .andExpect(status().isNotFound());
@@ -111,7 +111,7 @@ public class AdvertisementControllerTest {
   @Test
   public void addAdvertisementShouldReturnHttpStatusOk200()
       throws Exception {
-    mockMvc.perform(post("/advertisements/admin/addAdvertisement")
+    mockMvc.perform(post("/advertisements/admin/addadvertisement")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(objectToJson(advertisement))
     )
@@ -124,7 +124,7 @@ public class AdvertisementControllerTest {
     advertisement.setDescription("new descpiption");
     advertisement.setSubject("new subject");
     mockMvc.perform(
-        put("/advertisements/admin/updateAdvertisement")
+        put("/advertisements/admin/updateadvertisement")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(advertisement))
     )
@@ -138,7 +138,7 @@ public class AdvertisementControllerTest {
         .updateAdvertisement(any());
     advertisement.setSubject("new subject");
     mockMvc.perform(
-        put("/advertisements/admin/updateAdvertisement")
+        put("/advertisements/admin/updateadvertisement")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(advertisement))
     )
@@ -150,7 +150,7 @@ public class AdvertisementControllerTest {
   public void deleteAdvertisementShouldReturnHttpStatusOk200()
       throws Exception {
     mockMvc.perform(
-        delete("/advertisements/admin/deleteAdvertisement")
+        delete("/advertisements/admin/deleteadvertisement")
             .param("id", String.valueOf(advertisement.getId()))
     )
         .andDo(print())
@@ -162,7 +162,7 @@ public class AdvertisementControllerTest {
     doThrow(AdvertisementNotFoundException.class).when(advertisementService)
         .deleteAdvertisement(anyLong());
     mockMvc.perform(
-        delete("/advertisements/admin/deleteAdvertisement")
+        delete("/advertisements/admin/deleteadvertisement")
             .param("id", String.valueOf(advertisement.getId()))
     )
         .andDo(print())

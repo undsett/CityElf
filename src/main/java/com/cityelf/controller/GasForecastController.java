@@ -5,6 +5,7 @@ import com.cityelf.exceptions.ForecastNotFoundException;
 import com.cityelf.model.Address;
 import com.cityelf.model.GasForecast;
 import com.cityelf.service.GasForecastService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;

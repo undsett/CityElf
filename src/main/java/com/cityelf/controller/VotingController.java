@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -37,11 +36,11 @@ public class VotingController {
     return votingService.getUsersPolls();
   }
 
-  @RequestMapping(value = "/{pollId}", method = RequestMethod.GET)
-  public Poll getPoll(@PathVariable("pollId") long pollId)
+  @RequestMapping(value = "/{pollid}", method = RequestMethod.GET)
+  public Poll getPoll(@PathVariable("pollid") long pollid)
       throws VotingUnavailableException, PollNotFoundException {
-    votingService.isVoted(pollId);
-    return pollsService.getPollById(pollId);
+    votingService.isVoted(pollid);
+    return pollsService.getPollById(pollid);
   }
 
   @RequestMapping(value = "/voice", method = RequestMethod.POST)
@@ -53,12 +52,12 @@ public class VotingController {
     return votingService.giveVoice(voteParam.getPollId(), voteParam.getAnswerId());
   }
 
-  @RequestMapping(value = "/{pollId}/results", method = RequestMethod.GET)
-  public List<VoteResult> viewResults(@PathVariable("pollId") long pollId)
+  @RequestMapping(value = "/{pollid}/results", method = RequestMethod.GET)
+  public List<VoteResult> viewResults(@PathVariable("pollid") long pollid)
       throws VotingUnavailableException, PollAnswerNotFoundException, PollNotFoundException {
-    if (!votingService.isVoted(pollId)) {
+    if (!votingService.isVoted(pollid)) {
       throw new VotedException("Need voice before watching results");
     }
-    return votingService.viewResults(pollId);
+    return votingService.viewResults(pollid);
   }
 }

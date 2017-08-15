@@ -35,9 +35,10 @@ public class RegisterController {
 
   @RequestMapping(value = "/register", method = RequestMethod.POST)
   public Map<String, Object> registration(@RequestParam(name = "firebaseid") String fireBaseID,
-      @RequestParam(name = "email") String email, @RequestParam(name = "password") String password)
-      throws UserAlreadyExistsException {
-    return userService.registration(fireBaseID, email, password);
+      @RequestParam(name = "email") String email, @RequestParam(name = "password") String password,
+      @RequestParam(name = "address") String address)
+      throws UserAlreadyExistsException, AddressException {
+    return userService.registration(fireBaseID, email, password, address);
   }
 
   @RequestMapping(value = "/confirm", method = RequestMethod.GET)

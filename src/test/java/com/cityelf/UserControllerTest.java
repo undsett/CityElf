@@ -64,7 +64,7 @@ public class UserControllerTest {
     doThrow(UserNotFoundException.class).when(userService).updateUser(any());
     user.setEmail("login@domain.com");
     mockMvc.perform(
-        put("/users/updateUser")
+        put("/users/updateuser")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(user))
     )
@@ -74,10 +74,10 @@ public class UserControllerTest {
 
   @Test
   public void updateUserShouldReturnHttpStatusOk200() throws Exception {
-    doNothing().when(userService).updateUser(any());
+    when(userService.updateUser(any())).thenReturn(user);
     user.setEmail("login@domain.com");
     mockMvc.perform(
-        put("/users/updateUser")
+        put("/users/updateuser")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(user))
     )
@@ -87,10 +87,10 @@ public class UserControllerTest {
 
   @Test
   public void updateUserShouldReturnHttpStatusBadRequest400() throws Exception {
-    doNothing().when(userService).updateUser(any());
+    when(userService.updateUser(any())).thenReturn(user);
     user.setEmail("invalid-login.domain.com");
     mockMvc.perform(
-        put("/users/updateUser")
+        put("/users/updateuser")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(user))
     )
