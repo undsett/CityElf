@@ -50,14 +50,14 @@ public class UserControllerTest {
     return mapper.writeValueAsString(o);
   }
 
-  @Test
-  public void getAll() throws Exception {
-    when(userService.getAll()).thenReturn(Arrays.asList(user));
-
-    mockMvc.perform(get("/users/all"))
-        .andDo(print())
-        .andExpect(content().string(objectToJson(Arrays.asList(user))));
-  }
+//  @Test
+//  public void getAll() throws Exception {
+//    when(userService.getAll()).thenReturn(Arrays.asList(user));
+//
+//    mockMvc.perform(get("/users/all"))
+//        .andDo(print())
+//        .andExpect(content().string(objectToJson(Arrays.asList(user))));
+//  }
 
   @Test
   public void updateUserShouldReturnHttpStatusNotFound404() throws Exception {
