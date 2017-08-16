@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
 @Service
 public class UserService {
 
@@ -88,6 +90,7 @@ public class UserService {
     return user;
   }
 
+  @Transactional
   public Map<String, Object> registration(String fireBaseID, String email, String password,
       String address)
       throws AddressException {
@@ -111,8 +114,8 @@ public class UserService {
           return setUserParams(email, password, map, existUser);
 
         } else {
-          User user = createUser(fireBaseID, address);
-          return setUserParams(email, password, map, user);
+          existUser = createUser(fireBaseID, address);
+          return setUserParams(email, password, map, existUser);
         }
       }
     }
@@ -120,14 +123,16 @@ public class UserService {
     return map;
   }
 
+
   private Map<String, Object> setUserParams(String email, String password, Map<String, Object> map,
       User existUser) {
     existUser.setEmail(email);
     existUser.setPassword(password);
+    existUser.setActivated(true);
     userRepository.save(existUser);
-    String msg = "http://localhost:8088/services/registration/confirm?id=" + existUser.getId()
-        + "&email=" + email;
-    //mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
+//    String msg = "http://localhost:8088/services/registration/confirm?id=" + existUser.getId()
+//        + "&email=" + email;
+//    //mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
     confirmRegistration(existUser.getId(), email);
     map.put("status", Status.USER_REGISTRATION_OK);
     map.put("user", existUser);
@@ -138,8 +143,8 @@ public class UserService {
   public Status confirmRegistration(long id, String email) {
     User user = userRepository.findByEmail(email);
     if (user.getId() == id) {
-      user.setActivated(true);
-      userRepository.save(user);
+//      user.setActivated(true);
+//      userRepository.save(user);
       Set<UserRole> userRoles = roleService.getUserRoles(id);
       userRoles.add(new UserRole(id, AUTHORIZED_ROLE));
       roleService.save(userRoles);
