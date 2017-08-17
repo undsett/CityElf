@@ -28,6 +28,12 @@ public class NotificationToken {
 
   public NotificationToken(String street, LocalDateTime begin, LocalDateTime end, long userId) {
     this.timeOfEntry = LocalDateTime.now();
+    if (begin == null) {
+      begin = LocalDateTime.now();
+    }
+    if (end == null) {
+      end = LocalDateTime.now().plusHours(7);
+    }
     this.textHash = street + begin.toString() + end.toString() + userId;
   }
 

@@ -67,10 +67,10 @@ public class UserController {
     }
   }
 
-  @RequestMapping("/all")
+  /*@RequestMapping("/all")
   public List<User> getAll() {
     return userService.getAll();
-  }
+  }*/
 
   @RequestMapping(value = "/{userid}", method = RequestMethod.GET)
   public User getUser(@PathVariable(name = "userid") long id) throws UserException {
