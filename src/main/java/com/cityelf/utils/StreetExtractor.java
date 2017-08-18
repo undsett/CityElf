@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
-class StreetExtractor {
+public class StreetExtractor {
 
   private Pattern namePattern = Pattern.compile("[^,]+");
 

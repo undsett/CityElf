@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -29,7 +29,9 @@ public class AppServerFirebase {
 
     connection.setRequestMethod("POST");
     connection.setRequestProperty("Authorization", "key=" + authentificationKeyFirebase);
+    connection.setRequestProperty("Accept", "application/json");
     connection.setRequestProperty("Content-Type", "application/json");
+    connection.connect();
 
     JSONObject json = new JSONObject();
     json.put("to", firebaseId.trim());
@@ -38,14 +40,13 @@ public class AppServerFirebase {
     fireMessage.put("body", bodyMessage);
     json.put("notification", fireMessage);
 
-    OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+    OutputStream outputStream = connection.getOutputStream();
     try {
-      writer.write(json.toString());
-      writer.flush();
-    } catch (IOException exeption) {
-      exeption.printStackTrace();
+      outputStream.write(json.toString().getBytes());
+    } catch (IOException exception) {
+      exception.printStackTrace();
     } finally {
-      writer.close();
+      outputStream.close();
     }
   }
 }

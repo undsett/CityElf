@@ -1,4 +1,4 @@
-package com.cityelf.utils;
+package com.cityelf.utils.parser.gas.utils;
 
 import com.cityelf.exceptions.GasPageStructureChangedException;
 import com.cityelf.exceptions.ParserUnavailableException;
@@ -11,12 +11,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-class GasLoader {
+public class GasLoader {
 
   @Value("${odgaz.url}")
   private String webPage;
 
-  Elements getNeededNews(String dateToCheckRegex, String newsTheme)
+  public Elements getNeededNews(String dateToCheckRegex, String newsTheme)
       throws ParserUnavailableException {
     Elements neededNews = new Elements();
     Element newsHeader;

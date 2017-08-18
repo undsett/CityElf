@@ -17,13 +17,15 @@ public class ForgotPasswordController {
   private ForgotPasswordService forgotPasswordService;
 
   @RequestMapping(value = "/reset", method = RequestMethod.POST)
-  public void forgotPassword(@RequestParam String email) throws UserNotFoundException {
+  public void forgotPassword(@RequestParam(name = "email") String email)
+      throws UserNotFoundException {
     forgotPasswordService.forgotPassword(email);
   }
 
-  @RequestMapping(value = "/newPassword", method = RequestMethod.POST)
-  public void enterNewPassword(@RequestParam String token, @RequestParam String newPassword)
+  @RequestMapping(value = "/newpassword", method = RequestMethod.POST)
+  public void enterNewPassword(@RequestParam(name = "token") String token,
+      @RequestParam(name = "newpassword") String newpassword)
       throws Exception {
-    forgotPasswordService.settingNewPassword(token, newPassword);
+    forgotPasswordService.settingNewPassword(token, newpassword);
   }
 }
