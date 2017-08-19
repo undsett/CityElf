@@ -130,9 +130,6 @@ public class UserService {
     existUser.setPassword(password);
     existUser.setActivated(true);
     userRepository.save(existUser);
-//    String msg = "http://localhost:8088/services/registration/confirm?id=" + existUser.getId()
-//        + "&email=" + email;
-//    //mailSenderService.sendMail(email, "Confirm registration CityELF", msg);
     confirmRegistration(existUser.getId(), email);
     map.put("status", Status.USER_REGISTRATION_OK);
     map.put("user", existUser);
@@ -142,8 +139,6 @@ public class UserService {
   public Status confirmRegistration(long id, String email) {
     User user = userRepository.findByEmail(email);
     if (user.getId() == id) {
-//      user.setActivated(true);
-//      userRepository.save(user);
       Set<UserRole> userRoles = roleService.getUserRoles(id);
       userRoles.add(new UserRole(id, AUTHORIZED_ROLE));
       roleService.save(userRoles);
