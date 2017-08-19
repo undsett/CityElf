@@ -22,8 +22,7 @@ public enum RoadType {
   private static Pattern boulevardPattern = Pattern
       .compile("^бульвар[\\s,]|\\sбульвар[\\s,]*|^бул[\\s\\.]|\\sбул[\\s\\.]");
   private static Pattern descentPattern = Pattern
-      .compile(
-          "^сп[\\s\\.]|\\sсп[\\s\\.]|^спуск[\\s,]|\\sспуск[\\s,]*|^узв.з[\\s,]|\\sузв.з[\\s,]");
+      .compile("^сп[\\s\\.]|\\sсп[\\s\\.]|^спуск[\\s,]|\\sспуск[\\s,]*|^узв.з[\\s,]|\\sузв.з[\\s,]");
   private static Pattern linePattern = Pattern.compile("[\\s-]линия");
 
   public static RoadType getRoadType(String streetName) {
