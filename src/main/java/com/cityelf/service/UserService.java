@@ -139,7 +139,6 @@ public class UserService {
     return map;
   }
 
-
   public Status confirmRegistration(long id, String email) {
     User user = userRepository.findByEmail(email);
     if (user.getId() == id) {
