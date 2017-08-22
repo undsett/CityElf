@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/peoplereport")
+@RequestMapping("/services/peoplereport")
 public class ShutdownReportController {
 
   @Autowired

@@ -69,7 +69,7 @@ public class ShutdownInfoControllerTest {
     when(shutdownsInfoService.getAllForecasts(any(String.class)))
         .thenReturn(list);
 
-    mockMvc.perform(get("/allforecasts/get")
+    mockMvc.perform(get("/services/allforecasts/get")
         .param("start", waterForecast.getStart().toString())
         .param("address", waterForecast.getAddress().getAddress()))
         .andDo(print())
@@ -86,7 +86,7 @@ public class ShutdownInfoControllerTest {
     expectedMap.put("Water", waterForecast);
     forecasts.add(expectedMap);
 
-    mockMvc.perform(get("/allforecasts/get")
+    mockMvc.perform(get("/services/allforecasts/get")
         .param("start", waterForecast.getStart().toString())
         .param("address", waterForecast.getAddress().getAddress()))
         .andDo(print())

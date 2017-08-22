@@ -65,7 +65,7 @@ public class ElectricityForecastControllerTest {
   public void getAll() throws Exception {
     when(electricityForecastService.getAll()).thenReturn(Arrays.asList(electricityForecast));
 
-    mockMvc.perform(get("/electricityforecast/all"))
+    mockMvc.perform(get("/services/electricityforecast/all"))
         .andDo(print())
         .andExpect(content().string(objectToJson(Arrays.asList(electricityForecast))));
   }
@@ -75,7 +75,7 @@ public class ElectricityForecastControllerTest {
     when(electricityForecastService.getForecast(anyInt()))
         .thenThrow(ForecastNotFoundException.class);
 
-    mockMvc.perform(get("/electricityforecast/1"))
+    mockMvc.perform(get("/services/electricityforecast/1"))
         .andDo(print())
         .andExpect(status().isNotFound());
   }
@@ -85,7 +85,7 @@ public class ElectricityForecastControllerTest {
     when(electricityForecastService.getForecast(anyInt()))
         .thenReturn(electricityForecast);
 
-    mockMvc.perform(get("/electricityforecast/2"))
+    mockMvc.perform(get("/services/electricityforecast/2"))
         .andDo(print())
         .andExpect(status().isOk());
   }
@@ -95,7 +95,7 @@ public class ElectricityForecastControllerTest {
     when(electricityForecastService.getForecast(anyInt()))
         .thenReturn(electricityForecast);
 
-    mockMvc.perform(get("/electricityforecast/2"))
+    mockMvc.perform(get("/services/electricityforecast/2"))
         .andDo(print())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(content().string(objectToJson(electricityForecast)));
@@ -131,7 +131,7 @@ public class ElectricityForecastControllerTest {
     when(electricityForecastService.getForecastsByTime(any(LocalDateTime.class)))
         .thenReturn(Arrays.asList(electricityForecast));
 
-    mockMvc.perform(get("/electricityforecast/getbystart")
+    mockMvc.perform(get("/services/electricityforecast/getbystart")
         .param("start", electricityForecast.getStart().toString()))
         .andDo(print())
         .andExpect(status().isOk());
@@ -142,7 +142,7 @@ public class ElectricityForecastControllerTest {
     when(electricityForecastService.getForecastsByTime(any(LocalDateTime.class)))
         .thenReturn(Arrays.asList(electricityForecast));
 
-    mockMvc.perform(get("/electricityforecast/getbystart")
+    mockMvc.perform(get("/services/electricityforecast/getbystart")
         .param("start", electricityForecast.getStart().toString()))
         .andDo(print())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
@@ -154,7 +154,7 @@ public class ElectricityForecastControllerTest {
     when(electricityForecastService.getCurrentElectricityForecasts(any(LocalDateTime.class)))
         .thenReturn(Arrays.asList(electricityForecast));
 
-    mockMvc.perform(get("/electricityforecast/getcurrent"))
+    mockMvc.perform(get("/services/electricityforecast/getcurrent"))
         .andDo(print())
         .andExpect(status().isOk());
   }
@@ -165,7 +165,7 @@ public class ElectricityForecastControllerTest {
     when(electricityForecastService.getCurrentElectricityForecasts(any(LocalDateTime.class)))
         .thenReturn(Arrays.asList(electricityForecast));
 
-    mockMvc.perform(get("/electricityforecast/getcurrent"))
+    mockMvc.perform(get("/services/electricityforecast/getcurrent"))
         .andDo(print())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(content().string(objectToJson(Arrays.asList(electricityForecast))));
@@ -176,7 +176,7 @@ public class ElectricityForecastControllerTest {
     when(electricityForecastService.getAddressesByTime(any(LocalDateTime.class)))
         .thenReturn(new HashSet(Arrays.asList(address)));
 
-    mockMvc.perform(get("/electricityforecast/getaddressesbytime")
+    mockMvc.perform(get("/services/electricityforecast/getaddressesbytime")
         .param("start", electricityForecast.getStart().toString()))
         .andDo(print())
         .andExpect(status().isOk());
@@ -187,7 +187,7 @@ public class ElectricityForecastControllerTest {
     when(electricityForecastService.getAddressesByTime(any(LocalDateTime.class)))
         .thenReturn(new HashSet(Arrays.asList(address)));
 
-    mockMvc.perform(get("/electricityforecast/getaddressesbytime")
+    mockMvc.perform(get("/services/electricityforecast/getaddressesbytime")
         .param("start", electricityForecast.getStart().toString()))
         .andDo(print())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
@@ -198,7 +198,7 @@ public class ElectricityForecastControllerTest {
   public void addNewElectricityForecastShouldReturnHttpStatusOk200() throws Exception {
     doNothing().when(electricityForecastService).addNewElectricityForecast(any());
 
-    mockMvc.perform(post("/electricityforecast/addnew")
+    mockMvc.perform(post("/services/electricityforecast/addnew")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(objectToJson(electricityForecast))
     )
@@ -211,7 +211,7 @@ public class ElectricityForecastControllerTest {
     doNothing().when(electricityForecastService).updateElectricityForecast(any());
 
     mockMvc.perform(
-        put("/electricityforecast/update")
+        put("/services/electricityforecast/update")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(electricityForecast))
     )
@@ -225,7 +225,7 @@ public class ElectricityForecastControllerTest {
         .updateElectricityForecast(any());
 
     mockMvc.perform(
-        put("/electricityforecast/update")
+        put("/services/electricityforecast/update")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(electricityForecast))
     )
@@ -236,7 +236,7 @@ public class ElectricityForecastControllerTest {
   @Test
   public void deleteElectricityForecastShouldReturnHttpStatusOk200() throws Exception {
     mockMvc.perform(
-        delete("/electricityforecast/delete")
+        delete("/services/electricityforecast/delete")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(electricityForecast))
     )
@@ -250,7 +250,7 @@ public class ElectricityForecastControllerTest {
         .deleteElectricityForecast(any());
 
     mockMvc.perform(
-        delete("/electricityforecast/delete")
+        delete("/services/electricityforecast/delete")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(electricityForecast))
     )
@@ -261,7 +261,7 @@ public class ElectricityForecastControllerTest {
   @Test
   public void deleteElectricityForecastsByTimeShouldReturnHttpStatusOk200() throws Exception {
     mockMvc.perform(
-        delete("/electricityforecast/deleteallbytime")
+        delete("/services/electricityforecast/deleteallbytime")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(LocalDateTime.now()))
     )
