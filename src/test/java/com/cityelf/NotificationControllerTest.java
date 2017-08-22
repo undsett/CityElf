@@ -43,7 +43,7 @@ public class NotificationControllerTest {
     when(notificationService.getNotification(anyInt()))
         .thenThrow(UserNotFoundException.class);
 
-    mockMvc.perform(get("/notification/settings/1"))
+    mockMvc.perform(get("/services/notification/settings/1"))
         .andDo(print())
         .andExpect(status().isNotFound());
   }
@@ -53,7 +53,7 @@ public class NotificationControllerTest {
     when(notificationService.getNotification(anyInt()))
         .thenReturn(Optional.of(notification));
 
-    mockMvc.perform(get("/notification/settings/2"))
+    mockMvc.perform(get("/services/notification/settings/2"))
         .andDo(print())
         .andExpect(status().isOk());
 
@@ -64,7 +64,7 @@ public class NotificationControllerTest {
     when(notificationService.getNotification(anyInt()))
         .thenReturn(Optional.of(notification));
 
-    mockMvc.perform(get("/notification/settings/3"))
+    mockMvc.perform(get("/services/notification/settings/3"))
         .andDo(print())
         .andExpect(content().contentTypeCompatibleWith("application/json"))
         .andExpect(content().string(objectToJson(notification)));

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/allforecasts")
+@RequestMapping("/services/allforecasts")
 public class ShutdownsInfoController {
 
   @Autowired

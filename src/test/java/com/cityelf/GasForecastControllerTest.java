@@ -65,7 +65,7 @@ public class GasForecastControllerTest {
   public void getAll() throws Exception {
     when(gasForecastService.getAll()).thenReturn(Arrays.asList(gasForecast));
 
-    mockMvc.perform(get("/gasforecast/all"))
+    mockMvc.perform(get("/services/gasforecast/all"))
         .andDo(print())
         .andExpect(content().string(objectToJson(Arrays.asList(gasForecast))));
   }
@@ -85,7 +85,7 @@ public class GasForecastControllerTest {
     when(gasForecastService.getForecast(anyInt()))
         .thenReturn(gasForecast);
 
-    mockMvc.perform(get("/gasforecast/2"))
+    mockMvc.perform(get("/services/gasforecast/2"))
         .andDo(print())
         .andExpect(status().isOk());
   }
@@ -95,7 +95,7 @@ public class GasForecastControllerTest {
     when(gasForecastService.getForecast(anyInt()))
         .thenReturn(gasForecast);
 
-    mockMvc.perform(get("/gasforecast/2"))
+    mockMvc.perform(get("/services/gasforecast/2"))
         .andDo(print())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(content().string(objectToJson(gasForecast)));
@@ -131,7 +131,7 @@ public class GasForecastControllerTest {
     when(gasForecastService.getForecastsByTime(any(LocalDateTime.class)))
         .thenReturn(Arrays.asList(gasForecast));
 
-    mockMvc.perform(get("/gasforecast/getbystart")
+    mockMvc.perform(get("/services/gasforecast/getbystart")
         .param("start", gasForecast.getStart().toString()))
         .andDo(print())
         .andExpect(status().isOk());
@@ -142,7 +142,7 @@ public class GasForecastControllerTest {
     when(gasForecastService.getForecastsByTime(any(LocalDateTime.class)))
         .thenReturn(Arrays.asList(gasForecast));
 
-    mockMvc.perform(get("/gasforecast/getbystart")
+    mockMvc.perform(get("/services/gasforecast/getbystart")
         .param("start", gasForecast.getStart().toString()))
         .andDo(print())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
@@ -154,7 +154,7 @@ public class GasForecastControllerTest {
     when(gasForecastService.getCurrentGasForecasts(any(LocalDateTime.class)))
         .thenReturn(Arrays.asList(gasForecast));
 
-    mockMvc.perform(get("/gasforecast/getcurrent"))
+    mockMvc.perform(get("/services/gasforecast/getcurrent"))
         .andDo(print())
         .andExpect(status().isOk());
   }
@@ -165,7 +165,7 @@ public class GasForecastControllerTest {
     when(gasForecastService.getCurrentGasForecasts(any(LocalDateTime.class)))
         .thenReturn(Arrays.asList(gasForecast));
 
-    mockMvc.perform(get("/gasforecast/getcurrent"))
+    mockMvc.perform(get("/services/gasforecast/getcurrent"))
         .andDo(print())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(content().string(objectToJson(Arrays.asList(gasForecast))));
@@ -176,7 +176,7 @@ public class GasForecastControllerTest {
     when(gasForecastService.getAddressesByTime(any(LocalDateTime.class)))
         .thenReturn(new HashSet(Arrays.asList(address)));
 
-    mockMvc.perform(get("/gasforecast/getaddressesbytime")
+    mockMvc.perform(get("/services/gasforecast/getaddressesbytime")
         .param("start", gasForecast.getStart().toString()))
         .andDo(print())
         .andExpect(status().isOk());
@@ -187,7 +187,7 @@ public class GasForecastControllerTest {
     when(gasForecastService.getAddressesByTime(any(LocalDateTime.class)))
         .thenReturn(new HashSet(Arrays.asList(address)));
 
-    mockMvc.perform(get("/gasforecast/getaddressesbytime")
+    mockMvc.perform(get("/services/gasforecast/getaddressesbytime")
         .param("start", gasForecast.getStart().toString()))
         .andDo(print())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
@@ -198,7 +198,7 @@ public class GasForecastControllerTest {
   public void addNewGasForecastShouldReturnHttpStatusOk200() throws Exception {
     doNothing().when(gasForecastService).addNewGasForecast(any());
 
-    mockMvc.perform(post("/gasforecast/addnew")
+    mockMvc.perform(post("/services/gasforecast/addnew")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(objectToJson(gasForecast))
     )
@@ -211,7 +211,7 @@ public class GasForecastControllerTest {
     doNothing().when(gasForecastService).updateGasForecast(any());
 
     mockMvc.perform(
-        put("/gasforecast/update")
+        put("/services/gasforecast/update")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(gasForecast))
     )
@@ -224,7 +224,7 @@ public class GasForecastControllerTest {
     doThrow(ForecastNotFoundException.class).when(gasForecastService).updateGasForecast(any());
 
     mockMvc.perform(
-        put("/gasforecast/update")
+        put("/services/gasforecast/update")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(gasForecast))
     )
@@ -235,7 +235,7 @@ public class GasForecastControllerTest {
   @Test
   public void deleteGasForecastShouldReturnHttpStatusOk200() throws Exception {
     mockMvc.perform(
-        delete("/gasforecast/delete")
+        delete("/services/gasforecast/delete")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(gasForecast))
     )
@@ -248,7 +248,7 @@ public class GasForecastControllerTest {
     doThrow(ForecastNotFoundException.class).when(gasForecastService).deleteGasForecast(any());
 
     mockMvc.perform(
-        delete("/gasforecast/delete")
+        delete("/services/gasforecast/delete")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(gasForecast))
     )
@@ -259,7 +259,7 @@ public class GasForecastControllerTest {
   @Test
   public void deleteGasForecastsByTimeShouldReturnHttpStatusOk200() throws Exception {
     mockMvc.perform(
-        delete("/gasforecast/deleteallbytime")
+        delete("/services/gasforecast/deleteallbytime")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(LocalDateTime.now()))
     )
