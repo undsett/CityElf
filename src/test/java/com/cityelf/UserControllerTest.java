@@ -64,7 +64,7 @@ public class UserControllerTest {
     doThrow(UserNotFoundException.class).when(userService).updateUser(any());
     user.setEmail("login@domain.com");
     mockMvc.perform(
-        put("/users/updateuser")
+        put("/services/users/updateuser")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(user))
     )
@@ -77,7 +77,7 @@ public class UserControllerTest {
     when(userService.updateUser(any())).thenReturn(user);
     user.setEmail("login@domain.com");
     mockMvc.perform(
-        put("/users/updateuser")
+        put("/services/users/updateuser")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(user))
     )
@@ -90,7 +90,7 @@ public class UserControllerTest {
     when(userService.updateUser(any())).thenReturn(user);
     user.setEmail("invalid-login.domain.com");
     mockMvc.perform(
-        put("/users/updateuser")
+        put("/services/users/updateuser")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(objectToJson(user))
     )
@@ -103,7 +103,7 @@ public class UserControllerTest {
     when(userService.getUser(anyInt()))
         .thenThrow(UserNotFoundException.class);
 
-    mockMvc.perform(get("/users/1"))
+    mockMvc.perform(get("/services/users/1"))
         .andDo(print())
         .andExpect(status().isNotFound());
   }
@@ -113,7 +113,7 @@ public class UserControllerTest {
     when(userService.getUser(anyInt()))
         .thenReturn(user);
 
-    mockMvc.perform(get("/users/2"))
+    mockMvc.perform(get("/services/users/2"))
         .andDo(print())
         .andExpect(status().isOk());
   }
@@ -123,7 +123,7 @@ public class UserControllerTest {
     when(userService.getUser(anyInt()))
         .thenReturn(user);
 
-    mockMvc.perform(get("/users/2"))
+    mockMvc.perform(get("/services/users/2"))
         .andDo(print())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(content().string(objectToJson(user)));
@@ -133,14 +133,14 @@ public class UserControllerTest {
   public void deleteUserShouldReturnHttpStatusNotFound404() throws Exception {
     doThrow(UserNotFoundException.class).when(userService).deleteUser(anyInt());
 
-    mockMvc.perform(delete("/users/1"))
+    mockMvc.perform(delete("/services/users/1"))
         .andDo(print())
         .andExpect(status().isNotFound());
   }
 
   @Test
   public void deleteUserShouldReturnHttpStatusOk200() throws Exception {
-    mockMvc.perform(delete("/users/2"))
+    mockMvc.perform(delete("/services/users/2"))
         .andDo(print())
         .andExpect(status().isOk());
   }

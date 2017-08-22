@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/electricityforecast")
+@RequestMapping("/services/electricityforecast")
 public class ElectricityForecastController {
 
   @Autowired

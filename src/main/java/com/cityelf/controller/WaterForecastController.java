@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/waterforecast")
+@RequestMapping("/services/waterforecast")
 public class WaterForecastController {
 
   @Autowired
