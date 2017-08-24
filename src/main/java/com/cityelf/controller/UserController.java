@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/services/users")
 public class UserController {
 
   @Autowired
