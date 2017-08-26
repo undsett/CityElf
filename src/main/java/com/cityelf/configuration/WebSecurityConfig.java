@@ -21,23 +21,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     http
         .authorizeRequests()
         .antMatchers("/").permitAll()
-        .antMatchers("/forecasts/startcollector", "/feedback/get/**").hasAuthority("SYSTEM_ROLE")
-        .antMatchers("/advertisements/admin/**", "/polls/admin/**").hasAuthority("ADMIN_ROLE")
+        .antMatchers("/services/forecasts/startcollector", "/services/feedback/get/**")
+        .hasAuthority("SYSTEM_ROLE")
+        .antMatchers("/services/advertisements/admin/**", "/services/polls/admin/**")
+        .hasAuthority("ADMIN_ROLE")
         .antMatchers(
-            "/users/updateuser",
-            "/users/*",
-            "/advertisements/getall",
-            "/advertisements/getadvertisement",
-            "/polls/getall",
-            "/polls/getpoll",
-            "/peoplereport/add",
-            "/voting/*",
-            "/voting/**"
+            "/services/users/updateuser",
+            "/services/users/*",
+            "/services/advertisements/getall",
+            "/services/advertisements/getadvertisement",
+            "/services/polls/getall",
+            "/services/polls/getpoll",
+            "/services/peoplereport/add",
+            "/services/voting/*",
+            "/services/voting/**"
         ).hasAuthority("AUTHORIZED_ROLE")
         .antMatchers(
-            "/waterforecast/**",
-            "/electricityforecast/**",
-            "/gasforecast/**"
+            "/services/waterforecast/**",
+            "/services/electricityforecast/**",
+            "/services/gasforecast/**"
         ).hasAuthority("UTILITYADMIN_ROLE")
         .and()
         .httpBasic()

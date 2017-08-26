@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/feedback")
+@RequestMapping("/services/feedback")
 public class FeedbackController {
 
   @Autowired
