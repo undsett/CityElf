@@ -4,6 +4,7 @@ import com.cityelf.model.Address;
 import com.cityelf.model.ElectricityForecast;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,4 +27,7 @@ public interface ElectricityForecastRepository extends CrudRepository<Electricit
 
   List<ElectricityForecast> findElectricityForecastsByStartLessThanEqualAndEstimatedStopGreaterThan(
       LocalDateTime checkStart, LocalDateTime checkEnd);
+
+  @Transactional
+  void deleteByStartBefore(LocalDateTime timeOfEntry);
 }

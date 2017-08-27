@@ -5,6 +5,7 @@ import com.cityelf.model.GasForecast;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,4 +28,7 @@ public interface GasForecastRepository extends CrudRepository<GasForecast, Long>
 
   List<GasForecast> findGasForecastsByStartLessThanEqualAndEstimatedStopGreaterThan(
       LocalDateTime checkStart, LocalDateTime checkEnd);
+
+  @Transactional
+  void deleteByStartBefore(LocalDateTime timeOfEntry);
 }

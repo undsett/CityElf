@@ -48,5 +48,6 @@ public class AppServerFirebase {
     } finally {
       outputStream.close();
     }
+    String sendindResult = connection.getResponseMessage();
   }
 }

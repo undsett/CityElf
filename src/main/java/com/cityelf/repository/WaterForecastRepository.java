@@ -4,6 +4,7 @@ import com.cityelf.model.Address;
 import com.cityelf.model.WaterForecast;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,4 +26,7 @@ public interface WaterForecastRepository extends CrudRepository<WaterForecast, L
 
   List<WaterForecast> findWaterForecastsByStartLessThanEqualAndEstimatedStopGreaterThan(
       LocalDateTime checkStart, LocalDateTime checkEnd);
+
+  @Transactional
+  void deleteByStartBefore(LocalDateTime timeOfEntry);
 }
