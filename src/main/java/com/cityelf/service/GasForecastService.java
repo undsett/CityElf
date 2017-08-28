@@ -155,7 +155,7 @@ public class GasForecastService {
    */
   @Transactional
   public void rewriteAll(Iterable<GasForecast> gasForecasts) {
-    gasForecastRepository.deleteAllByPeopleReport(false);
+    gasForecastRepository.deletePreviousServiceReports();
     gasForecastRepository.save(gasForecasts);
   }
 

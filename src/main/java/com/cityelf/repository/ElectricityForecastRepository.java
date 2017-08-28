@@ -3,6 +3,8 @@ package com.cityelf.repository;
 import com.cityelf.model.Address;
 import com.cityelf.model.ElectricityForecast;
 
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.time.LocalDateTime;
@@ -22,8 +24,10 @@ public interface ElectricityForecastRepository extends CrudRepository<Electricit
 
   void deleteElectricityForecastByStart(LocalDateTime startTime);
 
-  void deleteAllByPeopleReport(boolean peopleReport);
-
   List<ElectricityForecast> findElectricityForecastsByStartLessThanEqualAndEstimatedStopGreaterThan(
       LocalDateTime checkStart, LocalDateTime checkEnd);
+
+  @Modifying
+  @Query("delete from ElectricityForecast ef where ef.peopleReport = false")
+  void deletePreviousServiceReports();
 }

@@ -141,7 +141,6 @@ public class DataCollectorService {
       }
       if (waterForecasts.size() > 0) {
         waterForecastService.rewriteAll(waterForecasts);
-        waterForecastService.save(waterForecasts);
       }
       if (gasForecasts.size() > 0) {
         gasForecastService.rewriteAll(gasForecasts);

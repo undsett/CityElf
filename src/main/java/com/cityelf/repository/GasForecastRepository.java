@@ -3,6 +3,8 @@ package com.cityelf.repository;
 import com.cityelf.model.Address;
 import com.cityelf.model.GasForecast;
 
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -23,8 +25,10 @@ public interface GasForecastRepository extends CrudRepository<GasForecast, Long>
 
   void deleteGasForecastsByStart(LocalDateTime startTime);
 
-  void deleteAllByPeopleReport(boolean peopleReport);
-
   List<GasForecast> findGasForecastsByStartLessThanEqualAndEstimatedStopGreaterThan(
       LocalDateTime checkStart, LocalDateTime checkEnd);
+
+  @Modifying
+  @Query("delete from GasForecast gf where gf.peopleReport = false")
+  void deletePreviousServiceReports();
 }

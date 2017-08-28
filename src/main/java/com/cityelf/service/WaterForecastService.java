@@ -155,12 +155,7 @@ public class WaterForecastService {
    */
   @Transactional
   public void rewriteAll(Iterable<WaterForecast> waterForecasts) {
-    waterForecastRepository.deleteAllByPeopleReport(false);
-    //waterForecastRepository.save(waterForecasts);
-  }
-
-  @Transactional
-  public void save(Iterable<WaterForecast> waterForecasts) {
+    waterForecastRepository.deletePreviousServiceReports();
     waterForecastRepository.save(waterForecasts);
   }
 }
