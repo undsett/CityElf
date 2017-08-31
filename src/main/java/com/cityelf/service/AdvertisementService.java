@@ -71,8 +71,8 @@ public class AdvertisementService {
       try {
         for (User user : usersFromAddress) {
           appServerFirebase.pushFCMNotification(user.getFirebaseId(), "New advertisement",
-              "По адресу " + advertisement.getAddress().getAddress()
-                  + " появилось новое объявление!");
+              "По адресу " + addressesRepository.findById(advertisement.getAddress().getId()).getAddress()
+                  + " новое объявление!");
         }
       } catch (Exception exception) {
         exception.printStackTrace();

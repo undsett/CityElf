@@ -91,8 +91,8 @@ public class PollsService {
       try {
         for (User user : usersFromAddress) {
           appServerFirebase.pushFCMNotification(user.getFirebaseId(), "New poll",
-              "По адресу " + poll.getAddress().getAddress()
-                  + " появился новый опрос!");
+              "По адресу " + addressesRepository.findOne(poll.getAddress().getId()).getAddress()
+                  + " новый опрос!");
         }
       } catch (Exception exception) {
         exception.printStackTrace();
