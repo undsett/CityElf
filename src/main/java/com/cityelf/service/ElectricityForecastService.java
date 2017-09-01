@@ -96,7 +96,7 @@ public class ElectricityForecastService {
    */
   @Transactional
   public void rewriteAll(Iterable<ElectricityForecast> electricityForecasts) {
-    electricityForecastRepository.deleteAllByPeopleReport(false);
+    electricityForecastRepository.deletePreviousServiceReports();
     electricityForecastRepository.save(electricityForecasts);
   }
 }

@@ -3,6 +3,8 @@ package com.cityelf.repository;
 import com.cityelf.model.Address;
 import com.cityelf.model.WaterForecast;
 
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,10 +24,12 @@ public interface WaterForecastRepository extends CrudRepository<WaterForecast, L
 
   void deleteWaterForecastsByStart(LocalDateTime startTime);
 
-  void deleteAllByPeopleReport(boolean peopleReport);
-
   List<WaterForecast> findWaterForecastsByStartLessThanEqualAndEstimatedStopGreaterThan(
       LocalDateTime checkStart, LocalDateTime checkEnd);
+
+  @Modifying
+  @Query("delete from WaterForecast wf where wf.peopleReport = false")
+  void deletePreviousServiceReports();
 
   @Transactional
   void deleteByStartBefore(LocalDateTime timeOfEntry);
