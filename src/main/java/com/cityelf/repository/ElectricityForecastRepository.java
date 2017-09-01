@@ -6,6 +6,7 @@ import com.cityelf.model.ElectricityForecast;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,4 +31,7 @@ public interface ElectricityForecastRepository extends CrudRepository<Electricit
   @Modifying
   @Query("delete from ElectricityForecast ef where ef.peopleReport = false")
   void deletePreviousServiceReports();
+
+  @Transactional
+  void deleteByStartBefore(LocalDateTime timeOfEntry);
 }
